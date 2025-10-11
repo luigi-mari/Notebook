@@ -1,55 +1,56 @@
-name: deploy-quarto
+name: deploy-book
 
 on:
   push:
     branches:
       - main
 
+env:
+  BASE_URL: /${{ github.event.repository.name }}
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  deploy-quarto:
-    runs-on: windows-latest
+  deploy-book:
+    runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
           python-version: 3.11
 
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install plotly ipywidgets
+          pip install jupyter-book
 
-      - name: Install Quarto (Windows)
-        run: |
-          Invoke-WebRequest -Uri https://github.com/quarto-dev/quarto-cli/releases/download/v1.9.3/Quarto-1.9.3-win.exe -OutFile quarto-installer.exe
-          Start-Process -Wait -FilePath quarto-installer.exe -ArgumentList '/S'
+      - name: Check Jupyter Book version
+        run: jupyter-book --version
 
-      - name: Check Quarto version
-        run: quarto --version
+      - name: Build the book
+        run: jupyter-book build chapters
 
-      - name: Build Quarto book
-        run: quarto render quarto.yml --output _site
-
-      - name: Debug - List files after build
-        run: dir
-
-      - name: Debug - List _site content
-        run: dir _site || echo "_site directory missing!"
+      - name: Debug - Check if HTML build exists
+        run: ls -la chapters/_build/html || echo "HTML build directory missing!"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           name: "github-pages"
-          path: "_site"
+          path: "chapters/_build/html"
+
+      - name: Debug - List uploaded artifacts
+        run: ls -la ${{ runner.temp }}/pages-artifact/ || echo "No artifacts uploaded!"
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
         with:
           artifact_name: "github-pages"
