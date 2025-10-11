@@ -6,4 +6,3 @@ pandas
 plotly
 seaborn
 ipywidgets
-scipy
