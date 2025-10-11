@@ -1,25 +1,20 @@
-name: deploy-book
+name: deploy-quarto
 
 on:
   push:
     branches:
       - main
 
-env:
-  BASE_URL: /${{ github.event.repository.name }}
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
-  deploy-book:
+  deploy-quarto:
     runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
@@ -34,23 +29,19 @@ jobs:
       - name: Check Quarto version
         run: quarto --version
 
-      - name: Build the book
-        run: quarto render chapters
-
-      - name: Debug - Check if HTML build exists
-        run: ls -la chapters/_site || echo "_site directory missing!"
+      - name: Build Quarto book
+        run: quarto render  # Quarto will use quarto.yml at repo root
+          
+      - name: Debug - Check if _site exists
+        run: ls -la _site || echo "_site directory missing!"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           name: "github-pages"
-          path: "chapters/_site"
-
-      - name: Debug - List uploaded artifacts
-        run: ls -la ${{ runner.temp }}/pages-artifact/ || echo "No artifacts uploaded!"
+          path: "_site"
 
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
         with:
           artifact_name: "github-pages"
