@@ -44,10 +44,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           name: "github-pages"
-          path: |
-                chapters/_build/html
-                chapters/_build/html/_files
-                chapters/_build/html/_static
+          path: "chapters/_build/html"
 
       - name: Debug - List uploaded artifacts
         run: ls -la ${{ runner.temp }}/pages-artifact/ || echo "No artifacts uploaded!"
