@@ -2,18 +2,17 @@
 
 [![Made with MyST](https://img.shields.io/badge/made%20with-myst-orange)](https://myst.tools)
 
-Welcome to my notebook!  
-**Luigi Mari — Mechanical Engineer - Data Scientist**
+Hi, I’m **Luigi Mari** — a **mechanical engineer** with a growing focus on **data science** and **quantitative finance**.  
 
-In this space, you’ll find some of my notes, experiments, and research focused on the fields that fascinate me the most: **trading**, **mathematics**, **statistics**, and **engineering**.  
+This notebook is where I combine **engineering discipline** with **financial modeling** — exploring how data, math, and algorithms can be used to understand and trade financial markets.  
 
-My goal is to explore how quantitative methods, data analysis, and algorithmic thinking can be applied to financial markets — from **systematic trading strategies** and **risk modeling** to **portfolio optimization** and **derivatives pricing**.  
+Here, you’ll find a mix of **experiments**, **prototypes**, and **research notes** — from **systematic trading strategies** and **risk models**, to **data pipelines** and **simulation tools** built in Python.  
 
-This repository is a personal collection of ideas I’ve been studying and developing over the years, aimed at understanding how **math and engineering principles** can interact to build smarter, more efficient approaches to complex financial problems.
+I’m especially interested in the intersection of **mathematics, computation, and market behavior**, and in how quantitative methods can bridge theory and real-world decision-making.  
 
-## Topics you’ll find here
+## Contents
 
-1. Quantitative trading strategies and backtests  
-2. Mathematical and statistical modeling for finance  
-3. Engineering approaches to data pipelines and time-series processing  
-4. Notes, experiments, and research projects combining all the above 🚀
+1. **Trading systems** — strategy design and backtesting  
+2. **Derivatives & risk** — pricing models and hedging simulations  
+3. **Data engineering for finance** — pipelines and time-series analysis  
+4. **Quant research tools** — experiments and explorations
