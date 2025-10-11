@@ -1,0 +1,41 @@
+project:
+  type: book
+  title: "Notebook"
+  author: "Luigi Mari"
+  logo: chapters/logo.png
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    mathjax: true
+    page-layout: full
+    fontsize: 16px
+    code-tools: true
+  pdf: default
+
+execute:
+  echo: true
+  warning: false
+  error: true
+  freeze: false
+  timeout: 600
+
+launch:
+  thebe: true
+  binder:
+    url: "https://mybinder.org"
+  notebook-interface: jupyterlab
+
+bibliography:
+  - chapters/references.bib
+
+book:
+  chapters:
+    - file: chapters/intro.md
+    - file: chapters/notebooks/optionspnl.ipynb
+    # Add other notebooks in desired order
+
+website:
+  title: "Notebook"
+  base-url: "/Notebook"   # Your GitHub repo name
