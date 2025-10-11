@@ -31,3 +31,8 @@ html:
   use_issues_button: true
   use_repository_button: true
   use_mathjax: true
+
+launch_buttons:
+  binderhub_url: "https://mybinder.org"
+  thebe: true                # Enables in-page code execution
+  notebook_interface: jupyterlab
