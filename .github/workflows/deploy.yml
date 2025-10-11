@@ -21,18 +21,26 @@ jobs:
         with:
           python-version: 3.11
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           pip install -r requirements.txt
-          pip install quarto-cli plotly ipywidgets
+          pip install plotly ipywidgets
+
+      - name: Install Quarto CLI
+        run: |
+          wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.5.351/quarto-1.5.351-linux-amd64.deb
+          sudo dpkg -i quarto-1.5.351-linux-amd64.deb
 
       - name: Check Quarto version
         run: quarto --version
 
       - name: Build Quarto book
-        run: quarto render  # Quarto will use quarto.yml at repo root
-          
-      - name: Debug - Check if _site exists
+        run: quarto render quarto.yml --output _site
+
+      - name: Debug - List files after build
+        run: ls -la
+
+      - name: Debug - List _site content
         run: ls -la _site || echo "_site directory missing!"
 
       - name: Upload artifact
