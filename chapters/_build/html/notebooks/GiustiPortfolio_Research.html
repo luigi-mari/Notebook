@@ -532,13 +532,15 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">plotly.subplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_subplots</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">plotly.io</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pio</span>
 <span class="n">pio</span><span class="o">.</span><span class="n">renderers</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;plotly_mimetype&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">plotly.subplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_subplots</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">skopt</span><span class="w"> </span><span class="kn">import</span> <span class="n">gp_minimize</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">skopt.space</span><span class="w"> </span><span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">skopt.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">use_named_args</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
 
 <span class="c1"># ── Pandas display settings ──────────────────────────────────────────────</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.float_format&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{:.4f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
@@ -620,14 +622,8 @@ Sample tickers: [&#39;ADBE&#39;, &#39;AMD&#39;, &#39;ABNB&#39;, &#39;ALNY&#39;, 
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading OHLC data — this may take ~30 seconds...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\Louis\AppData\Local\Temp\ipykernel_456\1604681543.py:2: FutureWarning:
 
-YF.download() has changed argument auto_adjust default to True
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape  : (2843, 100)
+Shape  : (2843, 100)
 Period : 2015-01-02 → 2026-04-23
 Coverage: 93.4% non-null across all tickers
 </pre></div>
@@ -855,6 +851,7 @@ Max Drawdown                 -39.06%    -36.40%
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/94089402d7b1a7178dcae395e3f21249c4f5e3737c0b4a359be4aa2a5ba98421.png" src="../_images/94089402d7b1a7178dcae395e3f21249c4f5e3737c0b4a359be4aa2a5ba98421.png" />
 </div>
 </div>
 </section>
@@ -1000,6 +997,7 @@ Max Drawdown                 -39.06%    -36.40%
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/f895e12cd5c46b8956d162b5b3fd347e76922c4b6ca3af90b7e1f5d53bc49f09.png" src="../_images/f895e12cd5c46b8956d162b5b3fd347e76922c4b6ca3af90b7e1f5d53bc49f09.png" />
 </div>
 </div>
 </section>
@@ -1051,6 +1049,7 @@ Max Drawdown                 -39.06%    -36.40%
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/31460199d191fde1ded7b7acf494b2e9eccd1b435d14ef7aee043edafefe2846.png" src="../_images/31460199d191fde1ded7b7acf494b2e9eccd1b435d14ef7aee043edafefe2846.png" />
 </div>
 </div>
 </section>
@@ -1133,6 +1132,7 @@ Recovered to profit: 27  (56.2%)
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/ded330cd047ac233ca0310dbc8356e408a5192cdd0c719c854d0baf0e53da42e.png" src="../_images/ded330cd047ac233ca0310dbc8356e408a5192cdd0c719c854d0baf0e53da42e.png" />
 </div>
 </div>
 </section>
@@ -1219,6 +1219,7 @@ Tactical stop  → CAGR: 40.54%  Vol: 24.02%  Sharpe: 1.69
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/75752d7ce2832ad40bff43b41719bf16c1941bad474bcc997585e3754421ac4e.png" src="../_images/75752d7ce2832ad40bff43b41719bf16c1941bad474bcc997585e3754421ac4e.png" />
 </div>
 </div>
 <section id="bayesian-parameter-optimization">
@@ -1264,9 +1265,8 @@ Tactical stop  → CAGR: 40.54%  Vol: 24.02%  Sharpe: 1.69
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running Bayesian optimization (30 evaluations)...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best in-sample Sharpe : 1.71
+
+Best in-sample Sharpe : 1.71
   STOP_DAYS        = 10
   THRESHOLD        = 5.16%
   REDUCED_EXPOSURE = 19.78%
@@ -1526,6 +1526,7 @@ Strategy   : +22.33%   Nasdaq: +11.89%   Alpha: +10.44%
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/66b2127be7f35c203c30c9b159022c6bbf698c7667d7fc9c39a507e80134fe7b.png" src="../_images/66b2127be7f35c203c30c9b159022c6bbf698c7667d7fc9c39a507e80134fe7b.png" />
 </div>
 </div>
 </section>
