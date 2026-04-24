@@ -843,7 +843,7 @@ Max Drawdown                 -39.06%    -36.40%
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Nasdaq DD&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;#FFD700&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;dot&#39;</span><span class="p">)),</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x unified&quot;</span><span class="p">,</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span><span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x unified&quot;</span><span class="p">,</span>
     <span class="n">title</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Nasdaq-100 Momentum Waterfall&lt;/b&gt;  |  CAGR </span><span class="si">{</span><span class="n">cagr</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">  |  &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;Sharpe </span><span class="si">{</span><span class="n">sharpe</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">  |  Max DD </span><span class="si">{</span><span class="n">max_dd</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.01</span><span class="p">))</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -851,7 +851,6 @@ Max Drawdown                 -39.06%    -36.40%
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/94089402d7b1a7178dcae395e3f21249c4f5e3737c0b4a359be4aa2a5ba98421.png" src="../_images/94089402d7b1a7178dcae395e3f21249c4f5e3737c0b4a359be4aa2a5ba98421.png" />
 </div>
 </div>
 </section>
@@ -990,14 +989,13 @@ Max Drawdown                 -39.06%    -36.40%
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Nasdaq&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;dot&#39;</span><span class="p">)),</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">fig_m</span><span class="o">.</span><span class="n">add_hline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">line_dash</span><span class="o">=</span><span class="s2">&quot;dot&quot;</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">fig_m</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x unified&quot;</span><span class="p">,</span>
+<span class="n">fig_m</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span> <span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x unified&quot;</span><span class="p">,</span>
     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&lt;b&gt;Risk Dashboard&lt;/b&gt; — Rolling Alpha &amp; Sharpe&quot;</span><span class="p">)</span>
 <span class="n">fig_m</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f895e12cd5c46b8956d162b5b3fd347e76922c4b6ca3af90b7e1f5d53bc49f09.png" src="../_images/f895e12cd5c46b8956d162b5b3fd347e76922c4b6ca3af90b7e1f5d53bc49f09.png" />
 </div>
 </div>
 </section>
@@ -1042,14 +1040,13 @@ Max Drawdown                 -39.06%    -36.40%
 
 <span class="n">fig_j</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)))</span>
-<span class="n">fig_j</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+<span class="n">fig_j</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span><span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
     <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Trading Days to New High&quot;</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">fig_j</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/31460199d191fde1ded7b7acf494b2e9eccd1b435d14ef7aee043edafefe2846.png" src="../_images/31460199d191fde1ded7b7acf494b2e9eccd1b435d14ef7aee043edafefe2846.png" />
 </div>
 </div>
 </section>
@@ -1126,13 +1123,12 @@ Recovered to profit: 27  (56.2%)
            <span class="sa">f</span><span class="s2">&quot;Resiliency: </span><span class="si">{</span><span class="n">recovery_rate</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% of red-after-1w recovered to profit&quot;</span><span class="p">),</span>
     <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Trading Days Since Portfolio Construction&quot;</span><span class="p">,</span>
     <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Cumulative Return (%)&quot;</span><span class="p">,</span>
-    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">650</span><span class="p">,</span> <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x unified&quot;</span><span class="p">)</span>
+    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">650</span><span class="p">,</span><span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x unified&quot;</span><span class="p">)</span>
 <span class="n">fig_c</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ded330cd047ac233ca0310dbc8356e408a5192cdd0c719c854d0baf0e53da42e.png" src="../_images/ded330cd047ac233ca0310dbc8356e408a5192cdd0c719c854d0baf0e53da42e.png" />
 </div>
 </div>
 </section>
@@ -1211,7 +1207,7 @@ Tactical stop  → CAGR: 40.54%  Vol: 24.02%  Sharpe: 1.69
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Nasdaq DD&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;#FFD700&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.4</span><span class="p">),</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">fig_s</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">fig_s</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x unified&quot;</span><span class="p">,</span>
+<span class="n">fig_s</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span> <span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span> <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x unified&quot;</span><span class="p">,</span>
     <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Tactical Stop&lt;/b&gt;  |  days=</span><span class="si">{</span><span class="n">STOP_DAYS</span><span class="si">}</span><span class="s2">  threshold=</span><span class="si">{</span><span class="n">THRESHOLD</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">  &quot;</span>
           <span class="sa">f</span><span class="s2">&quot;exposure=</span><span class="si">{</span><span class="n">REDUCED_EXPOSURE</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">fig_s</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1219,7 +1215,6 @@ Tactical stop  → CAGR: 40.54%  Vol: 24.02%  Sharpe: 1.69
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/75752d7ce2832ad40bff43b41719bf16c1941bad474bcc997585e3754421ac4e.png" src="../_images/75752d7ce2832ad40bff43b41719bf16c1941bad474bcc997585e3754421ac4e.png" />
 </div>
 </div>
 <section id="bayesian-parameter-optimization">
@@ -1526,7 +1521,6 @@ Strategy   : +22.33%   Nasdaq: +11.89%   Alpha: +10.44%
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/66b2127be7f35c203c30c9b159022c6bbf698c7667d7fc9c39a507e80134fe7b.png" src="../_images/66b2127be7f35c203c30c9b159022c6bbf698c7667d7fc9c39a507e80134fe7b.png" />
 </div>
 </div>
 </section>
