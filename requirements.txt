@@ -1,9 +1,11 @@
 jupyter-book
 yfinance
-matplotlib
+beautifulsoup4
 numpy
 pandas
-plotly
-seaborn
-ipywidgets
 scipy
+scikit-optimize
+matplotlib
+seaborn
+plotly
+ipywidgets
