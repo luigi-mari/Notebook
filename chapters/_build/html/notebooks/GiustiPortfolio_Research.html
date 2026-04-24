@@ -470,7 +470,7 @@ document.write(`
 <h1>Nasdaq-100 Momentum Waterfall Strategy<a class="headerlink" href="#nasdaq-100-momentum-waterfall-strategy" title="Link to this heading">#</a></h1>
 <section id="a-systematic-equity-selection-framework-for-monthly-rebalancing">
 <h2>A Systematic Equity Selection Framework for Monthly Rebalancing<a class="headerlink" href="#a-systematic-equity-selection-framework-for-monthly-rebalancing" title="Link to this heading">#</a></h2>
-<p><strong>Author:</strong> Giusti<br />
+<p><strong>Author:</strong> Luigi Mari
 <strong>Methodology:</strong> Multi-horizon momentum filtering with realistic execution modeling<br />
 <strong>Universe:</strong> Nasdaq-100 constituents<br />
 <strong>Rebalancing:</strong> Monthly (end-of-month signal → next open execution)</p>
@@ -622,9 +622,8 @@ Sample tickers: [&#39;ADBE&#39;, &#39;AMD&#39;, &#39;ABNB&#39;, &#39;ALNY&#39;, 
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading OHLC data — this may take ~30 seconds...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape  : (2843, 100)
+
+Shape  : (2843, 100)
 Period : 2015-01-02 → 2026-04-23
 Coverage: 93.4% non-null across all tickers
 </pre></div>
@@ -852,6 +851,7 @@ Max Drawdown                 -39.06%    -36.40%
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/1fb705f06113ea5e14ad13eda58738f8e10a68b3149e76f1e19862148adc317d.png" src="../_images/1fb705f06113ea5e14ad13eda58738f8e10a68b3149e76f1e19862148adc317d.png" />
 </div>
 </div>
 </section>
@@ -997,6 +997,7 @@ Max Drawdown                 -39.06%    -36.40%
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/06ff9e3365d089a36e7113734d63171c4c603ea12b50e0ac39d55d94fca1a484.png" src="../_images/06ff9e3365d089a36e7113734d63171c4c603ea12b50e0ac39d55d94fca1a484.png" />
 </div>
 </div>
 </section>
@@ -1216,6 +1217,7 @@ Tactical stop  → CAGR: 40.54%  Vol: 24.02%  Sharpe: 1.69
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/272cae44ce96359a2f815a8730bc00ffd07e3ac5c253153e031cf4d75d107a67.png" src="../_images/272cae44ce96359a2f815a8730bc00ffd07e3ac5c253153e031cf4d75d107a67.png" />
 </div>
 </div>
 <section id="bayesian-parameter-optimization">
@@ -1261,9 +1263,8 @@ Tactical stop  → CAGR: 40.54%  Vol: 24.02%  Sharpe: 1.69
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running Bayesian optimization (30 evaluations)...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best in-sample Sharpe : 1.71
+
+Best in-sample Sharpe : 1.71
   STOP_DAYS        = 10
   THRESHOLD        = 5.16%
   REDUCED_EXPOSURE = 19.78%
@@ -1504,6 +1505,7 @@ Strategy   : +22.33%   Nasdaq: +11.89%   Alpha: +10.44%
 <span class="c1"># ── Layout ────────────────────────────────────────────────────────────────</span>
 <span class="n">fig_dash</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
     <span class="n">height</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
+    <span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
     <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span>
     <span class="n">hovermode</span><span class="o">=</span><span class="s2">&quot;x unified&quot;</span><span class="p">,</span>
     <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1523,6 +1525,7 @@ Strategy   : +22.33%   Nasdaq: +11.89%   Alpha: +10.44%
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/842916e1ce2db3cbd73147e8983820431ca122a9b1658923611f1fa113f250e4.png" src="../_images/842916e1ce2db3cbd73147e8983820431ca122a9b1658923611f1fa113f250e4.png" />
 </div>
 </div>
 </section>
@@ -1556,13 +1559,14 @@ Strategy   : +22.33%   Nasdaq: +11.89%   Alpha: +10.44%
     <span class="n">hover_data</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;6M&#39;</span><span class="p">,</span> <span class="s1">&#39;3M&#39;</span><span class="p">],</span>
     <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Momentum Funnel — </span><span class="si">{</span><span class="n">current_month_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="n">fig_pan</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;plotly_dark&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+<span class="n">fig_pan</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;plotly_dark&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span><span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
     <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">fig_pan</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../_images/68e23dcd2998a5eab4c06783e1e5ee36ba36278bde3a355aab6934e7849f1b8e.png" src="../_images/68e23dcd2998a5eab4c06783e1e5ee36ba36278bde3a355aab6934e7849f1b8e.png" />
 </div>
 </div>
 </section>
