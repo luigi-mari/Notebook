@@ -1,0 +1,1836 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Nasdaq-100 Momentum Waterfall &#8212; Notebook</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/MomentumWaterfall_WalkForward';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Naked Options Simulation in Python" href="optionspnl.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Notebook - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Notebook - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Welcome to My Notebook
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="optionspnl.html">Naked Options Simulation in Python</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Nasdaq-100 Momentum Waterfall</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/luigi-mari/Notebook/master?urlpath=lab/tree/docs/notebooks/MomentumWaterfall_WalkForward.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/luigi-mari/Notebook" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/luigi-mari/Notebook/issues/new?title=Issue%20on%20page%20%2Fnotebooks/MomentumWaterfall_WalkForward.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/MomentumWaterfall_WalkForward.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Nasdaq-100 Momentum Waterfall</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-of-an-edge-tested-twice-with-and-without-membership-lookahead-bias">Evidence of an edge, tested twice: with and without membership lookahead bias</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#research-question">Research question</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-strategy">The strategy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-walk-forward-without-optimisation">Why a walk-forward <em>without</em> optimisation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-data">1. Parameters &amp; data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signals-and-backtest-engine">2. Signals and backtest engine</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-out-of-sample-track-record">3. The out-of-sample track record</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds-is-the-edge-consistent">4. Walk-forward folds — is the edge consistent?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">5. Evidence accumulation — does the case get stronger, and does it stay strong?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance">6. Statistical significance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scorecard">7. Scorecard</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lookahead-bias-check-same-strategy-today-s-membership">8. The lookahead bias check: same strategy, today’s membership</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-far-can-this-conclusion-be-pushed">9. How far can this conclusion be pushed?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">10. Main findings</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="nasdaq-100-momentum-waterfall">
+<h1>Nasdaq-100 Momentum Waterfall<a class="headerlink" href="#nasdaq-100-momentum-waterfall" title="Link to this heading">#</a></h1>
+<section id="evidence-of-an-edge-tested-twice-with-and-without-membership-lookahead-bias">
+<h2>Evidence of an edge, tested twice: with and without membership lookahead bias<a class="headerlink" href="#evidence-of-an-edge-tested-twice-with-and-without-membership-lookahead-bias" title="Link to this heading">#</a></h2>
+</section>
+<section id="research-question">
+<h2>Research question<a class="headerlink" href="#research-question" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>Does a monthly momentum waterfall applied to the Nasdaq-100 generate a statistically significant, economically meaningful, and persistent excess return over buy-and-hold QQQ, using only information available at each portfolio formation date, with results robust to survivorship, membership lookahead bias, transaction costs, and alternative market regimes?</p>
+</div></blockquote>
+</section>
+<section id="the-strategy">
+<h2>The strategy<a class="headerlink" href="#the-strategy" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>index members (≈100) at each rebalance ──► top 50 by 12M return ──► top 25 by 6M return ──► top 10 by 3M return ──► equal weight, monthly
+</pre></div>
+</div>
+</section>
+<section id="why-a-walk-forward-without-optimisation">
+<h2>Why a walk-forward <em>without</em> optimisation<a class="headerlink" href="#why-a-walk-forward-without-optimisation" title="Link to this heading">#</a></h2>
+<p>The rule has <strong>no fitted parameters</strong>: horizons (12/6/3 months) and funnel sizes (50/25/10) are fixed in advance and never tuned on this data. That has a useful consequence: there is no train/test leakage from parameter fitting, so the walk-forward is applied to the <strong>evidence</strong> instead of to a model. The history is replayed month by month exactly as a live investor would experience it:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>Rule</p></th>
+<th class="head"><p>Why it matters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Signal</p></td>
+<td><p>Computed on the last close of month <em>t</em> using prices ≤ <em>t</em> only</p></td>
+<td><p>No lookahead</p></td>
+</tr>
+<tr class="row-odd"><td><p>Execution</p></td>
+<td><p>Buy at the <strong>open of t+1</strong>, hold to the next rebalance open</p></td>
+<td><p>Realistic fills, no overnight gap “lost”</p></td>
+</tr>
+<tr class="row-even"><td><p>Costs</p></td>
+<td><p>10 bp charged on every unit of notional traded</p></td>
+<td><p>Net results only</p></td>
+</tr>
+<tr class="row-odd"><td><p>Benchmark</p></td>
+<td><p>QQQ, same dates, same price type (dividend-adjusted)</p></td>
+<td><p>Apples to apples</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Then we ask three questions of the resulting out-of-sample track record:</p>
+<ol class="arabic simple">
+<li><p><strong>Consistency</strong> — does the edge show up in <em>independent</em> 12-month folds, not just in the total? (§4)</p></li>
+<li><p><strong>Stability</strong> — as evidence accumulates month after month, does the statistical case strengthen and stay strong, or is it carried by one episode? (§5)</p></li>
+<li><p><strong>Significance</strong> — does it survive tests that are robust to autocorrelation and fat tails: HAC t-tests, CAPM alpha, and a block bootstrap? (§6)</p></li>
+</ol>
+<p>Everything is summarised in an automatic scorecard (§7).</p>
+<blockquote>
+<div><p><strong>Honest scope.</strong> No parameter search was run, so there is no multiple-testing inflation <em>from tuning</em>. The design was chosen by a human who knew the history, and the universe uses point-in-time membership from <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> (§1) — survivorship handled as well as that file allows. Section 8 quantifies what changes when today’s membership is used at every date instead, and section 9 states how far the conclusions can be pushed.</p>
+</div></blockquote>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>matplotlib<span class="w"> </span>yfinance<span class="w"> </span>requests<span class="w"> </span>beautifulsoup4
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="parameters-data">
+<h2>1. Parameters &amp; data<a class="headerlink" href="#parameters-data" title="Link to this heading">#</a></h2>
+<p>All tunables are in one cell. Prices are fetched from Yahoo Finance with <code class="docutils literal notranslate"><span class="pre">auto_adjust=True</span></code> (splits <strong>and</strong> dividends for stocks and benchmark alike) and cached, so the notebook is reproducible.</p>
+<p><strong>Point-in-time universe.</strong> <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> lists index additions (<em>Ticker entrati</em>) and removals (<em>Ticker usciti</em>) by calendar year (2015–2025). We do not have exact effective dates, so a change recorded in year Y takes effect from <strong>Jan 1 of year Y+1</strong>: an addition is usable only starting the following year (its whole addition year is ignored), and a removal stays eligible through Dec 31 of its exit year. By January of the next year each event is unambiguously past, so no signal ever uses information that had not yet become public.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">comb</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+
+<span class="c1"># ── Plot style: white background, visible grid drawn behind everything ─────</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;figure.figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">),</span>
+    <span class="s2">&quot;axes.grid&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>            <span class="s2">&quot;grid.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#c9cfd8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;grid.linewidth&quot;</span><span class="p">:</span> <span class="mf">.8</span><span class="p">,</span>         <span class="s2">&quot;axes.axisbelow&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>     <span class="c1"># grid behind lines/bars</span>
+    <span class="s2">&quot;axes.spines.top&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>     <span class="s2">&quot;axes.spines.right&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;axes.edgecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#595f6b&quot;</span><span class="p">,</span>  <span class="s2">&quot;axes.labelcolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#23272e&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;xtick.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#3a4048&quot;</span><span class="p">,</span>     <span class="s2">&quot;ytick.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#3a4048&quot;</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.float_format&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+
+<span class="c1"># ── Strategy (fixed ex-ante, never tuned) ────────────────────────────────</span>
+<span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">10</span>     <span class="c1"># top-N1 by 12M → top-N2 by 6M → top-N3 by 3M</span>
+<span class="n">COST_BPS</span>   <span class="o">=</span> <span class="mi">10</span>             <span class="c1"># per unit of notional traded, one way</span>
+<span class="c1"># ── Data / testing ───────────────────────────────────────────────────────</span>
+<span class="n">START</span>      <span class="o">=</span> <span class="s2">&quot;2015-01-01&quot;</span>
+<span class="n">BENCH</span>      <span class="o">=</span> <span class="s2">&quot;QQQ&quot;</span>
+<span class="n">MEM_FILE</span>   <span class="o">=</span> <span class="s2">&quot;inout.xlsx&quot;</span>    <span class="c1"># index additions/removals by calendar year (point-in-time universe)</span>
+<span class="n">RF</span>         <span class="o">=</span> <span class="mf">0.0</span>             <span class="c1"># annual risk-free rate used in Sharpe</span>
+<span class="n">FOLD</span>       <span class="o">=</span> <span class="mi">12</span>              <span class="c1"># walk-forward fold length (months)</span>
+<span class="n">HAC_LAGS</span>   <span class="o">=</span> <span class="mi">3</span>               <span class="c1"># lag terms for the robust (HAC) standard errors</span>
+<span class="n">BLOCK</span>      <span class="o">=</span> <span class="mi">6</span>               <span class="c1"># bootstrap block length (months)</span>
+<span class="n">NSIM</span>       <span class="o">=</span> <span class="mi">10_000</span>
+<span class="n">CACHE</span>      <span class="o">=</span> <span class="s2">&quot;data/prices.pkl&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">nasdaq100_tickers</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Current Nasdaq-100 constituents, scraped from Wikipedia.&#39;&#39;&#39;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
+    <span class="n">url</span>   <span class="o">=</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/List_of_NASDAQ-100_companies&quot;</span>
+    <span class="n">soup</span>  <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;constituents&quot;</span><span class="p">})</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_membership</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Additions / removals per calendar year, from inout.xlsx.&#39;&#39;&#39;</span>
+    <span class="n">io_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">MEM_FILE</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">strip</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">strip</span><span class="p">()}</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="p">{}</span>                                     <span class="c1"># ticker -&gt; {(year, kind), ...}</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">io_</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;Anno&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;Ticker entrati&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;Ticker usciti&quot;</span><span class="p">,</span> <span class="s2">&quot;out&quot;</span><span class="p">)]:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">parse</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="n">col</span><span class="p">]):</span>
+                    <span class="n">events</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">y</span><span class="p">,</span> <span class="n">kind</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">t</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">events</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+<span class="n">EVENTS</span> <span class="o">=</span> <span class="n">load_membership</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">eligible_years</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Calendar years (int) during which t was a Nasdaq-100 constituent.</span>
+<span class="sd">       A change recorded in year Y takes effect from Jan 1 of Y+1: an addition is usable only</span>
+<span class="sd">       starting the following year, and a removal stays eligible through its exit year — so no</span>
+<span class="sd">       signal ever relies on information that had not yet become public.&#39;&#39;&#39;</span>
+    <span class="n">evs</span> <span class="o">=</span> <span class="n">EVENTS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">evs</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>                                 <span class="c1"># current member with no recorded change → assumed in throughout</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="p">(</span><span class="n">evs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;out&quot;</span><span class="p">)</span>                    <span class="c1"># constituent before its first event iff it later exited…</span>
+    <span class="n">lo</span><span class="p">,</span> <span class="n">ivals</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">9_000</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span> <span class="p">[]</span>     <span class="c1"># …so an exit-only record means &quot;member up to that year&quot;</span>
+    <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">evs</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>                                   <span class="c1"># the change applies from Jan 1 of the following year</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">state</span><span class="p">:</span>                 <span class="c1"># becomes eligible at start of s</span>
+            <span class="n">lo</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;out&quot;</span> <span class="ow">and</span> <span class="n">state</span><span class="p">:</span>                  <span class="c1"># stops being eligible after exit year y</span>
+            <span class="n">ivals</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lo</span><span class="p">,</span> <span class="n">y</span><span class="p">));</span> <span class="n">lo</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">state</span> <span class="ow">and</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ivals</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lo</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">))</span>     <span class="c1"># still a member → open interval</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">ivals</span><span class="p">])</span>
+
+<span class="n">CURRENT</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">nasdaq100_tickers</span><span class="p">()}</span>   <span class="c1"># today&#39;s membership: the lookahead set used in section 8</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_prices</span><span class="p">():</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">yfinance</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">yf</span>
+    <span class="n">want</span>    <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">CURRENT</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">EVENTS</span><span class="p">))</span>                                <span class="c1"># current ∪ historical members (PIT universe)</span>
+    <span class="n">tickers</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">want</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;GOOG&quot;</span><span class="p">,</span> <span class="n">BENCH</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">BENCH</span><span class="p">]</span>   <span class="c1"># keep GOOGL only</span>
+    <span class="n">cached</span><span class="p">,</span> <span class="n">have</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">CACHE</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cached</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">CACHE</span><span class="p">)</span>
+            <span class="n">have</span>   <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cached</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>                                   <span class="c1"># cache written by a different numpy version → rebuild</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  (cache unreadable in this environment, rebuilding from Yahoo)&quot;</span><span class="p">)</span>
+
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">have</span><span class="p">]</span>
+    <span class="n">close</span><span class="p">,</span> <span class="n">open_</span> <span class="o">=</span> <span class="p">(</span><span class="n">cached</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">],</span> <span class="n">cached</span><span class="p">[</span><span class="s2">&quot;open&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+                   <span class="k">else</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(),</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>                                      <span class="c1"># cache may predate the historical additions → top them up</span>
+        <span class="n">raw</span>  <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">missing</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">START</span><span class="p">,</span> <span class="n">auto_adjust</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">got</span>  <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">missing</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">[</span><span class="s2">&quot;Close&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        <span class="n">close</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">close</span><span class="p">,</span> <span class="n">raw</span><span class="p">[</span><span class="s2">&quot;Close&quot;</span><span class="p">][</span><span class="n">got</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">open_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">open_</span><span class="p">,</span> <span class="n">raw</span><span class="p">[</span><span class="s2">&quot;Open&quot;</span><span class="p">][</span><span class="n">got</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">tickers</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">close</span><span class="o">.</span><span class="n">columns</span><span class="p">)]</span>     <span class="c1"># exact universe (bench last); stale cache columns dropped</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">CACHE</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">oc</span>   <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">open_</span><span class="o">.</span><span class="n">columns</span><span class="p">)]</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">({</span><span class="s2">&quot;close&quot;</span><span class="p">:</span> <span class="n">close</span><span class="p">[</span><span class="n">cols</span><span class="p">],</span> <span class="s2">&quot;open&quot;</span><span class="p">:</span> <span class="n">open_</span><span class="p">[</span><span class="n">oc</span><span class="p">]},</span> <span class="n">CACHE</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">close</span><span class="p">[</span><span class="n">cols</span><span class="p">],</span> <span class="n">open_</span><span class="p">[</span><span class="n">oc</span><span class="p">]</span>
+
+<span class="n">close</span><span class="p">,</span> <span class="n">open_</span> <span class="o">=</span> <span class="n">load_prices</span><span class="p">()</span>
+<span class="n">bench_open</span>   <span class="o">=</span> <span class="n">open_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">BENCH</span><span class="p">)</span>
+<span class="n">close</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">BENCH</span><span class="p">)</span>
+<span class="n">MEM</span>  <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="p">:</span> <span class="n">eligible_years</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">EVENTS</span><span class="p">}</span>              <span class="c1"># calendar years per ticker (∅ → never eligible)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">constituents_at</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Eligible index members at signal date t (point-in-time).&#39;&#39;&#39;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">year</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">MEM</span> <span class="ow">or</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">MEM</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Universe   : </span><span class="si">{</span><span class="n">close</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> tickers with price data (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">EVENTS</span><span class="p">)</span><span class="si">}</span><span class="s2"> with recorded membership changes)&quot;</span><span class="p">)</span>
+<span class="n">no_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">EVENTS</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">close</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">no_data</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No usable price history — excluded wherever needed: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">no_data</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ABNB&quot;</span><span class="p">,</span> <span class="s2">&quot;NTAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SMCI&quot;</span><span class="p">):</span>                          <span class="c1"># spot-check the year-boundary rule</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">MEM</span><span class="p">:</span>
+        <span class="n">yrs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">MEM</span><span class="p">[</span><span class="n">t</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  e.g. </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">: eligible </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">yrs</span><span class="p">),</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="n">START</span><span class="p">[:</span><span class="mi">4</span><span class="p">]))</span><span class="si">}</span><span class="s2">–</span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">yrs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">yrs</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;  e.g. </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">: never eligible (added &amp; removed within one year)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  (cache unreadable in this environment, rebuilding from Yahoo)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>$XLNX: possibly delisted; no timezone found
+$SHPG: possibly delisted; no timezone found
+$WFM: possibly delisted; no timezone found
+HTTP Error 404: {&quot;quoteSummary&quot;:{&quot;result&quot;:null,&quot;error&quot;:{&quot;code&quot;:&quot;Not Found&quot;,&quot;description&quot;:&quot;Quote not found for symbol: ESRX&quot;}}}
+HTTP Error 404: {&quot;quoteSummary&quot;:{&quot;result&quot;:null,&quot;error&quot;:{&quot;code&quot;:&quot;Not Found&quot;,&quot;description&quot;:&quot;Quote not found for symbol: WBA&quot;}}}
+$SRCL: possibly delisted; no timezone found
+$QRTEA: possibly delisted; no timezone found
+$ENDP: possibly delisted; no timezone found
+$SGEN: possibly delisted; no timezone found
+$WBA: possibly delisted; no timezone found
+$ESRX: possibly delisted; no timezone found
+$WLTW: possibly delisted; no timezone found
+$GMCR: possibly delisted; no timezone found
+$ALTR: possibly delisted; no timezone found
+$LMCK: possibly delisted; no timezone found
+$ATVI: possibly delisted; no timezone found
+$LLTC: possibly delisted; no timezone found
+$SPLK: possibly delisted; no timezone found
+$HOLX: No data found, symbol may be delisted
+$ANSS: possibly delisted; no timezone found
+$MXIM: possibly delisted; no timezone found
+$CTRP: possibly delisted; no timezone found
+$LMCA: possibly delisted; no timezone found
+$CERN: possibly delisted; no timezone found
+$DTV: possibly delisted; no timezone found
+$ALXN: possibly delisted; no timezone found
+$SIAL: possibly delisted; no timezone found
+
+25 Failed downloads:
+[&#39;XLNX&#39;, &#39;SHPG&#39;, &#39;WFM&#39;, &#39;SRCL&#39;, &#39;QRTEA&#39;, &#39;ENDP&#39;, &#39;SGEN&#39;, &#39;WBA&#39;, &#39;ESRX&#39;, &#39;WLTW&#39;, &#39;GMCR&#39;, &#39;ALTR&#39;, &#39;LMCK&#39;, &#39;ATVI&#39;, &#39;LLTC&#39;, &#39;SPLK&#39;, &#39;ANSS&#39;, &#39;MXIM&#39;, &#39;CTRP&#39;, &#39;LMCA&#39;, &#39;CERN&#39;, &#39;DTV&#39;, &#39;ALXN&#39;, &#39;SIAL&#39;]: possibly delisted; no timezone found
+[&#39;HOLX&#39;]: No data found, symbol may be delisted
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Universe   : 181 tickers with price data (118 with recorded membership changes)
+No usable price history — excluded wherever needed: ALTR, ALXN, ANSS, ATVI, CERN, CTRP, DTV, ENDP, ESRX, GMCR, HOLX, LLTC, LMCA, LMCK, MXIM, QRTEA, SGEN, SHPG, SIAL, SPLK, SRCL, WBA, WFM, WLTW, XLNX
+  e.g. ABNB: eligible 2022–2026
+  e.g. NTAP: eligible 2015–2020
+  e.g. SMCI: never eligible (added &amp; removed within one year)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="signals-and-backtest-engine">
+<h2>2. Signals and backtest engine<a class="headerlink" href="#signals-and-backtest-engine" title="Link to this heading">#</a></h2>
+<p>Momentum is the simple return over 3, 6 and 12 months on month-end closes. Holding-period returns are <strong>open-to-open</strong>: buy at the open of the first trading day after the signal, sell at the open of the first trading day of the next month (the same price at which the next portfolio is bought). Positions are buy-and-hold within the month. The engine takes any selection function <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">→</span> <span class="pre">tickers</span></code>, so the strategy and the baselines run through identical code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">days</span> <span class="o">=</span> <span class="n">close</span><span class="o">.</span><span class="n">index</span>
+
+<span class="c1"># Last trading day of each month; drop the current month if still in progress</span>
+<span class="n">last_td</span> <span class="o">=</span> <span class="n">days</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">days</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s2">&quot;M&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">days</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">offsets</span><span class="o">.</span><span class="n">BDay</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="n">days</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+    <span class="n">last_td</span> <span class="o">=</span> <span class="n">last_td</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">mtl</span> <span class="o">=</span> <span class="n">close</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">last_td</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>                      <span class="c1"># month-end closes</span>
+
+<span class="n">m12</span> <span class="o">=</span> <span class="n">mtl</span> <span class="o">/</span> <span class="n">mtl</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">m6</span>  <span class="o">=</span> <span class="n">mtl</span> <span class="o">/</span> <span class="n">mtl</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>  <span class="o">-</span> <span class="mi">1</span>
+<span class="n">m3</span>  <span class="o">=</span> <span class="n">mtl</span> <span class="o">/</span> <span class="n">mtl</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="o">-</span> <span class="mi">1</span>
+
+<span class="c1"># Entry = open of the first trading day after each signal; exit = next entry</span>
+<span class="n">pos</span>   <span class="o">=</span> <span class="n">days</span><span class="o">.</span><span class="n">get_indexer</span><span class="p">(</span><span class="n">mtl</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">has</span>   <span class="o">=</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">days</span><span class="p">)</span>
+<span class="n">entry</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">days</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">has</span><span class="p">]],</span> <span class="n">index</span><span class="o">=</span><span class="n">mtl</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">has</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">open_to_open</span><span class="p">(</span><span class="n">opens</span><span class="p">):</span>
+    <span class="n">o</span> <span class="o">=</span> <span class="n">opens</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">o</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">set_axis</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">R</span> <span class="o">=</span> <span class="n">open_to_open</span><span class="p">(</span><span class="n">open_</span><span class="p">)</span>                              <span class="c1"># stock returns, one row per signal date</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">open_to_open</span><span class="p">(</span><span class="n">bench_open</span><span class="o">.</span><span class="n">to_frame</span><span class="p">())</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>   <span class="c1"># QQQ on identical dates</span>
+
+<span class="n">sig</span>       <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">R</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">m12</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>     <span class="c1"># first date with a full 12M signal</span>
+<span class="n">exit_date</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span>
+<span class="n">B</span>         <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis</span><span class="p">(</span><span class="n">exit_date</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span><span class="si">}</span><span class="s2"> monthly cohorts | signals </span><span class="si">{</span><span class="n">sig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">sig</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;| returns realised through </span><span class="si">{</span><span class="n">exit_date</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>128 monthly cohorts | signals 2016-01-29 → 2026-08-31 | returns realised through 2026-10-01
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">waterfall</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n1</span><span class="o">=</span><span class="n">N1</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="n">N2</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="n">N3</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">m12</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">constituents_at</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>     <span class="c1"># only point-in-time index members</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">m6</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+    <span class="k">return</span> <span class="n">m3</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n3</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+
+<span class="n">universe</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">constituents_at</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">m12</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">])]</span>   <span class="c1"># baseline: equal-weight index members (used in §8)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">backtest</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="n">cost_bps</span><span class="o">=</span><span class="n">COST_BPS</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Equal weight, buy-and-hold within the month. Gross/net monthly returns + turnover.&#39;&#39;&#39;</span>
+    <span class="n">gross</span><span class="p">,</span> <span class="n">turn</span><span class="p">,</span> <span class="n">prev</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">:</span>
+        <span class="n">picks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+        <span class="n">gross</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">picks</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="n">turn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">prev</span> <span class="k">else</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">picks</span><span class="p">)</span> <span class="o">-</span> <span class="n">prev</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">picks</span><span class="p">))</span>   <span class="c1"># Σ|Δw|; full replacement = 2</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">picks</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;gross&quot;</span><span class="p">:</span> <span class="n">gross</span><span class="p">,</span> <span class="s2">&quot;turn&quot;</span><span class="p">:</span> <span class="n">turn</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">exit_date</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="s2">&quot;net&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">gross</span> <span class="o">-</span> <span class="n">out</span><span class="o">.</span><span class="n">turn</span> <span class="o">*</span> <span class="n">cost_bps</span> <span class="o">/</span> <span class="mf">1e4</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="n">strat</span> <span class="o">=</span> <span class="n">backtest</span><span class="p">(</span><span class="n">waterfall</span><span class="p">)</span>
+<span class="n">ew</span>    <span class="o">=</span> <span class="n">backtest</span><span class="p">(</span><span class="n">universe</span><span class="p">)</span>
+<span class="n">S</span>     <span class="o">=</span> <span class="n">strat</span><span class="o">.</span><span class="n">net</span>                                    <span class="c1"># strategy, net of costs: the series under test</span>
+<span class="n">A</span>     <span class="o">=</span> <span class="n">S</span> <span class="o">-</span> <span class="n">B</span>                                        <span class="c1"># monthly active return vs QQQ</span>
+<span class="n">pool</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">constituents_at</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">sig</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average monthly turnover (two-way): </span><span class="si">{</span><span class="n">strat</span><span class="o">.</span><span class="n">turn</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> of the book&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Eligible pool at each signal: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="si">}</span><span class="s2">–</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="si">}</span><span class="s2"> constituents (point-in-time membership)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average monthly turnover (two-way): 96% of the book
+Eligible pool at each signal: 107–113 constituents (point-in-time membership)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="the-out-of-sample-track-record">
+<h2>3. The out-of-sample track record<a class="headerlink" href="#the-out-of-sample-track-record" title="Link to this heading">#</a></h2>
+<p>Net of costs, versus QQQ, with actual index membership at each date (the naive version is quantified in section 8). Sharpe is annualised mean excess return over volatility (one definition used everywhere); max drawdown is measured on monthly data and therefore understates intra-month drawdowns.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">perf</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">rf</span><span class="o">=</span><span class="n">RF</span><span class="p">):</span>
+    <span class="n">r</span>   <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">eq</span>  <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+    <span class="n">vol</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;CAGR&quot;</span><span class="p">:</span> <span class="n">eq</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="p">(</span><span class="mi">12</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Vol&quot;</span><span class="p">:</span> <span class="n">vol</span><span class="p">,</span>
+            <span class="s2">&quot;Sharpe&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">rf</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">/</span> <span class="n">vol</span><span class="p">,</span> <span class="s2">&quot;MaxDD&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">eq</span> <span class="o">/</span> <span class="n">eq</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="s2">&quot;Best month&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="s2">&quot;Worst month&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="s2">&quot;% months &gt; 0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()}</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Waterfall (net)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S</span><span class="p">),</span> <span class="s2">&quot;QQQ&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">B</span><span class="p">)})</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CAGR</th>
+      <th>Vol</th>
+      <th>Sharpe</th>
+      <th>MaxDD</th>
+      <th>Best month</th>
+      <th>Worst month</th>
+      <th>% months &gt; 0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Waterfall (net)</th>
+      <td>0.357</td>
+      <td>0.252</td>
+      <td>1.347</td>
+      <td>-0.271</td>
+      <td>0.290</td>
+      <td>-0.222</td>
+      <td>0.664</td>
+    </tr>
+    <tr>
+      <th>QQQ</th>
+      <td>0.211</td>
+      <td>0.192</td>
+      <td>1.102</td>
+      <td>-0.322</td>
+      <td>0.161</td>
+      <td>-0.138</td>
+      <td>0.664</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Reading.</strong> Even with actual membership at each date the waterfall still beats QQQ on every headline number: CAGR 36% versus 21%, Sharpe 1.35 versus 1.10, and a shallower max drawdown (27% against 32%). The edge survives contact with reality; it just becomes thinner than when the universe was quietly chosen from today’s member list.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height_ratios&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span>
+<span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">lw</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">S</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net)&quot;</span><span class="p">,</span> <span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">),</span> <span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="s2">&quot;QQQ&quot;</span><span class="p">,</span> <span class="s2">&quot;#e69f00&quot;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)]:</span>
+    <span class="n">eq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:],</span> <span class="p">[</span><span class="n">eq</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>      <span class="c1"># end marker</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span> <span class="o">/</span> <span class="n">eq</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Growth of 1 (log)&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Drawdown (monthly)&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Waterfall vs QQQ — monthly rebalance, open-to-open, net of costs&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">.96</span><span class="p">));</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/357a107982f96c0eaee756b8c88794893c24d3be0f8463912e75f66b55759da2.png" src="../_images/357a107982f96c0eaee756b8c88794893c24d3be0f8463912e75f66b55759da2.png" />
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="walk-forward-folds-is-the-edge-consistent">
+<h2>4. Walk-forward folds — is the edge consistent?<a class="headerlink" href="#walk-forward-folds-is-the-edge-consistent" title="Link to this heading">#</a></h2>
+<p>The track record is cut into <strong>independent, non-overlapping 12-month folds</strong>. In each fold nothing was fitted on that data, so each is a clean out-of-sample test of the <em>frozen</em> rule. A single total can hide the fact that one spectacular year did all the work; the fold view cannot.</p>
+<p>Two numbers summarise it: the <strong>hit rate</strong> (folds in which the strategy beat QQQ) and an exact <strong>one-sided binomial p-value</strong> — the probability of seeing at least that many wins if each fold were a coin flip.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fold_table</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">FOLD</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">size</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">)</span>
+        <span class="n">ss</span><span class="p">,</span> <span class="n">bb</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">b</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_len</span><span class="p">:</span>            <span class="c1"># tiny tail fold is dropped (too noisy to judge)</span>
+            <span class="k">continue</span>
+        <span class="n">rs</span><span class="p">,</span> <span class="n">rb</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ss</span><span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">bb</span><span class="p">)</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;Fold&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;From&quot;</span><span class="p">:</span> <span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="s2">&quot;To&quot;</span><span class="p">:</span> <span class="n">ss</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>
+                     <span class="s2">&quot;Months&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss</span><span class="p">),</span> <span class="s2">&quot;Waterfall&quot;</span><span class="p">:</span> <span class="n">rs</span><span class="p">,</span> <span class="s2">&quot;QQQ&quot;</span><span class="p">:</span> <span class="n">rb</span><span class="p">,</span> <span class="s2">&quot;Active&quot;</span><span class="p">:</span> <span class="n">rs</span> <span class="o">-</span> <span class="n">rb</span><span class="p">,</span> <span class="s2">&quot;Win&quot;</span><span class="p">:</span> <span class="n">rs</span> <span class="o">&gt;</span> <span class="n">rb</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Fold&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">binom_p</span><span class="p">(</span><span class="n">wins</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>                    <span class="c1"># P(X &gt;= wins), X ~ Binomial(n, 0.5)</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">comb</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">wins</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">n</span>
+
+<span class="n">folds</span> <span class="o">=</span> <span class="n">fold_table</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Folds beating QQQ: </span><span class="si">{</span><span class="n">folds</span><span class="o">.</span><span class="n">Win</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">folds</span><span class="p">)</span><span class="si">}</span><span class="s2">   |   exact binomial p = &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">binom_p</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">folds</span><span class="o">.</span><span class="n">Win</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">folds</span><span class="p">))</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">folds</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Folds beating QQQ: 8 / 11   |   exact binomial p = 0.113
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>From</th>
+      <th>To</th>
+      <th>Months</th>
+      <th>Waterfall</th>
+      <th>QQQ</th>
+      <th>Active</th>
+      <th>Win</th>
+    </tr>
+    <tr>
+      <th>Fold</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>2016-03-01</td>
+      <td>2017-02-01</td>
+      <td>12</td>
+      <td>0.530</td>
+      <td>0.224</td>
+      <td>0.306</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2017-03-01</td>
+      <td>2018-02-01</td>
+      <td>12</td>
+      <td>0.380</td>
+      <td>0.352</td>
+      <td>0.028</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2018-03-01</td>
+      <td>2019-02-01</td>
+      <td>12</td>
+      <td>-0.020</td>
+      <td>0.004</td>
+      <td>-0.023</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2019-03-01</td>
+      <td>2020-02-03</td>
+      <td>12</td>
+      <td>0.313</td>
+      <td>0.326</td>
+      <td>-0.013</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2020-03-02</td>
+      <td>2021-02-01</td>
+      <td>12</td>
+      <td>0.822</td>
+      <td>0.453</td>
+      <td>0.369</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2021-03-01</td>
+      <td>2022-02-01</td>
+      <td>12</td>
+      <td>0.232</td>
+      <td>0.151</td>
+      <td>0.080</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2022-03-01</td>
+      <td>2023-02-01</td>
+      <td>12</td>
+      <td>-0.029</td>
+      <td>-0.186</td>
+      <td>0.157</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>2023-03-01</td>
+      <td>2024-02-01</td>
+      <td>12</td>
+      <td>0.223</td>
+      <td>0.432</td>
+      <td>-0.210</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>2024-03-01</td>
+      <td>2025-02-03</td>
+      <td>12</td>
+      <td>0.451</td>
+      <td>0.233</td>
+      <td>0.217</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>2025-03-03</td>
+      <td>2026-02-02</td>
+      <td>12</td>
+      <td>0.826</td>
+      <td>0.211</td>
+      <td>0.615</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>2026-03-02</td>
+      <td>2026-10-01</td>
+      <td>8</td>
+      <td>0.352</td>
+      <td>0.204</td>
+      <td>0.147</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">))</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">folds</span><span class="o">.</span><span class="n">Active</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="n">bars</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">folds</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vals</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="s2">&quot;#d1495b&quot;</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>                                   <span class="c1"># value label above/below each bar</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">+.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">v</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span>
+                <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#595f6b&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">.8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">folds</span><span class="o">.</span><span class="n">index</span><span class="p">);</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">d</span><span class="o">.</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">folds</span><span class="o">.</span><span class="n">From</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Active return vs QQQ (%)&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Fold start year&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Walk-forward folds: waterfall minus QQQ, 12-month non-overlapping blocks&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">.94</span><span class="p">));</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/396216dc942da4fc694d7f12a005adf8d26cb8f781bc913f5ceeaa8764a46301.png" src="../_images/396216dc942da4fc694d7f12a005adf8d26cb8f781bc913f5ceeaa8764a46301.png" />
+</div>
+</div>
+<p><strong>Reading.</strong> The strategy wins in 8 of the 11 one year folds, which still sounds solid. But the exact binomial p has moved to 0.113, so consistency across folds no longer clears even a lenient 10% bar. The three losing blocks are instructive: Mar 2018 to Feb 2019, Mar 2019 to Feb 2020 (when QQQ itself rose 33%), and Mar 2023 to Feb 2024 (QQQ +43%, strategy +22%). The edge is real but lumpy; it is not a coin flip that wins every year.</p>
+</section>
+<hr class="docutils" />
+<section id="evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">
+<h2>5. Evidence accumulation — does the case get stronger, and does it stay strong?<a class="headerlink" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong" title="Link to this heading">#</a></h2>
+<p>Here the walk-forward is applied to the <strong>statistic itself</strong>. At each month <em>m</em> we use only the history up to <em>m</em> and compute the t-statistic of the mean monthly active return (strategy − QQQ). Two things are being checked:</p>
+<ul class="simple">
+<li><p>does the t-stat <strong>climb and stay above ~2</strong> as data accumulates (a real edge accumulates evidence ∝ √time), or does it spike and decay (an episode)?</p></li>
+<li><p>the <strong>rolling 36-month active return</strong>: how often is a three-year investor ahead of QQQ?</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MIN_M</span>  <span class="o">=</span> <span class="mi">24</span>
+<span class="n">cnt</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">t_exp</span>  <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">expanding</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">expanding</span><span class="p">()</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cnt</span><span class="p">)))</span>
+<span class="n">t_exp</span>  <span class="o">=</span> <span class="n">t_exp</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">MIN_M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">roll36</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">36</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span> <span class="o">*</span> <span class="mi">12</span>
+<span class="n">share_roll</span> <span class="o">=</span> <span class="p">(</span><span class="n">roll36</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">6.5</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_exp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">.9</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">.6</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t_exp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">t_exp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">t_exp</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.15</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Expanding t-stat of</span><span class="se">\n</span><span class="s2">mean active return&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Evidence accumulation: only information available at each date (dashed line: t = 2)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">roll36</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#4c72b0&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">.8</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">roll36</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">roll36</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">roll36</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">roll36</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">roll36</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">roll36</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#d1495b&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.25</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Rolling 36M active</span><span class="se">\n</span><span class="s2">return, annualised (%)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;A 3-year holder was ahead of QQQ in </span><span class="si">{</span><span class="n">share_roll</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> of rolling windows&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ae4ab01bbfe7acf31972892863bb9dbdda1cf6bc6fbbd4fe0837fb0738071eb9.png" src="../_images/ae4ab01bbfe7acf31972892863bb9dbdda1cf6bc6fbbd4fe0837fb0738071eb9.png" />
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="statistical-significance">
+<h2>6. Statistical significance<a class="headerlink" href="#statistical-significance" title="Link to this heading">#</a></h2>
+<p>Monthly active returns are autocorrelated, fat-tailed and heteroskedastic, so a naive t-test overstates confidence. Three tests that respect that:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Test</p></th>
+<th class="head"><p>What it answers</p></th>
+<th class="head"><p>Robustness</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Robust t-test of the mean active return</strong> (Newey West estimator)</p></td>
+<td><p>Is outperformance different from zero?</p></td>
+<td><p>Standard errors robust to autocorrelation and heteroskedasticity (HAC)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>CAPM alpha vs QQQ</strong> (HAC)</p></td>
+<td><p>Is the edge <em>after</em> removing market exposure — or just leveraged beta?</p></td>
+<td><p>Same HAC errors; reports <strong>beta</strong> too</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Paired block bootstrap</strong> (6-month blocks, 10,000 resamples)</p></td>
+<td><p>Distribution-free p-value and 95% CI for (a) annual active return and (b) the <strong>Sharpe difference</strong></p></td>
+<td><p>No normality assumption; blocks keep serial dependence; strategy and QQQ are resampled <em>together</em></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A 10-stock momentum book is typically high-beta, so the alpha line matters more than the raw outperformance: a strategy that simply owns QQQ with leverage would “beat” it in a bull market with zero skill.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">nw_t</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">HAC_LAGS</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;t-stat of the mean with robust HAC (Newey West type) standard error.&#39;&#39;&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="n">e</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">e</span> <span class="o">@</span> <span class="n">e</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lags</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">l</span> <span class="o">/</span> <span class="p">(</span><span class="n">lags</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="n">l</span><span class="p">:]</span> <span class="o">@</span> <span class="n">e</span><span class="p">[:</span><span class="o">-</span><span class="n">l</span><span class="p">])</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ols_hac</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">HAC_LAGS</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;OLS y = a + b·x with robust HAC covariance → coefficients and t-stats.&#39;&#39;&#39;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">x</span><span class="p">])</span>
+    <span class="n">XtXi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">XtXi</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">X</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">X</span> <span class="o">@</span> <span class="n">b</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">u</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lags</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">l</span><span class="p">:]</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">u</span><span class="p">[:</span><span class="o">-</span><span class="n">l</span><span class="p">]</span>
+        <span class="n">S</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">l</span> <span class="o">/</span> <span class="p">(</span><span class="n">lags</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">G</span> <span class="o">+</span> <span class="n">G</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">XtXi</span> <span class="o">@</span> <span class="n">S</span> <span class="o">@</span> <span class="n">XtXi</span>
+    <span class="k">return</span> <span class="n">b</span><span class="p">,</span> <span class="n">b</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">V</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sharpe_rows</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">rf</span><span class="o">=</span><span class="n">RF</span><span class="p">):</span>                           <span class="c1"># Sharpe of each row of a (sims × months) matrix</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">rf</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">/</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">battery</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Full significance battery of series s against benchmark b (monthly returns).&#39;&#39;&#39;</span>
+    <span class="n">s</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+    <span class="n">sv</span><span class="p">,</span> <span class="n">bv</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">sv</span> <span class="o">-</span> <span class="n">bv</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sv</span><span class="p">)</span>
+
+    <span class="n">coef</span><span class="p">,</span> <span class="n">tv</span> <span class="o">=</span> <span class="n">ols_hac</span><span class="p">(</span><span class="n">sv</span><span class="p">,</span> <span class="n">bv</span><span class="p">)</span>
+    <span class="n">f</span>  <span class="o">=</span> <span class="n">fold_table</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">ra</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">36</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span> <span class="o">*</span> <span class="mi">12</span>
+
+    <span class="n">rng</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>               <span class="c1"># circular paired block bootstrap</span>
+    <span class="n">nb</span>    <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="n">BLOCK</span><span class="p">))</span>
+    <span class="n">idx</span>   <span class="o">=</span> <span class="p">((</span><span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">NSIM</span><span class="p">,</span> <span class="n">nb</span><span class="p">))[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">BLOCK</span><span class="p">))</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">NSIM</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">Sb</span><span class="p">,</span> <span class="n">Bb</span> <span class="o">=</span> <span class="n">sv</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">bv</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">act_b</span> <span class="o">=</span> <span class="p">(</span><span class="n">Sb</span> <span class="o">-</span> <span class="n">Bb</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span>
+    <span class="n">dsh_b</span> <span class="o">=</span> <span class="n">sharpe_rows</span><span class="p">(</span><span class="n">Sb</span><span class="p">)</span> <span class="o">-</span> <span class="n">sharpe_rows</span><span class="p">(</span><span class="n">Bb</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;Months&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span>
+        <span class="s2">&quot;Active return (ann.)&quot;</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">12</span><span class="p">,</span>
+        <span class="s2">&quot;HAC t-stat (active return)&quot;</span><span class="p">:</span> <span class="n">nw_t</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
+        <span class="s2">&quot;CAPM alpha (ann.)&quot;</span><span class="p">:</span> <span class="n">coef</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">12</span><span class="p">,</span>
+        <span class="s2">&quot;t-stat of alpha, HAC&quot;</span><span class="p">:</span> <span class="n">tv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">&quot;Beta vs benchmark&quot;</span><span class="p">:</span> <span class="n">coef</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;Sharpe difference&quot;</span><span class="p">:</span> <span class="n">sharpe_rows</span><span class="p">(</span><span class="n">sv</span><span class="p">[</span><span class="kc">None</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">sharpe_rows</span><span class="p">(</span><span class="n">bv</span><span class="p">[</span><span class="kc">None</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">&quot;Bootstrap p: active ≤ 0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">act_b</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">&quot;Bootstrap p: ΔSharpe ≤ 0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">dsh_b</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">&quot;Folds won&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">Win</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Binomial p (folds)&quot;</span><span class="p">:</span> <span class="n">binom_p</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">Win</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)),</span>
+        <span class="s2">&quot;Rolling 36M ahead&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ra</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s2">&quot;_act_boot&quot;</span><span class="p">:</span> <span class="n">act_b</span><span class="p">,</span> <span class="s2">&quot;_dsh_boot&quot;</span><span class="p">:</span> <span class="n">dsh_b</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<span class="n">vs_qqq</span> <span class="o">=</span> <span class="n">battery</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">res_dict</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="p">{</span><span class="n">m</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)}</span>
+                         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+
+<span class="n">show</span><span class="p">({</span><span class="s2">&quot;Waterfall vs QQQ&quot;</span><span class="p">:</span> <span class="n">vs_qqq</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Waterfall vs QQQ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Active return (ann.)</th>
+      <td>0.128</td>
+    </tr>
+    <tr>
+      <th>Beta vs benchmark</th>
+      <td>0.953</td>
+    </tr>
+    <tr>
+      <th>Binomial p (folds)</th>
+      <td>0.113</td>
+    </tr>
+    <tr>
+      <th>Bootstrap p: active ≤ 0</th>
+      <td>0.008</td>
+    </tr>
+    <tr>
+      <th>Bootstrap p: ΔSharpe ≤ 0</th>
+      <td>0.167</td>
+    </tr>
+    <tr>
+      <th>CAPM alpha (ann.)</th>
+      <td>0.138</td>
+    </tr>
+    <tr>
+      <th>Folds won</th>
+      <td>8/11</td>
+    </tr>
+    <tr>
+      <th>HAC t-stat (active return)</th>
+      <td>2.187</td>
+    </tr>
+    <tr>
+      <th>Months</th>
+      <td>128</td>
+    </tr>
+    <tr>
+      <th>Rolling 36M ahead</th>
+      <td>0.914</td>
+    </tr>
+    <tr>
+      <th>Sharpe difference</th>
+      <td>0.245</td>
+    </tr>
+    <tr>
+      <th>t-stat of alpha, HAC</th>
+      <td>2.271</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">lab</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;_act_boot&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;Annual active return vs QQQ (%)&quot;</span><span class="p">),</span>
+                           <span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;_dsh_boot&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="s2">&quot;Sharpe difference (waterfall − QQQ)&quot;</span><span class="p">)]:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vs_qqq</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">*</span> <span class="n">scale</span>
+    <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">97.5</span><span class="p">])</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.10</span><span class="p">)</span>                        <span class="c1"># CI band behind the histogram</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#b9c4d0&quot;</span><span class="p">,</span> <span class="n">histtype</span><span class="o">=</span><span class="s2">&quot;stepfilled&quot;</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#595f6b&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">);</span> <span class="n">a</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">hi</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">lab</span><span class="p">);</span> <span class="n">a</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;95% CI [</span><span class="si">{</span><span class="n">lo</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">]   ·   median </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">:</span><span class="s2">+.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Paired block bootstrap (10,000 resamples) — an interval that excludes 0 means the edge is not noise&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">.93</span><span class="p">));</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8e3823cb4903cfb0602c4d31a62180cfc87a1be2b2f290546764e4d2bf2b63dd.png" src="../_images/8e3823cb4903cfb0602c4d31a62180cfc87a1be2b2f290546764e4d2bf2b63dd.png" />
+</div>
+</div>
+<p><strong>Reading.</strong> The case now rests on two legs. Outperformance holds under robust HAC inference (t near 2.2), and the paired block bootstrap puts P(active ≤ 0) at about one percent. The Sharpe difference alone does not clear its bar (p = 0.167). So what we can claim is a positive, statistically credible return edge after beta; what we cannot yet claim is a reliably higher risk adjusted score.</p>
+</section>
+<hr class="docutils" />
+<section id="scorecard">
+<h2>7. Scorecard<a class="headerlink" href="#scorecard" title="Link to this heading">#</a></h2>
+<p>Each criterion is computed from the numbers above — nothing is typed by hand. Thresholds are conventional rules of thumb (5% one-sided for the main tests, 10% for the binomial test because there are only ~10 folds). A ✗ means <em>“claim not supported by this evidence”</em>, not <em>“strategy is worthless”</em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">scorecard</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Outperforms: active return &gt; 0 and HAC t &gt; 2&quot;</span><span class="p">:</span>        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Active return (ann.)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;HAC t-stat (active return)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2&quot;</span><span class="p">:</span>      <span class="n">r</span><span class="p">[</span><span class="s2">&quot;CAPM alpha (ann.)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;t-stat of alpha, HAC&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;Bootstrap: P(active ≤ 0) &lt; 5%&quot;</span><span class="p">:</span>                       <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Bootstrap p: active ≤ 0&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">.05</span><span class="p">,</span>
+        <span class="s2">&quot;Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%&quot;</span><span class="p">:</span>                      <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Bootstrap p: ΔSharpe ≤ 0&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">.05</span><span class="p">,</span>
+        <span class="s2">&quot;Consistency: folds won, binomial p &lt; 10%&quot;</span><span class="p">:</span>            <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Binomial p (folds)&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">.10</span><span class="p">,</span>
+        <span class="s2">&quot;Persistence: ahead in ≥ 75</span><span class="si">% o</span><span class="s2">f rolling 36M windows&quot;</span><span class="p">:</span>  <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Rolling 36M ahead&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">.75</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;── </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="s2">&quot;─&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">60</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">checks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;✓&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;✗&#39;</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span><span class="si">}</span><span class="s2"> passed | active </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;Active return (ann.)&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">/yr | &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;alpha </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;CAPM alpha (ann.)&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">/yr | beta </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;Beta vs benchmark&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | folds won </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;Folds won&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="nb">len</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span>
+
+<span class="n">k</span><span class="p">,</span> <span class="n">tot</span> <span class="o">=</span> <span class="n">scorecard</span><span class="p">(</span><span class="n">vs_qqq</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs QQQ&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>── Waterfall (net) vs QQQ ──────────────────────────────────────
+  ✓  Outperforms: active return &gt; 0 and HAC t &gt; 2
+  ✓  Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
+  ✓  Bootstrap: P(active ≤ 0) &lt; 5%
+  ✗  Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
+  ✗  Consistency: folds won, binomial p &lt; 10%
+  ✓  Persistence: ahead in ≥ 75% of rolling 36M windows
+  → 4/6 passed | active 12.8%/yr | alpha 13.8%/yr | beta 0.95 | folds won 8/11
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Reading.</strong> Four of the six checks pass against QQQ: outperformance, alpha after beta, bootstrap significance on active return, and persistence across rolling windows. The two that fail are the stricter ones (Sharpe difference and fold consistency). The honest summary is a credible return edge with an unproven Sharpe edge.</p>
+</section>
+<section id="the-lookahead-bias-check-same-strategy-today-s-membership">
+<h2>8. The lookahead bias check: same strategy, today’s membership<a class="headerlink" href="#the-lookahead-bias-check-same-strategy-today-s-membership" title="Link to this heading">#</a></h2>
+<p>So far every universe decision used actual index membership at each date. Now the classic shortcut: run the <strong>identical</strong> waterfall (same signals, same funnel, same costs, same dates) with <strong>today’s index membership applied to every month since 2016</strong>. That is the backtest most people would ship, and it silently gives the strategy its future self. Section by section we compare results and statistical validation: real case membership vs today’s membership (lookahead).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">waterfall_biased</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n1</span><span class="o">=</span><span class="n">N1</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="n">N2</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="n">N3</span><span class="p">):</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">CURRENT</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>     <span class="c1"># today&#39;s members at every date: the lookahead set</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">m12</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">pool</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">m6</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+    <span class="k">return</span> <span class="n">m3</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n3</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+
+<span class="n">S_bias</span> <span class="o">=</span> <span class="n">backtest</span><span class="p">(</span><span class="n">waterfall_biased</span><span class="p">)</span><span class="o">.</span><span class="n">net</span>                    <span class="c1"># everything identical to the real case except the universe</span>
+<span class="n">cmp_perf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;QQQ (benchmark)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">B</span><span class="p">),</span>
+    <span class="s2">&quot;Real case membership&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S</span><span class="p">),</span>
+    <span class="s2">&quot;Today&#39;s membership (lookahead)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S_bias</span><span class="p">),</span>
+<span class="p">})</span><span class="o">.</span><span class="n">T</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Universe: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="fm">__len__</span><span class="p">())</span><span class="si">}</span><span class="s2"> tickers at every date with today&#39;s membership, vs 107 to 113 actual members in the real case&quot;</span><span class="p">)</span>
+<span class="n">cmp_perf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Universe: 128 tickers at every date with today&#39;s membership, vs 107 to 113 actual members in the real case
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CAGR</th>
+      <th>Vol</th>
+      <th>Sharpe</th>
+      <th>MaxDD</th>
+      <th>Best month</th>
+      <th>Worst month</th>
+      <th>% months &gt; 0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>QQQ (benchmark)</th>
+      <td>0.211</td>
+      <td>0.192</td>
+      <td>1.102</td>
+      <td>-0.322</td>
+      <td>0.161</td>
+      <td>-0.138</td>
+      <td>0.664</td>
+    </tr>
+    <tr>
+      <th>Real case membership</th>
+      <td>0.357</td>
+      <td>0.252</td>
+      <td>1.347</td>
+      <td>-0.271</td>
+      <td>0.290</td>
+      <td>-0.222</td>
+      <td>0.664</td>
+    </tr>
+    <tr>
+      <th>Today's membership (lookahead)</th>
+      <td>0.511</td>
+      <td>0.302</td>
+      <td>1.531</td>
+      <td>-0.274</td>
+      <td>0.510</td>
+      <td>-0.274</td>
+      <td>0.695</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Reading.</strong> Lookahead does a lot of work here. With today’s membership at every date the strategy compounds 51% a year (Sharpe 1.53); with actual membership it earns 36% (Sharpe 1.35), while QQQ sits at 21% (Sharpe 1.10). Volatility climbs from about 25% to 30% as well, so part of the extra return is simply owning the winners before everyone else does. In the chart above, the vertical gap between the two strategy lines <strong>is</strong> the size of the membership bias.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height_ratios&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span>
+<span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">ls</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">B</span><span class="p">,</span>      <span class="s2">&quot;QQQ&quot;</span><span class="p">,</span>                                        <span class="s2">&quot;#e69f00&quot;</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
+                           <span class="p">(</span><span class="n">S_bias</span><span class="p">,</span> <span class="s2">&quot;Strategy with today&#39;s membership (lookahead)&quot;</span><span class="p">,</span> <span class="s2">&quot;#d1495b&quot;</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">),</span>
+                           <span class="p">(</span><span class="n">S</span><span class="p">,</span>      <span class="s2">&quot;Strategy with real case membership&quot;</span><span class="p">,</span>            <span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)]:</span>
+    <span class="n">eq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span> <span class="o">/</span> <span class="n">eq</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Growth of 1 (log)&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Drawdown (monthly)&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Same strategy, two universes: the lookahead gap is the vertical distance between the two strategy lines&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">.96</span><span class="p">));</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3ebec0e7b60b8e88e039efe4b4ab25f57ad4d5f8f4e53a85a17f79a01d9aee79.png" src="../_images/3ebec0e7b60b8e88e039efe4b4ab25f57ad4d5f8f4e53a85a17f79a01d9aee79.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bat_bias</span> <span class="o">=</span> <span class="n">battery</span><span class="p">(</span><span class="n">S_bias</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>                              <span class="c1"># full significance battery, same tests as section 7</span>
+<span class="n">cmp_stat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;real case&quot;</span><span class="p">:</span>     <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs_qqq</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
+    <span class="s2">&quot;with lookahead&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bat_bias</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
+<span class="p">})</span>
+<span class="n">scorecard</span><span class="p">(</span><span class="n">bat_bias</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs QQQ — with today&#39;s membership at every date&quot;</span><span class="p">)</span>
+<span class="n">cmp_stat</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>── Waterfall (net) vs QQQ — with today&#39;s membership at every date 
+  ✓  Outperforms: active return &gt; 0 and HAC t &gt; 2
+  ✓  Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
+  ✓  Bootstrap: P(active ≤ 0) &lt; 5%
+  ✓  Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
+  ✓  Consistency: folds won, binomial p &lt; 10%
+  ✓  Persistence: ahead in ≥ 75% of rolling 36M windows
+  → 6/6 passed | active 25.1%/yr | alpha 23.7%/yr | beta 1.07 | folds won 10/11
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>real case</th>
+      <th>with lookahead</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Months</th>
+      <td>128</td>
+      <td>128</td>
+    </tr>
+    <tr>
+      <th>Active return (ann.)</th>
+      <td>0.128</td>
+      <td>0.251</td>
+    </tr>
+    <tr>
+      <th>HAC t-stat (active return)</th>
+      <td>2.187</td>
+      <td>3.494</td>
+    </tr>
+    <tr>
+      <th>CAPM alpha (ann.)</th>
+      <td>0.138</td>
+      <td>0.237</td>
+    </tr>
+    <tr>
+      <th>t-stat of alpha, HAC</th>
+      <td>2.271</td>
+      <td>3.318</td>
+    </tr>
+    <tr>
+      <th>Beta vs benchmark</th>
+      <td>0.953</td>
+      <td>1.069</td>
+    </tr>
+    <tr>
+      <th>Sharpe difference</th>
+      <td>0.245</td>
+      <td>0.429</td>
+    </tr>
+    <tr>
+      <th>Bootstrap p: active ≤ 0</th>
+      <td>0.008</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>Bootstrap p: ΔSharpe ≤ 0</th>
+      <td>0.167</td>
+      <td>0.036</td>
+    </tr>
+    <tr>
+      <th>Folds won</th>
+      <td>8/11</td>
+      <td>10/11</td>
+    </tr>
+    <tr>
+      <th>Binomial p (folds)</th>
+      <td>0.113</td>
+      <td>0.006</td>
+    </tr>
+    <tr>
+      <th>Rolling 36M ahead</th>
+      <td>0.914</td>
+      <td>1.000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Reading.</strong> Here it gets interesting. Both versions beat QQQ convincingly on active return and CAPM alpha (HAC t between about 2.2 and 3.5), and the bootstrap probability of losing money is near zero in both. The difference shows up in the two stricter checks. With today’s membership, P(ΔSharpe ≤ 0) drops from 0.17 to 0.04 (pass instead of fail), and fold consistency improves from 8 wins out of 11 (binomial p = 0.113) to 10 out of 11 (p = 0.006). The perfect six of six scorecard is therefore a product of membership lookahead; the real case earns four of six, with outperformance and alpha still significant while Sharpe difference and fold consistency miss their bars.</p>
+</section>
+<hr class="docutils" />
+<section id="how-far-can-this-conclusion-be-pushed">
+<h2>9. How far can this conclusion be pushed?<a class="headerlink" href="#how-far-can-this-conclusion-be-pushed" title="Link to this heading">#</a></h2>
+<p>A significant result against QQQ is <strong>necessary, not sufficient</strong>. The honest boundaries:</p>
+<p><strong>1. Membership timing (quantified in section 8).</strong> The universe uses point-in-time membership from <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code>: a recorded addition only becomes eligible in the year <em>after</em> its addition year (its whole addition year is ignored), and a removal stays eligible through its exit year, so no signal relies on information that had not yet become public. Residual approximations: (i) effective dates within a year are unknown; (ii) current members with no recorded change are assumed to have been in the index since before 2015; (iii) tickers without downloadable price history drop out wherever they would be needed. The cell below runs the <em>same battery</em> against an <strong>equal-weight portfolio of the same universe</strong>: if the waterfall’s edge over <em>that</em> is weak, much of the advantage over QQQ is simply “owning today’s winners”. Passing this is necessary, still not proof.</p>
+<p><strong>2. Hindsight in the design.</strong> No parameters were searched, but 12/6/3 months and 50/25/10 were chosen by someone who had seen this history. Only genuinely new data — a forward test — removes this.</p>
+<p><strong>3. One regime.</strong> About ten years dominated by US mega-cap tech. The Sharpe ratio’s standard error at this length is roughly 0.3.</p>
+<p><strong>4. Simplified costs.</strong> Flat 10 bp on traded notional; no market impact, no taxes.</p>
+<p><strong>5. Multiple tests.</strong> The scorecard reports six related criteria; they are correlated, not independent, but a single ✓ among ✗s should not be oversold.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vs_ew</span> <span class="o">=</span> <span class="n">battery</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">ew</span><span class="o">.</span><span class="n">gross</span><span class="p">)</span>       <span class="c1"># same universe, equal-weight, no skill — the membership-adjusted yardstick</span>
+<span class="n">k2</span><span class="p">,</span> <span class="n">tot2</span> <span class="o">=</span> <span class="n">scorecard</span><span class="p">(</span><span class="n">vs_ew</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs equal-weight universe&quot;</span><span class="p">)</span>
+<span class="n">show</span><span class="p">({</span><span class="s2">&quot;vs QQQ&quot;</span><span class="p">:</span> <span class="n">vs_qqq</span><span class="p">,</span> <span class="s2">&quot;vs equal-weight universe&quot;</span><span class="p">:</span> <span class="n">vs_ew</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>── Waterfall (net) vs equal-weight universe ────────────────────
+  ✓  Outperforms: active return &gt; 0 and HAC t &gt; 2
+  ✓  Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
+  ✓  Bootstrap: P(active ≤ 0) &lt; 5%
+  ✗  Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
+  ✗  Consistency: folds won, binomial p &lt; 10%
+  ✓  Persistence: ahead in ≥ 75% of rolling 36M windows
+  → 4/6 passed | active 13.6%/yr | alpha 14.0%/yr | beta 0.98 | folds won 8/11
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>vs QQQ</th>
+      <th>vs equal-weight universe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Months</th>
+      <td>128</td>
+      <td>128</td>
+    </tr>
+    <tr>
+      <th>Active return (ann.)</th>
+      <td>0.128</td>
+      <td>0.136</td>
+    </tr>
+    <tr>
+      <th>HAC t-stat (active return)</th>
+      <td>2.187</td>
+      <td>2.348</td>
+    </tr>
+    <tr>
+      <th>CAPM alpha (ann.)</th>
+      <td>0.138</td>
+      <td>0.140</td>
+    </tr>
+    <tr>
+      <th>t-stat of alpha, HAC</th>
+      <td>2.271</td>
+      <td>2.564</td>
+    </tr>
+    <tr>
+      <th>Beta vs benchmark</th>
+      <td>0.953</td>
+      <td>0.978</td>
+    </tr>
+    <tr>
+      <th>Sharpe difference</th>
+      <td>0.245</td>
+      <td>0.231</td>
+    </tr>
+    <tr>
+      <th>Bootstrap p: active ≤ 0</th>
+      <td>0.008</td>
+      <td>0.004</td>
+    </tr>
+    <tr>
+      <th>Bootstrap p: ΔSharpe ≤ 0</th>
+      <td>0.167</td>
+      <td>0.162</td>
+    </tr>
+    <tr>
+      <th>Folds won</th>
+      <td>8/11</td>
+      <td>8/11</td>
+    </tr>
+    <tr>
+      <th>Binomial p (folds)</th>
+      <td>0.113</td>
+      <td>0.113</td>
+    </tr>
+    <tr>
+      <th>Rolling 36M ahead</th>
+      <td>0.914</td>
+      <td>0.946</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Reading.</strong> The same battery passes against an equal weight basket of real index membership: about 14% active return per year, HAC t near 2.4 to 2.6, and P(active ≤ 0) at 0.4%. Simply owning today’s winners therefore does not explain the whole edge. What it also cannot fix is the same pair of failures (Sharpe difference, fold consistency), which persist against both benchmarks.</p>
+<p><strong>Next steps to make the claim stronger:</strong> (1) exact effective dates for each addition/removal in <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> (currently year-resolution); (2) extend to Russell 1000 / global equities as a genuinely different sample; (3) regress on Fama-French + momentum factors to see whether the alpha is more than known factor exposure; (4) paper-trade and accumulate a live forward record before sizing up.</p>
+<hr class="docutils" />
+<p><em>Research for educational purposes. Nothing herein constitutes investment advice.</em></p>
+</section>
+<section id="main-findings">
+<h2>10. Main findings<a class="headerlink" href="#main-findings" title="Link to this heading">#</a></h2>
+<p>This notebook runs the same strategy twice and puts both against QQQ, because the comparison itself is the story: benchmark versus strategy with membership lookahead versus real case.</p>
+<p>Net of costs, the real case waterfall beats QQQ by about 13% a year (CAGR 36% against 21%, Sharpe 1.35 against 1.10), with a marginally shallower drawdown. That outperformance is statistically credible: HAC t near 2.2 on active return, positive CAPM alpha after beta (t near 2.3), and a bootstrap probability of losing money below one percent.</p>
+<p>What does not survive is the finer print. With actual membership the strategy wins in only 8 of the 11 independent folds, each one year long (binomial p = 0.113), and the Sharpe difference misses its bar (P(ΔSharpe ≤ 0) = 0.17). Scorecard: four of six.</p>
+<p>The lookahead run explains exactly that gap. With today’s membership at every date, CAGR climbs from 36% to 51%, and both failed checks flip to pass (P(ΔSharpe ≤ 0) = 0.04; folds won 10 out of 11, p = 0.006). Scorecard: six of six. In other words, the perfect statistical validation is a product of membership lookahead; in the real case only outperformance and alpha remain significant.</p>
+<p>The practical takeaway: momentum selection over this index has a genuine but moderate edge over holding QQQ, and how much of it you keep depends on picking from actual members at each date rather than from today’s list. Twenty five historical constituents had no downloadable price history and were excluded wherever needed (the list is in section 1).</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "luigi-mari/Notebook",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="optionspnl.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Naked Options Simulation in Python</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-of-an-edge-tested-twice-with-and-without-membership-lookahead-bias">Evidence of an edge, tested twice: with and without membership lookahead bias</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#research-question">Research question</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-strategy">The strategy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-walk-forward-without-optimisation">Why a walk-forward <em>without</em> optimisation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-data">1. Parameters &amp; data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signals-and-backtest-engine">2. Signals and backtest engine</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-out-of-sample-track-record">3. The out-of-sample track record</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds-is-the-edge-consistent">4. Walk-forward folds — is the edge consistent?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">5. Evidence accumulation — does the case get stronger, and does it stay strong?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance">6. Statistical significance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scorecard">7. Scorecard</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lookahead-bias-check-same-strategy-today-s-membership">8. The lookahead bias check: same strategy, today’s membership</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-far-can-this-conclusion-be-pushed">9. How far can this conclusion be pushed?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">10. Main findings</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Luigi Mari
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
