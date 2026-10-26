@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Welcome to My Notebook &#8212; Notebook</title>
+    <title>Welcome &#8212; Notebook</title>
   
   
   
@@ -178,7 +178,7 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1 current active">
                 <a class="reference internal" href="#">
-                    Welcome to My Notebook
+                    Welcome
                 </a>
             </li>
         </ul>
@@ -370,7 +370,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Welcome to My Notebook</h1>
+    <h1>Welcome</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -380,7 +380,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-this-book-is">What this book is</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chapters">Chapters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#skills">Skills</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contact">Contact</a></li>
 </ul>
             </nav>
         </div>
@@ -392,21 +396,36 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="welcome-to-my-notebook">
-<h1>Welcome to My Notebook<a class="headerlink" href="#welcome-to-my-notebook" title="Link to this heading">#</a></h1>
-<p><a class="reference external" href="https://myst.tools"><img alt="Made with MyST" src="https://img.shields.io/badge/made%20with-myst-orange" /></a></p>
-<p>Hi, I’m <strong>Luigi Mari</strong> — a <strong>mechanical engineer</strong> with a growing focus on <strong>data science</strong> and <strong>quantitative finance</strong>.</p>
-<p>This notebook is where I combine <strong>engineering discipline</strong> with <strong>financial modeling</strong> — exploring how data, math, and algorithms can be used to understand and trade financial markets.</p>
-<p>Here, you’ll find a mix of <strong>experiments</strong>, <strong>prototypes</strong>, and <strong>research notes</strong> — from <strong>systematic trading strategies</strong> and <strong>risk models</strong>, to <strong>data pipelines</strong> and <strong>simulation tools</strong> built in Python.</p>
-<p>I’m especially interested in the intersection of <strong>mathematics, computation, and market behavior</strong>, and in how quantitative methods can bridge theory and real-world decision-making.</p>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="welcome">
+<h1>Welcome<a class="headerlink" href="#welcome" title="Link to this heading">#</a></h1>
+<p>Hi, I’m <strong>Luigi Mari</strong>. I’m a mechanical engineer turned R&amp;D data scientist: four years of industrial work in quantitative modeling, time-series analysis, and data automation, now applied to financial markets. This book is where I build systematic strategies in Python, validate them under honest assumptions, and publish the whole process.</p>
+<p>I hold a Master’s degree in <strong>Risk Management, Models &amp; Data Science for Finance</strong> (University of Pisa), with a focus on quantitative asset allocation frameworks, machine-learning signal validation, and walk-forward portfolio optimization.</p>
+<section id="what-this-book-is">
+<h2>What this book is<a class="headerlink" href="#what-this-book-is" title="Link to this heading">#</a></h2>
+<p>Every chapter here is an executable notebook, not a report: real market data, transaction costs included, results checked with statistics that do not assume normality, and the classic biases (like membership lookahead) measured instead of hidden. If a number is on the page, you can re-run it and get it back.</p>
+</section>
+<section id="chapters">
+<h2>Chapters<a class="headerlink" href="#chapters" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p><strong>Trading systems</strong> — strategy design and backtesting</p></li>
-<li><p><strong>Derivatives &amp; risk</strong> — pricing models and hedging simulations</p></li>
-<li><p><strong>Data engineering for finance</strong> — pipelines and time-series analysis</p></li>
-<li><p><strong>Quant research tools</strong> — experiments and explorations</p></li>
+<li><p><strong>Naked Options Simulation in Python</strong>: Black-Scholes-Merton pricing from a live option chain, GBM Monte Carlo for the naked position path by path, and interactive 3D sensitivity surfaces across strike, tenor, and implied volatility (theta and delta included).</p></li>
+<li><p><strong>Nasdaq-100 Momentum Waterfall</strong>: a multi-period momentum funnel (12m/6m/3m) rotating through point-in-time index constituents, net of costs, with the full significance battery: HAC t-stats, block bootstrap, walk-forward folds, and the cost of membership lookahead quantified case by case.</p></li>
 </ol>
+</section>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">#</a></h2>
+<p><strong>University of Pisa</strong> (MSc, Risk Management, Models &amp; Data Science for Finance): stochastic processes, statistical learning, econometrics, machine learning for finance, derivatives pricing, credit risk modeling. Master’s thesis: a two-layer rank funnel on a 21-ETF universe with systematic IC/ICIR feature validation and walk-forward optimization across sizing schemes; out-of-sample Sharpe of <strong>1.38</strong> with an annualized alpha of <strong>13.4%</strong> (HAC t = 2.87).</p>
+<p><strong>University of Salerno</strong> (BEng, Mechanical Engineering, 92/110): mathematics, physics, thermodynamics and heat transfer, fluid mechanics, computer science.</p>
+<p>Before the Master’s I spent four years in industrial R&amp;D on high-voltage electronics: stochastic simulation of failure modes, regression on noisy thermal time-series data that cut component unit costs by about a third, and Python pipelines that replaced manual analysis across the department. In the last stretch of that role I moved into quantitative product work: Monte Carlo models for risk-adjusted margin decisions under cost and pricing constraints, a quote-approval dashboard that lifted daily throughput by 75%, and copper options used to hedge raw-material exposure on international contracts.</p>
+</section>
+<section id="skills">
+<h2>Skills<a class="headerlink" href="#skills" title="Link to this heading">#</a></h2>
+<p><strong>Quantitative methods</strong>: time-series &amp; cross-sectional feature engineering (IC/ICIR), Kalman filtering, mean-variance and risk parity (ERC) with hierarchical risk parity, Black-Scholes-Merton, CDS bootstrapping and hazard-rate modeling, GARCH / VaR, Monte Carlo simulation, GBM / SDEs with Itô calculus, OLS / MLE, P&amp;L attribution, walk-forward backtesting.</p>
+<p><strong>Programming &amp; tools</strong>: Python (NumPy, Pandas, SciPy, Scikit-learn, PyMC3, Statsmodels, Matplotlib, Plotly, Dash), R, MATLAB, SQL; Git and JupyterLab.</p>
+<p><strong>Certifications</strong>: IBM Data Science Professional Certificate (12 courses); Interactive Brokers Derivatives: Options &amp; Futures. <strong>Languages</strong>: Italian (native), English (fluent).</p>
+</section>
+<section id="contact">
+<h2>Contact<a class="headerlink" href="#contact" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="mailto:ing&#46;luigimari&#37;&#52;&#48;yahoo&#46;com">ing<span>&#46;</span>luigimari<span>&#64;</span>yahoo<span>&#46;</span>com</a> · <a class="reference external" href="https://www.linkedin.com/in/luigi-mari">linkedin.com/in/luigi-mari</a> · <a class="reference external" href="https://github.com/luigi-mari">github.com/luigi-mari</a></p>
 </section>
 <div class="toctree-wrapper compound">
 </div>
@@ -467,7 +486,11 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-this-book-is">What this book is</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chapters">Chapters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#skills">Skills</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contact">Contact</a></li>
 </ul>
   </nav></div>
 
