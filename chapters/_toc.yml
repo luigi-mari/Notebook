@@ -4,6 +4,7 @@
 format: jb-book
 root: intro
 chapters:
-- file: notebooks/optionspnl
-- file: notebooks/MomentumWaterfall_WalkForward
-
+- file: optionspnl
+  title: Naked Options Simulation in Python
+- file: nasdaq100_momentum_waterfall
+  title: Nasdaq-100 Momentum Waterfall
