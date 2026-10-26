@@ -6,4 +6,5 @@ root: intro
 chapters:
 - file: notebooks/optionspnl
 - file: notebooks/GiustiPortfolio_Research.ipynb
+- file: notebooks/MomentumWaterfall_WalkForward
 
