@@ -432,10 +432,10 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-data">1. Parameters &amp; data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signals-and-backtest-engine">2. Signals and backtest engine</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-out-of-sample-track-record">3. The out-of-sample track record</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds-is-the-edge-consistent">4. Walk-forward folds — is the edge consistent?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">5. Evidence accumulation — does the case get stronger, and does it stay strong?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance">6. Statistical significance</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scorecard">7. Scorecard</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds-is-the-edge-consistent">4. Walk-forward folds: is the edge consistent?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">5. Evidence accumulation: does the case get stronger, and does it stay strong?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance-robust-tests-that-do-not-assume-normality">6. Statistical significance: robust tests that do not assume normality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-validation-scorecard-real-case-only">7. The validation scorecard, real case only</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lookahead-bias-check-same-strategy-today-s-membership">8. The lookahead bias check: same strategy, today’s membership</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-far-can-this-conclusion-be-pushed">9. How far can this conclusion be pushed?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">10. Main findings</a></li>
@@ -458,18 +458,16 @@ document.write(`
 <section id="research-question">
 <h2>Research question<a class="headerlink" href="#research-question" title="Link to this heading">#</a></h2>
 <blockquote>
-<div><p>Does a monthly momentum waterfall applied to the Nasdaq-100 generate a statistically significant, economically meaningful, and persistent excess return over buy-and-hold QQQ, using only information available at each portfolio formation date, with results robust to survivorship, membership lookahead bias, transaction costs, and alternative market regimes?</p>
+<div><p>Does a monthly momentum waterfall applied to the Nasdaq-100 generate a statistically significant, economically meaningful, and persistent excess return over buy-and-hold QQQ, using only information available at each portfolio formation date?</p>
 </div></blockquote>
 </section>
 <section id="the-strategy">
 <h2>The strategy<a class="headerlink" href="#the-strategy" title="Link to this heading">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>index members (≈100) at each rebalance ──► top 50 by 12M return ──► top 25 by 6M return ──► top 10 by 3M return ──► equal weight, monthly
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">index</span> <span class="pre">members</span> <span class="pre">(~100)</span> <span class="pre">|</span> <span class="pre">top</span> <span class="pre">50</span> <span class="pre">by</span> <span class="pre">12M</span> <span class="pre">return</span> <span class="pre">|</span> <span class="pre">top</span> <span class="pre">25</span> <span class="pre">by</span> <span class="pre">6M</span> <span class="pre">|</span> <span class="pre">top</span> <span class="pre">10</span> <span class="pre">by</span> <span class="pre">3M</span> <span class="pre">|</span> <span class="pre">equal</span> <span class="pre">weight,</span> <span class="pre">monthly</span> <span class="pre">rebalance</span></code></p>
 </section>
 <section id="why-a-walk-forward-without-optimisation">
 <h2>Why a walk-forward <em>without</em> optimisation<a class="headerlink" href="#why-a-walk-forward-without-optimisation" title="Link to this heading">#</a></h2>
-<p>The rule has <strong>no fitted parameters</strong>: horizons (12/6/3 months) and funnel sizes (50/25/10) are fixed in advance and never tuned on this data. That has a useful consequence: there is no train/test leakage from parameter fitting, so the walk-forward is applied to the <strong>evidence</strong> instead of to a model. The history is replayed month by month exactly as a live investor would experience it:</p>
+<p>The rule has <strong>no fitted parameters</strong>: horizons (12/6/3 months) and funnel sizes (50/25/10) are fixed ex-ante and never tuned on this data. So there is no train/test leakage from parameter fitting, and the walk-forward is applied to the <strong>evidence</strong> instead of to a model: the history is replayed month by month exactly as a live investor would experience it.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Step</p></th>
@@ -479,7 +477,7 @@ document.write(`
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Signal</p></td>
-<td><p>Computed on the last close of month <em>t</em> using prices ≤ <em>t</em> only</p></td>
+<td><p>Last close of month <em>t</em>, prices ≤ <em>t</em> only</p></td>
 <td><p>No lookahead</p></td>
 </tr>
 <tr class="row-odd"><td><p>Execution</p></td>
@@ -491,31 +489,30 @@ document.write(`
 <td><p>Net results only</p></td>
 </tr>
 <tr class="row-odd"><td><p>Benchmark</p></td>
-<td><p>QQQ, same dates, same price type (dividend-adjusted)</p></td>
+<td><p>QQQ, same dates, dividend-adjusted like everything else</p></td>
 <td><p>Apples to apples</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Then we ask three questions of the resulting out-of-sample track record:</p>
+<p>Three questions are asked of the resulting out-of-sample track record:</p>
 <ol class="arabic simple">
-<li><p><strong>Consistency</strong> — does the edge show up in <em>independent</em> 12-month folds, not just in the total? (§4)</p></li>
-<li><p><strong>Stability</strong> — as evidence accumulates month after month, does the statistical case strengthen and stay strong, or is it carried by one episode? (§5)</p></li>
-<li><p><strong>Significance</strong> — does it survive tests that are robust to autocorrelation and fat tails: HAC t-tests, CAPM alpha, and a block bootstrap? (§6)</p></li>
+<li><p><strong>Consistency</strong>: does the edge show up in <em>independent</em> 12-month folds, not just in the total? (§4)</p></li>
+<li><p><strong>Stability</strong>: as evidence accumulates month after month, does the statistical case strengthen and stay strong, or is it carried by one episode? (§5)</p></li>
+<li><p><strong>Significance</strong>: does it survive tests robust to autocorrelation and fat tails: HAC t-tests, CAPM alpha, block bootstrap? (§6)</p></li>
 </ol>
-<p>Everything is summarised in an automatic scorecard (§7).</p>
+<p>Everything lands in an automatic scorecard (§7).</p>
 <blockquote>
-<div><p><strong>Honest scope.</strong> No parameter search was run, so there is no multiple-testing inflation <em>from tuning</em>. The design was chosen by a human who knew the history, and the universe uses point-in-time membership from <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> (§1) — survivorship handled as well as that file allows. Section 8 quantifies what changes when today’s membership is used at every date instead, and section 9 states how far the conclusions can be pushed.</p>
+<div><p><strong>Honest scope.</strong> No parameter search was run, so there is no multiple-testing inflation <em>from tuning</em>. The design was chosen by a human who knew the history, and the universe uses point-in-time membership from <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> (§1): additions count only from the year after they were recorded. Section 8 quantifies what changes when today’s membership is used at every date instead; section 9 states how far the conclusions can be pushed.</p>
 </div></blockquote>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>matplotlib<span class="w"> </span>yfinance<span class="w"> </span>requests<span class="w"> </span>beautifulsoup4
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>matplotlib<span class="w"> </span>yfinance<span class="w"> </span>requests<span class="w"> </span>beautifulsoup4<span class="w"> </span>openpyxl
 </pre></div>
 </div>
 </section>
-<hr class="docutils" />
 <section id="parameters-data">
 <h2>1. Parameters &amp; data<a class="headerlink" href="#parameters-data" title="Link to this heading">#</a></h2>
-<p>All tunables are in one cell. Prices are fetched from Yahoo Finance with <code class="docutils literal notranslate"><span class="pre">auto_adjust=True</span></code> (splits <strong>and</strong> dividends for stocks and benchmark alike) and cached, so the notebook is reproducible.</p>
-<p><strong>Point-in-time universe.</strong> <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> lists index additions (<em>Ticker entrati</em>) and removals (<em>Ticker usciti</em>) by calendar year (2015–2025). We do not have exact effective dates, so a change recorded in year Y takes effect from <strong>Jan 1 of year Y+1</strong>: an addition is usable only starting the following year (its whole addition year is ignored), and a removal stays eligible through Dec 31 of its exit year. By January of the next year each event is unambiguously past, so no signal ever uses information that had not yet become public.</p>
+<p>All tunables live in one cell. Prices come from Yahoo Finance with <code class="docutils literal notranslate"><span class="pre">auto_adjust=True</span></code> (splits <strong>and</strong> dividends, stocks and benchmark alike) and are cached on disk, so the notebook is reproducible offline.</p>
+<p><strong>Point-in-time universe.</strong> <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> lists index additions (<em>Ticker entrati</em>) and removals (<em>Ticker usciti</em>) by calendar year (2015 to 2025). We do not have exact effective dates, so a change recorded in year Y takes effect from <strong>Jan 1 of Y+1</strong>: an addition is usable only starting the following year (its whole addition year is ignored), and a removal stays eligible through Dec 31 of its exit year. By January of the next year each event is unambiguously past, so no signal ever uses information that had not yet become public.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">warnings</span>
@@ -526,28 +523,28 @@ document.write(`
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
 
-<span class="c1"># ── Plot style: white background, visible grid drawn behind everything ─────</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
     <span class="s2">&quot;figure.figsize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">),</span>
     <span class="s2">&quot;axes.grid&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>            <span class="s2">&quot;grid.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#c9cfd8&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;grid.linewidth&quot;</span><span class="p">:</span> <span class="mf">.8</span><span class="p">,</span>         <span class="s2">&quot;axes.axisbelow&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>     <span class="c1"># grid behind lines/bars</span>
+    <span class="s2">&quot;grid.linewidth&quot;</span><span class="p">:</span> <span class="mf">.8</span><span class="p">,</span>         <span class="s2">&quot;axes.axisbelow&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>      <span class="c1"># grid behind lines/bars</span>
     <span class="s2">&quot;axes.spines.top&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>     <span class="s2">&quot;axes.spines.right&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="s2">&quot;axes.edgecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#595f6b&quot;</span><span class="p">,</span>  <span class="s2">&quot;axes.labelcolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#23272e&quot;</span><span class="p">,</span>
     <span class="s2">&quot;xtick.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#3a4048&quot;</span><span class="p">,</span>     <span class="s2">&quot;ytick.color&quot;</span><span class="p">:</span> <span class="s2">&quot;#3a4048&quot;</span><span class="p">,</span>
 <span class="p">})</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.float_format&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
 
-<span class="c1"># ── Strategy (fixed ex-ante, never tuned) ────────────────────────────────</span>
-<span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">10</span>     <span class="c1"># top-N1 by 12M → top-N2 by 6M → top-N3 by 3M</span>
-<span class="n">COST_BPS</span>   <span class="o">=</span> <span class="mi">10</span>             <span class="c1"># per unit of notional traded, one way</span>
-<span class="c1"># ── Data / testing ───────────────────────────────────────────────────────</span>
+<span class="c1"># Strategy: fixed ex-ante, never tuned on this data</span>
+<span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">10</span>      <span class="c1"># top-N by 12M -&gt; top-N by 6M -&gt; top-N by 3M</span>
+<span class="n">COST_BPS</span>   <span class="o">=</span> <span class="mi">10</span>              <span class="c1"># per unit of notional traded, one way</span>
+
+<span class="c1"># Data / testing</span>
 <span class="n">START</span>      <span class="o">=</span> <span class="s2">&quot;2015-01-01&quot;</span>
 <span class="n">BENCH</span>      <span class="o">=</span> <span class="s2">&quot;QQQ&quot;</span>
-<span class="n">MEM_FILE</span>   <span class="o">=</span> <span class="s2">&quot;inout.xlsx&quot;</span>    <span class="c1"># index additions/removals by calendar year (point-in-time universe)</span>
-<span class="n">RF</span>         <span class="o">=</span> <span class="mf">0.0</span>             <span class="c1"># annual risk-free rate used in Sharpe</span>
-<span class="n">FOLD</span>       <span class="o">=</span> <span class="mi">12</span>              <span class="c1"># walk-forward fold length (months)</span>
-<span class="n">HAC_LAGS</span>   <span class="o">=</span> <span class="mi">3</span>               <span class="c1"># lag terms for the robust (HAC) standard errors</span>
-<span class="n">BLOCK</span>      <span class="o">=</span> <span class="mi">6</span>               <span class="c1"># bootstrap block length (months)</span>
+<span class="n">MEM_FILE</span>   <span class="o">=</span> <span class="s2">&quot;inout.xlsx&quot;</span>     <span class="c1"># index additions/removals by calendar year (point-in-time universe)</span>
+<span class="n">RF</span>         <span class="o">=</span> <span class="mf">0.0</span>              <span class="c1"># annual risk-free rate used in Sharpe</span>
+<span class="n">FOLD</span>       <span class="o">=</span> <span class="mi">12</span>               <span class="c1"># walk-forward fold length (months)</span>
+<span class="n">HAC_LAGS</span>   <span class="o">=</span> <span class="mi">3</span>                <span class="c1"># lag terms for the robust standard errors</span>
+<span class="n">BLOCK</span>      <span class="o">=</span> <span class="mi">6</span>                <span class="c1"># bootstrap block length (months)</span>
 <span class="n">NSIM</span>       <span class="o">=</span> <span class="mi">10_000</span>
 <span class="n">CACHE</span>      <span class="o">=</span> <span class="s2">&quot;data/prices.pkl&quot;</span>
 </pre></div>
@@ -557,7 +554,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">nasdaq100_tickers</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Current Nasdaq-100 constituents, scraped from Wikipedia.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Current Nasdaq-100 constituents, scraped from Wikipedia.&quot;&quot;&quot;</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
     <span class="n">url</span>   <span class="o">=</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/List_of_NASDAQ-100_companies&quot;</span>
@@ -567,11 +564,11 @@ document.write(`
             <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)]</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">load_membership</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Additions / removals per calendar year, from inout.xlsx.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Additions / removals per calendar year, from inout.xlsx.&quot;&quot;&quot;</span>
     <span class="n">io_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">MEM_FILE</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">strip</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">strip</span><span class="p">()}</span>
-    <span class="n">events</span> <span class="o">=</span> <span class="p">{}</span>                                     <span class="c1"># ticker -&gt; {(year, kind), ...}</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">io_</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
         <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;Anno&quot;</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;Ticker entrati&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;Ticker usciti&quot;</span><span class="p">,</span> <span class="s2">&quot;out&quot;</span><span class="p">)]:</span>
@@ -583,48 +580,46 @@ document.write(`
 <span class="n">EVENTS</span> <span class="o">=</span> <span class="n">load_membership</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">eligible_years</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Calendar years (int) during which t was a Nasdaq-100 constituent.</span>
-<span class="sd">       A change recorded in year Y takes effect from Jan 1 of Y+1: an addition is usable only</span>
-<span class="sd">       starting the following year, and a removal stays eligible through its exit year — so no</span>
-<span class="sd">       signal ever relies on information that had not yet become public.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calendar years (int) during which t was a Nasdaq-100 constituent.</span>
+<span class="sd">       A change recorded in year Y applies from Jan 1 of Y+1.&quot;&quot;&quot;</span>
     <span class="n">evs</span> <span class="o">=</span> <span class="n">EVENTS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">evs</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>                                 <span class="c1"># current member with no recorded change → assumed in throughout</span>
-    <span class="n">state</span> <span class="o">=</span> <span class="p">(</span><span class="n">evs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;out&quot;</span><span class="p">)</span>                    <span class="c1"># constituent before its first event iff it later exited…</span>
-    <span class="n">lo</span><span class="p">,</span> <span class="n">ivals</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">9_000</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span> <span class="p">[]</span>     <span class="c1"># …so an exit-only record means &quot;member up to that year&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span>                                   <span class="c1"># no recorded change: assumed member throughout</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="p">(</span><span class="n">evs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;out&quot;</span><span class="p">)</span>                      <span class="c1"># exit-only record means &quot;member up to that year&quot;</span>
+    <span class="n">lo</span><span class="p">,</span> <span class="n">ivals</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">9_000</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">evs</span><span class="p">:</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>                                   <span class="c1"># the change applies from Jan 1 of the following year</span>
-        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">state</span><span class="p">:</span>                 <span class="c1"># becomes eligible at start of s</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>                                      <span class="c1"># change applies from Jan 1 of the following year</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">state</span><span class="p">:</span>
             <span class="n">lo</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;out&quot;</span> <span class="ow">and</span> <span class="n">state</span><span class="p">:</span>                  <span class="c1"># stops being eligible after exit year y</span>
+        <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;out&quot;</span> <span class="ow">and</span> <span class="n">state</span><span class="p">:</span>
             <span class="n">ivals</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lo</span><span class="p">,</span> <span class="n">y</span><span class="p">));</span> <span class="n">lo</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">state</span> <span class="ow">and</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ivals</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lo</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">))</span>     <span class="c1"># still a member → open interval</span>
+        <span class="n">ivals</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lo</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">))</span> <span class="c1"># still a member: open interval</span>
     <span class="k">return</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">ivals</span><span class="p">])</span>
 
-<span class="n">CURRENT</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">nasdaq100_tickers</span><span class="p">()}</span>   <span class="c1"># today&#39;s membership: the lookahead set used in section 8</span>
+<span class="n">CURRENT</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">nasdaq100_tickers</span><span class="p">()}</span>   <span class="c1"># today&#39;s membership (lookahead set of section 8)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">load_prices</span><span class="p">():</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">yfinance</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">yf</span>
-    <span class="n">want</span>    <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">CURRENT</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">EVENTS</span><span class="p">))</span>                                <span class="c1"># current ∪ historical members (PIT universe)</span>
-    <span class="n">tickers</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">want</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;GOOG&quot;</span><span class="p">,</span> <span class="n">BENCH</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">BENCH</span><span class="p">]</span>   <span class="c1"># keep GOOGL only</span>
+    <span class="n">want</span>    <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">CURRENT</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">EVENTS</span><span class="p">))</span>                          <span class="c1"># current + historical members</span>
+    <span class="n">tickers</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">want</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;GOOG&quot;</span><span class="p">,</span> <span class="n">BENCH</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="n">BENCH</span><span class="p">]</span>
     <span class="n">cached</span><span class="p">,</span> <span class="n">have</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">CACHE</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cached</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">CACHE</span><span class="p">)</span>
             <span class="n">have</span>   <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cached</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>                                   <span class="c1"># cache written by a different numpy version → rebuild</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  (cache unreadable in this environment, rebuilding from Yahoo)&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>                                           <span class="c1"># cache written by another numpy version: rebuild silently</span>
+            <span class="n">cached</span> <span class="o">=</span> <span class="kc">None</span>
 
+    <span class="n">close</span><span class="p">,</span> <span class="n">open_</span> <span class="o">=</span> <span class="p">(</span><span class="n">cached</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">],</span> <span class="n">cached</span><span class="p">[</span><span class="s2">&quot;open&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(),</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">())</span>
     <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickers</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">have</span><span class="p">]</span>
-    <span class="n">close</span><span class="p">,</span> <span class="n">open_</span> <span class="o">=</span> <span class="p">(</span><span class="n">cached</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">],</span> <span class="n">cached</span><span class="p">[</span><span class="s2">&quot;open&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
-                   <span class="k">else</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(),</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">())</span>
-    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>                                      <span class="c1"># cache may predate the historical additions → top them up</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>                                                     <span class="c1"># top up any symbol absent from the cache</span>
         <span class="n">raw</span>  <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">missing</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">START</span><span class="p">,</span> <span class="n">auto_adjust</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">got</span>  <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">missing</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">[</span><span class="s2">&quot;Close&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
         <span class="n">close</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">close</span><span class="p">,</span> <span class="n">raw</span><span class="p">[</span><span class="s2">&quot;Close&quot;</span><span class="p">][</span><span class="n">got</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">open_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">open_</span><span class="p">,</span> <span class="n">raw</span><span class="p">[</span><span class="s2">&quot;Open&quot;</span><span class="p">][</span><span class="n">got</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">tickers</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">close</span><span class="o">.</span><span class="n">columns</span><span class="p">)]</span>     <span class="c1"># exact universe (bench last); stale cache columns dropped</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">tickers</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">close</span><span class="o">.</span><span class="n">columns</span><span class="p">)]</span>          <span class="c1"># exact universe (bench last); stale columns dropped</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">CACHE</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">oc</span>   <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">open_</span><span class="o">.</span><span class="n">columns</span><span class="p">)]</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">({</span><span class="s2">&quot;close&quot;</span><span class="p">:</span> <span class="n">close</span><span class="p">[</span><span class="n">cols</span><span class="p">],</span> <span class="s2">&quot;open&quot;</span><span class="p">:</span> <span class="n">open_</span><span class="p">[</span><span class="n">oc</span><span class="p">]},</span> <span class="n">CACHE</span><span class="p">)</span>
@@ -633,74 +628,20 @@ document.write(`
 <span class="n">close</span><span class="p">,</span> <span class="n">open_</span> <span class="o">=</span> <span class="n">load_prices</span><span class="p">()</span>
 <span class="n">bench_open</span>   <span class="o">=</span> <span class="n">open_</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">BENCH</span><span class="p">)</span>
 <span class="n">close</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">BENCH</span><span class="p">)</span>
-<span class="n">MEM</span>  <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="p">:</span> <span class="n">eligible_years</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">EVENTS</span><span class="p">}</span>              <span class="c1"># calendar years per ticker (∅ → never eligible)</span>
+<span class="n">MEM</span>  <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="p">:</span> <span class="n">eligible_years</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">EVENTS</span><span class="p">}</span>                       <span class="c1"># calendar years per ticker (empty set: never eligible)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">constituents_at</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Eligible index members at signal date t (point-in-time).&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Eligible index members at signal date t (point-in-time).&quot;&quot;&quot;</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">year</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">MEM</span> <span class="ow">or</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">MEM</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Universe   : </span><span class="si">{</span><span class="n">close</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> tickers with price data (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">EVENTS</span><span class="p">)</span><span class="si">}</span><span class="s2"> with recorded membership changes)&quot;</span><span class="p">)</span>
-<span class="n">no_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">EVENTS</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">close</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
-<span class="k">if</span> <span class="n">no_data</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No usable price history — excluded wherever needed: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">no_data</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ABNB&quot;</span><span class="p">,</span> <span class="s2">&quot;NTAP&quot;</span><span class="p">,</span> <span class="s2">&quot;SMCI&quot;</span><span class="p">):</span>                          <span class="c1"># spot-check the year-boundary rule</span>
-    <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">MEM</span><span class="p">:</span>
-        <span class="n">yrs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">MEM</span><span class="p">[</span><span class="n">t</span><span class="p">])</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  e.g. </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">: eligible </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">yrs</span><span class="p">),</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="n">START</span><span class="p">[:</span><span class="mi">4</span><span class="p">]))</span><span class="si">}</span><span class="s2">–</span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">yrs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">yrs</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;  e.g. </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">: never eligible (added &amp; removed within one year)&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  (cache unreadable in this environment, rebuilding from Yahoo)
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>$XLNX: possibly delisted; no timezone found
-$SHPG: possibly delisted; no timezone found
-$WFM: possibly delisted; no timezone found
-HTTP Error 404: {&quot;quoteSummary&quot;:{&quot;result&quot;:null,&quot;error&quot;:{&quot;code&quot;:&quot;Not Found&quot;,&quot;description&quot;:&quot;Quote not found for symbol: ESRX&quot;}}}
-HTTP Error 404: {&quot;quoteSummary&quot;:{&quot;result&quot;:null,&quot;error&quot;:{&quot;code&quot;:&quot;Not Found&quot;,&quot;description&quot;:&quot;Quote not found for symbol: WBA&quot;}}}
-$SRCL: possibly delisted; no timezone found
-$QRTEA: possibly delisted; no timezone found
-$ENDP: possibly delisted; no timezone found
-$SGEN: possibly delisted; no timezone found
-$WBA: possibly delisted; no timezone found
-$ESRX: possibly delisted; no timezone found
-$WLTW: possibly delisted; no timezone found
-$GMCR: possibly delisted; no timezone found
-$ALTR: possibly delisted; no timezone found
-$LMCK: possibly delisted; no timezone found
-$ATVI: possibly delisted; no timezone found
-$LLTC: possibly delisted; no timezone found
-$SPLK: possibly delisted; no timezone found
-$HOLX: No data found, symbol may be delisted
-$ANSS: possibly delisted; no timezone found
-$MXIM: possibly delisted; no timezone found
-$CTRP: possibly delisted; no timezone found
-$LMCA: possibly delisted; no timezone found
-$CERN: possibly delisted; no timezone found
-$DTV: possibly delisted; no timezone found
-$ALXN: possibly delisted; no timezone found
-$SIAL: possibly delisted; no timezone found
-
-25 Failed downloads:
-[&#39;XLNX&#39;, &#39;SHPG&#39;, &#39;WFM&#39;, &#39;SRCL&#39;, &#39;QRTEA&#39;, &#39;ENDP&#39;, &#39;SGEN&#39;, &#39;WBA&#39;, &#39;ESRX&#39;, &#39;WLTW&#39;, &#39;GMCR&#39;, &#39;ALTR&#39;, &#39;LMCK&#39;, &#39;ATVI&#39;, &#39;LLTC&#39;, &#39;SPLK&#39;, &#39;ANSS&#39;, &#39;MXIM&#39;, &#39;CTRP&#39;, &#39;LMCA&#39;, &#39;CERN&#39;, &#39;DTV&#39;, &#39;ALXN&#39;, &#39;SIAL&#39;]: possibly delisted; no timezone found
-[&#39;HOLX&#39;]: No data found, symbol may be delisted
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Universe   : 181 tickers with price data (118 with recorded membership changes)
-No usable price history — excluded wherever needed: ALTR, ALXN, ANSS, ATVI, CERN, CTRP, DTV, ENDP, ESRX, GMCR, HOLX, LLTC, LMCA, LMCK, MXIM, QRTEA, SGEN, SHPG, SIAL, SPLK, SRCL, WBA, WFM, WLTW, XLNX
-  e.g. ABNB: eligible 2022–2026
-  e.g. NTAP: eligible 2015–2020
-  e.g. SMCI: never eligible (added &amp; removed within one year)
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<hr class="docutils" />
 <section id="signals-and-backtest-engine">
 <h2>2. Signals and backtest engine<a class="headerlink" href="#signals-and-backtest-engine" title="Link to this heading">#</a></h2>
-<p>Momentum is the simple return over 3, 6 and 12 months on month-end closes. Holding-period returns are <strong>open-to-open</strong>: buy at the open of the first trading day after the signal, sell at the open of the first trading day of the next month (the same price at which the next portfolio is bought). Positions are buy-and-hold within the month. The engine takes any selection function <code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">→</span> <span class="pre">tickers</span></code>, so the strategy and the baselines run through identical code.</p>
+<p>Momentum is the simple return over 3, 6 and 12 months on month-end closes. Holding-period returns are <strong>open-to-open</strong>: buy at the open of the first trading day after the signal, sell at the open of the first trading day of the next month (the same price at which the next portfolio is bought). Positions are buy-and-hold within the month. The engine takes any selection rule mapping a date to tickers, so the strategy and the baselines run through identical code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">days</span> <span class="o">=</span> <span class="n">close</span><span class="o">.</span><span class="n">index</span>
@@ -731,13 +672,12 @@ No usable price history — excluded wherever needed: ALTR, ALXN, ANSS, ATVI, CE
 <span class="n">exit_date</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span>
 <span class="n">B</span>         <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis</span><span class="p">(</span><span class="n">exit_date</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span><span class="si">}</span><span class="s2"> monthly cohorts | signals </span><span class="si">{</span><span class="n">sig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">sig</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> &quot;</span>
-      <span class="sa">f</span><span class="s2">&quot;| returns realised through </span><span class="si">{</span><span class="n">exit_date</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span><span class="si">}</span><span class="s2"> monthly cohorts | signals </span><span class="si">{</span><span class="n">sig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">sig</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> | returns realised through </span><span class="si">{</span><span class="n">exit_date</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>128 monthly cohorts | signals 2016-01-29 → 2026-08-31 | returns realised through 2026-10-01
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>128 monthly cohorts | signals 2016-01-29 to 2026-08-31 | returns realised through 2026-10-01
 </pre></div>
 </div>
 </div>
@@ -749,15 +689,15 @@ No usable price history — excluded wherever needed: ALTR, ALXN, ANSS, ATVI, CE
     <span class="n">p</span> <span class="o">=</span> <span class="n">m6</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
     <span class="k">return</span> <span class="n">m3</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n3</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
 
-<span class="n">universe</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">constituents_at</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">m12</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">])]</span>   <span class="c1"># baseline: equal-weight index members (used in §8)</span>
+<span class="n">universe</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">constituents_at</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">m12</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">])]</span>   <span class="c1"># equal-weight index members (baseline of section 9)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">backtest</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="n">cost_bps</span><span class="o">=</span><span class="n">COST_BPS</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Equal weight, buy-and-hold within the month. Gross/net monthly returns + turnover.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Equal weight, buy-and-hold within the month. Gross/net monthly returns + turnover.&quot;&quot;&quot;</span>
     <span class="n">gross</span><span class="p">,</span> <span class="n">turn</span><span class="p">,</span> <span class="n">prev</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">:</span>
         <span class="n">picks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
         <span class="n">gross</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">picks</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-        <span class="n">turn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">prev</span> <span class="k">else</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">picks</span><span class="p">)</span> <span class="o">-</span> <span class="n">prev</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">picks</span><span class="p">))</span>   <span class="c1"># Σ|Δw|; full replacement = 2</span>
+        <span class="n">turn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">prev</span> <span class="k">else</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">picks</span><span class="p">)</span> <span class="o">-</span> <span class="n">prev</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">picks</span><span class="p">))</span>   <span class="c1"># fraction of book traded; full replacement = 2</span>
         <span class="n">prev</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">picks</span><span class="p">)</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;gross&quot;</span><span class="p">:</span> <span class="n">gross</span><span class="p">,</span> <span class="s2">&quot;turn&quot;</span><span class="p">:</span> <span class="n">turn</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">exit_date</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;net&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">gross</span> <span class="o">-</span> <span class="n">out</span><span class="o">.</span><span class="n">turn</span> <span class="o">*</span> <span class="n">cost_bps</span> <span class="o">/</span> <span class="mf">1e4</span>
@@ -767,15 +707,22 @@ No usable price history — excluded wherever needed: ALTR, ALXN, ANSS, ATVI, CE
 <span class="n">ew</span>    <span class="o">=</span> <span class="n">backtest</span><span class="p">(</span><span class="n">universe</span><span class="p">)</span>
 <span class="n">S</span>     <span class="o">=</span> <span class="n">strat</span><span class="o">.</span><span class="n">net</span>                                    <span class="c1"># strategy, net of costs: the series under test</span>
 <span class="n">A</span>     <span class="o">=</span> <span class="n">S</span> <span class="o">-</span> <span class="n">B</span>                                        <span class="c1"># monthly active return vs QQQ</span>
-<span class="n">pool</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">constituents_at</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">sig</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">sig</span><span class="p">)</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average monthly turnover (two-way): </span><span class="si">{</span><span class="n">strat</span><span class="o">.</span><span class="n">turn</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> of the book&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Eligible pool at each signal: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="si">}</span><span class="s2">–</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="si">}</span><span class="s2"> constituents (point-in-time membership)&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">waterfall_biased</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n1</span><span class="o">=</span><span class="n">N1</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="n">N2</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="n">N3</span><span class="p">):</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">CURRENT</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>     <span class="c1"># today&#39;s members at every date: the lookahead set (section 8)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">m12</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">pool</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">m6</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+    <span class="k">return</span> <span class="n">m3</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n3</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+
+<span class="n">S_bias</span>   <span class="o">=</span> <span class="n">backtest</span><span class="p">(</span><span class="n">waterfall_biased</span><span class="p">)</span><span class="o">.</span><span class="n">net</span>                 <span class="c1"># identical strategy, today&#39;s membership at every date</span>
+<span class="n">N_LOOK</span>   <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">CURRENT</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average monthly turnover (two-way): 96% of the book
-Eligible pool at each signal: 107–113 constituents (point-in-time membership)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Average monthly turnover (two-way): 95% of the book
 </pre></div>
 </div>
 </div>
@@ -784,7 +731,7 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
 <hr class="docutils" />
 <section id="the-out-of-sample-track-record">
 <h2>3. The out-of-sample track record<a class="headerlink" href="#the-out-of-sample-track-record" title="Link to this heading">#</a></h2>
-<p>Net of costs, versus QQQ, with actual index membership at each date (the naive version is quantified in section 8). Sharpe is annualised mean excess return over volatility (one definition used everywhere); max drawdown is measured on monthly data and therefore understates intra-month drawdowns.</p>
+<p>One table, three cases side by side: <strong>QQQ</strong> as the benchmark, the strategy on <strong>actual index membership at each date</strong> (the real case under test), and the identical strategy run with <strong>today’s membership applied to every month</strong> (the lookahead case graded in section 8). Net of costs; Sharpe is annualised mean excess return over volatility (one definition used everywhere); max drawdown on monthly data understates intra-month drawdowns.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">perf</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">rf</span><span class="o">=</span><span class="n">RF</span><span class="p">):</span>
@@ -795,7 +742,12 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
             <span class="s2">&quot;Sharpe&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">rf</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">/</span> <span class="n">vol</span><span class="p">,</span> <span class="s2">&quot;MaxDD&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">eq</span> <span class="o">/</span> <span class="n">eq</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
             <span class="s2">&quot;Best month&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="s2">&quot;Worst month&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="s2">&quot;% months &gt; 0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()}</span>
 
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Waterfall (net)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S</span><span class="p">),</span> <span class="s2">&quot;QQQ&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">B</span><span class="p">)})</span><span class="o">.</span><span class="n">T</span>
+<span class="n">cmp_perf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;QQQ&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">B</span><span class="p">),</span>
+    <span class="s2">&quot;Real case (point-in-time membership)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S</span><span class="p">),</span>
+    <span class="s2">&quot;Lookahead (today&#39;s membership at every date)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S_bias</span><span class="p">),</span>
+<span class="p">})</span><span class="o">.</span><span class="n">T</span>
+<span class="n">cmp_perf</span>
 </pre></div>
 </div>
 </div>
@@ -829,16 +781,6 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
   </thead>
   <tbody>
     <tr>
-      <th>Waterfall (net)</th>
-      <td>0.357</td>
-      <td>0.252</td>
-      <td>1.347</td>
-      <td>-0.271</td>
-      <td>0.290</td>
-      <td>-0.222</td>
-      <td>0.664</td>
-    </tr>
-    <tr>
       <th>QQQ</th>
       <td>0.211</td>
       <td>0.192</td>
@@ -848,36 +790,64 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
       <td>-0.138</td>
       <td>0.664</td>
     </tr>
+    <tr>
+      <th>Real case (point-in-time membership)</th>
+      <td>0.374</td>
+      <td>0.255</td>
+      <td>1.387</td>
+      <td>-0.271</td>
+      <td>0.290</td>
+      <td>-0.222</td>
+      <td>0.648</td>
+    </tr>
+    <tr>
+      <th>Lookahead (today's membership at every date)</th>
+      <td>0.511</td>
+      <td>0.302</td>
+      <td>1.531</td>
+      <td>-0.274</td>
+      <td>0.510</td>
+      <td>-0.274</td>
+      <td>0.695</td>
+    </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p><strong>Reading.</strong> Even with actual membership at each date the waterfall still beats QQQ on every headline number: CAGR 36% versus 21%, Sharpe 1.35 versus 1.10, and a shallower max drawdown (27% against 32%). The edge survives contact with reality; it just becomes thinner than when the universe was quietly chosen from today’s member list.</p>
+<p><strong>Reading.</strong> Three cases, one table. <strong>QQQ</strong> delivered CAGR <strong>21%</strong> and Sharpe <strong>1.10</strong> over this span. The real case beats it on every headline number: CAGR <strong>37%</strong>, Sharpe <strong>1.39</strong>, max drawdown <strong>-27% versus -32%</strong>. The third column is the same strategy run with hindsight (section 8): CAGR <strong>51%</strong>, Sharpe <strong>1.53</strong>. The gap between columns two and three is membership lookahead in one view: roughly a third of the measured edge, plus the statistics that let us claim it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height_ratios&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">FuncFormatter</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">usd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>                                     <span class="c1"># dollar axis instead of 10^k ticks</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mf">1e6</span><span class="p">:</span> <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">x</span><span class="o">/</span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">M&quot;</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mf">1e3</span><span class="p">:</span> <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">x</span><span class="o">/</span><span class="mf">1e3</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">k&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height_ratios&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span>
 <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">lw</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">S</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net)&quot;</span><span class="p">,</span> <span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">),</span> <span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="s2">&quot;QQQ&quot;</span><span class="p">,</span> <span class="s2">&quot;#e69f00&quot;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)]:</span>
     <span class="n">eq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
     <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">)</span>
     <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:],</span> <span class="p">[</span><span class="n">eq</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>      <span class="c1"># end marker</span>
     <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span> <span class="o">/</span> <span class="n">eq</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Growth of 1 (log)&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="n">usd</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Value of $1 invested&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Drawdown (monthly)&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Waterfall vs QQQ — monthly rebalance, open-to-open, net of costs&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Waterfall vs QQQ: monthly rebalance, open-to-open, net of costs&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">.96</span><span class="p">));</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/357a107982f96c0eaee756b8c88794893c24d3be0f8463912e75f66b55759da2.png" src="_images/357a107982f96c0eaee756b8c88794893c24d3be0f8463912e75f66b55759da2.png" />
+<img alt="_images/82bfa838c90a707ce2e66a8013dab7c626913e373042694046202fc74e13f049.png" src="_images/82bfa838c90a707ce2e66a8013dab7c626913e373042694046202fc74e13f049.png" />
 </div>
 </div>
 </section>
-<hr class="docutils" />
 <section id="walk-forward-folds-is-the-edge-consistent">
-<h2>4. Walk-forward folds — is the edge consistent?<a class="headerlink" href="#walk-forward-folds-is-the-edge-consistent" title="Link to this heading">#</a></h2>
-<p>The track record is cut into <strong>independent, non-overlapping 12-month folds</strong>. In each fold nothing was fitted on that data, so each is a clean out-of-sample test of the <em>frozen</em> rule. A single total can hide the fact that one spectacular year did all the work; the fold view cannot.</p>
-<p>Two numbers summarise it: the <strong>hit rate</strong> (folds in which the strategy beat QQQ) and an exact <strong>one-sided binomial p-value</strong> — the probability of seeing at least that many wins if each fold were a coin flip.</p>
+<h2>4. Walk-forward folds: is the edge consistent?<a class="headerlink" href="#walk-forward-folds-is-the-edge-consistent" title="Link to this heading">#</a></h2>
+<p>The track record is cut into <strong>independent, non-overlapping 12-month folds</strong>. In each fold nothing was fitted on that data, so each one is a clean out-of-sample test of the <em>frozen</em> rule. A single total can hide the fact that one spectacular year did all the work; the fold view cannot.</p>
+<p>Two numbers summarise it: the <strong>hit rate</strong> (folds in which the strategy beat QQQ) and an exact <strong>one-sided binomial p-value</strong>: the probability of seeing at least that many wins if each fold were a coin flip.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fold_table</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">FOLD</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
@@ -903,7 +873,7 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Folds beating QQQ: 8 / 11   |   exact binomial p = 0.113
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Folds beating QQQ: 10 / 11   |   exact binomial p = 0.006
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -949,9 +919,9 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
       <td>2016-03-01</td>
       <td>2017-02-01</td>
       <td>12</td>
-      <td>0.530</td>
+      <td>0.519</td>
       <td>0.224</td>
-      <td>0.306</td>
+      <td>0.295</td>
       <td>True</td>
     </tr>
     <tr>
@@ -959,9 +929,9 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
       <td>2017-03-01</td>
       <td>2018-02-01</td>
       <td>12</td>
-      <td>0.380</td>
+      <td>0.427</td>
       <td>0.352</td>
-      <td>0.028</td>
+      <td>0.075</td>
       <td>True</td>
     </tr>
     <tr>
@@ -969,29 +939,29 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
       <td>2018-03-01</td>
       <td>2019-02-01</td>
       <td>12</td>
-      <td>-0.020</td>
+      <td>0.036</td>
       <td>0.004</td>
-      <td>-0.023</td>
-      <td>False</td>
+      <td>0.033</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>4</th>
       <td>2019-03-01</td>
       <td>2020-02-03</td>
       <td>12</td>
-      <td>0.313</td>
+      <td>0.330</td>
       <td>0.326</td>
-      <td>-0.013</td>
-      <td>False</td>
+      <td>0.004</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>5</th>
       <td>2020-03-02</td>
       <td>2021-02-01</td>
       <td>12</td>
-      <td>0.822</td>
+      <td>0.953</td>
       <td>0.453</td>
-      <td>0.369</td>
+      <td>0.499</td>
       <td>True</td>
     </tr>
     <tr>
@@ -999,9 +969,9 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
       <td>2021-03-01</td>
       <td>2022-02-01</td>
       <td>12</td>
-      <td>0.232</td>
+      <td>0.191</td>
       <td>0.151</td>
-      <td>0.080</td>
+      <td>0.040</td>
       <td>True</td>
     </tr>
     <tr>
@@ -1075,14 +1045,15 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/396216dc942da4fc694d7f12a005adf8d26cb8f781bc913f5ceeaa8764a46301.png" src="_images/396216dc942da4fc694d7f12a005adf8d26cb8f781bc913f5ceeaa8764a46301.png" />
+<img alt="_images/80ddaa763162fb82fe6f4642650c9dd78b8cc822f4de5d86e07e020e1cf50269.png" src="_images/80ddaa763162fb82fe6f4642650c9dd78b8cc822f4de5d86e07e020e1cf50269.png" />
 </div>
 </div>
-<p><strong>Reading.</strong> The strategy wins in 8 of the 11 one year folds, which still sounds solid. But the exact binomial p has moved to 0.113, so consistency across folds no longer clears even a lenient 10% bar. The three losing blocks are instructive: Mar 2018 to Feb 2019, Mar 2019 to Feb 2020 (when QQQ itself rose 33%), and Mar 2023 to Feb 2024 (QQQ +43%, strategy +22%). The edge is real but lumpy; it is not a coin flip that wins every year.</p>
+<p><strong>Reading.</strong> The strategy wins in <strong>10 of the 11</strong> one-year folds, and the exact binomial p-value is <strong>0.006</strong>: if every fold were a coin flip, a record at least this good would happen fewer than once in 100. Consistency clears even the strict bar we set (p &lt; 0.10). The single losing block is March 2023 to February 2024 (<strong>-21%</strong> active): one rough year, not a pattern.</p>
+<p>(The same 10/11 win rate appears for the lookahead column in section 6’s table: hindsight changes <em>how strongly</em> the edge is measured, not its consistency across time.)</p>
 </section>
 <hr class="docutils" />
 <section id="evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">
-<h2>5. Evidence accumulation — does the case get stronger, and does it stay strong?<a class="headerlink" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong" title="Link to this heading">#</a></h2>
+<h2>5. Evidence accumulation: does the case get stronger, and does it stay strong?<a class="headerlink" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong" title="Link to this heading">#</a></h2>
 <p>Here the walk-forward is applied to the <strong>statistic itself</strong>. At each month <em>m</em> we use only the history up to <em>m</em> and compute the t-statistic of the mean monthly active return (strategy − QQQ). Two things are being checked:</p>
 <ul class="simple">
 <li><p>does the t-stat <strong>climb and stay above ~2</strong> as data accumulates (a real edge accumulates evidence ∝ √time), or does it spike and decay (an episode)?</p></li>
@@ -1114,38 +1085,41 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/ae4ab01bbfe7acf31972892863bb9dbdda1cf6bc6fbbd4fe0837fb0738071eb9.png" src="_images/ae4ab01bbfe7acf31972892863bb9dbdda1cf6bc6fbbd4fe0837fb0738071eb9.png" />
+<img alt="_images/0e5274f931639bcdffc8f10b8a309b1be79e568fd62fb74894951f0781e7678d.png" src="_images/0e5274f931639bcdffc8f10b8a309b1be79e568fd62fb74894951f0781e7678d.png" />
 </div>
 </div>
 </section>
-<hr class="docutils" />
-<section id="statistical-significance">
-<h2>6. Statistical significance<a class="headerlink" href="#statistical-significance" title="Link to this heading">#</a></h2>
-<p>Monthly active returns are autocorrelated, fat-tailed and heteroskedastic, so a naive t-test overstates confidence. Three tests that respect that:</p>
+<section id="statistical-significance-robust-tests-that-do-not-assume-normality">
+<h2>6. Statistical significance: robust tests that do not assume normality<a class="headerlink" href="#statistical-significance-robust-tests-that-do-not-assume-normality" title="Link to this heading">#</a></h2>
+<p>Monthly active returns are autocorrelated and fat-tailed, so the naive standard error is too optimistic and a plain t-test overstates confidence. The battery below uses <strong>HAC (Newey-West type) inference</strong> for anything based on moments, and <strong>block bootstrap</strong> for distributions:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Test</p></th>
 <th class="head"><p>What it answers</p></th>
-<th class="head"><p>Robustness</p></th>
+<th class="head"><p>Why it’s robust here</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><strong>Robust t-test of the mean active return</strong> (Newey West estimator)</p></td>
-<td><p>Is outperformance different from zero?</p></td>
-<td><p>Standard errors robust to autocorrelation and heteroskedasticity (HAC)</p></td>
+<tr class="row-even"><td><p>HAC mean test of active return</p></td>
+<td><p>Is the average monthly edge above 0?</p></td>
+<td><p>Robust to autocorrelation; no normality assumption</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>CAPM alpha vs QQQ</strong> (HAC)</p></td>
-<td><p>Is the edge <em>after</em> removing market exposure — or just leveraged beta?</p></td>
+<tr class="row-odd"><td><p>CAPM alpha vs QQQ (HAC)</p></td>
+<td><p>Is the edge <em>after</em> removing market exposure, or just leveraged beta?</p></td>
 <td><p>Same HAC errors; reports <strong>beta</strong> too</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>Paired block bootstrap</strong> (6-month blocks, 10,000 resamples)</p></td>
-<td><p>Distribution-free p-value and 95% CI for (a) annual active return and (b) the <strong>Sharpe difference</strong></p></td>
-<td><p>No normality assumption; blocks keep serial dependence; strategy and QQQ are resampled <em>together</em></p></td>
+<tr class="row-even"><td><p>Sharpe difference (HAC SE)</p></td>
+<td><p>Is the risk-adjusted gap significant at RF = 0?</p></td>
+<td><p>HAC standard error of the ratio’s estimate</p></td>
+</tr>
+<tr class="row-odd"><td><p>Paired block bootstrap (10k)</p></td>
+<td><p>Full distribution of the <em>difference</em>; P(edge ≤ 0)</p></td>
+<td><p>Blocks keep serial dependence; strategy and QQQ resampled together, so fat tails are empirical</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>A 10-stock momentum book is typically high-beta, so the alpha line matters more than the raw outperformance: a strategy that simply owns QQQ with leverage would “beat” it in a bull market with zero skill.</p>
+<p>A 10-stock momentum book is typically <strong>high-beta</strong>, which is why alpha and beta are reported next to each other: a raw return gap that is just market exposure fails the test.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">nw_t</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">HAC_LAGS</span><span class="p">):</span>
@@ -1157,7 +1131,7 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
     <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">ols_hac</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">HAC_LAGS</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;OLS y = a + b·x with robust HAC covariance → coefficients and t-stats.&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;OLS y = a + b·x with robust HAC covariance; returns coefficients and t-stats.&#39;&#39;&#39;</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">x</span><span class="p">])</span>
     <span class="n">XtXi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">XtXi</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span>
@@ -1212,11 +1186,13 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">res_dict</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="p">{</span><span class="n">m</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)}</span>
-                         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bias</span> <span class="o">=</span> <span class="n">battery</span><span class="p">(</span><span class="n">S_bias</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>      <span class="c1"># same tests on the lookahead case: today&#39;s membership at every date (section 8)</span>
 
-<span class="n">show</span><span class="p">({</span><span class="s2">&quot;Waterfall vs QQQ&quot;</span><span class="p">:</span> <span class="n">vs_qqq</span><span class="p">})</span>
+<span class="n">battery_cmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;Real case (point-in-time)&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs_qqq</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
+    <span class="s2">&quot;Lookahead (today&#39;s membership)&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bias</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
+<span class="p">})</span>
+<span class="n">battery_cmp</span>
 </pre></div>
 </div>
 </div>
@@ -1239,57 +1215,70 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Waterfall vs QQQ</th>
+      <th>Real case (point-in-time)</th>
+      <th>Lookahead (today's membership)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>Active return (ann.)</th>
-      <td>0.128</td>
-    </tr>
-    <tr>
-      <th>Beta vs benchmark</th>
-      <td>0.953</td>
-    </tr>
-    <tr>
-      <th>Binomial p (folds)</th>
-      <td>0.113</td>
-    </tr>
-    <tr>
-      <th>Bootstrap p: active ≤ 0</th>
-      <td>0.008</td>
-    </tr>
-    <tr>
-      <th>Bootstrap p: ΔSharpe ≤ 0</th>
-      <td>0.167</td>
-    </tr>
-    <tr>
-      <th>CAPM alpha (ann.)</th>
-      <td>0.138</td>
-    </tr>
-    <tr>
-      <th>Folds won</th>
-      <td>8/11</td>
-    </tr>
-    <tr>
-      <th>HAC t-stat (active return)</th>
-      <td>2.187</td>
-    </tr>
-    <tr>
       <th>Months</th>
+      <td>128</td>
       <td>128</td>
     </tr>
     <tr>
-      <th>Rolling 36M ahead</th>
-      <td>0.914</td>
+      <th>Active return (ann.)</th>
+      <td>0.141</td>
+      <td>0.251</td>
     </tr>
     <tr>
-      <th>Sharpe difference</th>
-      <td>0.245</td>
+      <th>HAC t-stat (active return)</th>
+      <td>2.412</td>
+      <td>3.494</td>
+    </tr>
+    <tr>
+      <th>CAPM alpha (ann.)</th>
+      <td>0.150</td>
+      <td>0.237</td>
     </tr>
     <tr>
       <th>t-stat of alpha, HAC</th>
-      <td>2.271</td>
+      <td>2.479</td>
+      <td>3.318</td>
+    </tr>
+    <tr>
+      <th>Beta vs benchmark</th>
+      <td>0.961</td>
+      <td>1.069</td>
+    </tr>
+    <tr>
+      <th>Sharpe difference</th>
+      <td>0.285</td>
+      <td>0.429</td>
+    </tr>
+    <tr>
+      <th>Bootstrap p: active ≤ 0</th>
+      <td>0.003</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>Bootstrap p: ΔSharpe ≤ 0</th>
+      <td>0.124</td>
+      <td>0.036</td>
+    </tr>
+    <tr>
+      <th>Folds won</th>
+      <td>10/11</td>
+      <td>10/11</td>
+    </tr>
+    <tr>
+      <th>Binomial p (folds)</th>
+      <td>0.006</td>
+      <td>0.006</td>
+    </tr>
+    <tr>
+      <th>Rolling 36M ahead</th>
+      <td>0.903</td>
+      <td>1.000</td>
     </tr>
   </tbody>
 </table>
@@ -1299,165 +1288,103 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">lab</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;_act_boot&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;Annual active return vs QQQ (%)&quot;</span><span class="p">),</span>
-                           <span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;_dsh_boot&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="s2">&quot;Sharpe difference (waterfall − QQQ)&quot;</span><span class="p">)]:</span>
+                           <span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;_dsh_boot&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="s2">&quot;Sharpe difference (waterfall vs QQQ)&quot;</span><span class="p">)]:</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">vs_qqq</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">*</span> <span class="n">scale</span>
     <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">97.5</span><span class="p">])</span>
     <span class="n">a</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.10</span><span class="p">)</span>                        <span class="c1"># CI band behind the histogram</span>
     <span class="n">a</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#b9c4d0&quot;</span><span class="p">,</span> <span class="n">histtype</span><span class="o">=</span><span class="s2">&quot;stepfilled&quot;</span><span class="p">)</span>
     <span class="n">a</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#595f6b&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
     <span class="n">a</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">);</span> <span class="n">a</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">hi</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
-    <span class="n">a</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">lab</span><span class="p">);</span> <span class="n">a</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;95% CI [</span><span class="si">{</span><span class="n">lo</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">]   ·   median </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">:</span><span class="s2">+.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Paired block bootstrap (10,000 resamples) — an interval that excludes 0 means the edge is not noise&quot;</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">lab</span><span class="p">);</span> <span class="n">a</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;95% CI [</span><span class="si">{</span><span class="n">lo</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">], median </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">:</span><span class="s2">+.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Paired block bootstrap, real case (point-in-time membership), 10,000 resamples: an interval that excludes 0 means the edge is not noise&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">.93</span><span class="p">));</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/8e3823cb4903cfb0602c4d31a62180cfc87a1be2b2f290546764e4d2bf2b63dd.png" src="_images/8e3823cb4903cfb0602c4d31a62180cfc87a1be2b2f290546764e4d2bf2b63dd.png" />
+<img alt="_images/839b385f089e140c82cff3bd36223f824123e534c417f083cd12227696a72938.png" src="_images/839b385f089e140c82cff3bd36223f824123e534c417f083cd12227696a72938.png" />
 </div>
 </div>
-<p><strong>Reading.</strong> The case now rests on two legs. Outperformance holds under robust HAC inference (t near 2.2), and the paired block bootstrap puts P(active ≤ 0) at about one percent. The Sharpe difference alone does not clear its bar (p = 0.167). So what we can claim is a positive, statistically credible return edge after beta; what we cannot yet claim is a reliably higher risk adjusted score.</p>
+<p><strong>Reading.</strong> Both cases beat QQQ on every active-return test; they differ at the margin. The real case column is what we are allowed to claim: HAC t = <strong>2.41</strong>, CAPM alpha <strong>+15%</strong> (t = <strong>2.48</strong>), Sharpe-difference bootstrap p = <strong>0.12</strong>. The lookahead column runs the same strategy with hindsight: every t-statistic above 3, and that borderline p falls to <strong>3.6%</strong>. Section 8 grades both cases against the full scorecard; here it simply shows why one borderline test deserves attention instead of being smoothed over.</p>
 </section>
 <hr class="docutils" />
-<section id="scorecard">
-<h2>7. Scorecard<a class="headerlink" href="#scorecard" title="Link to this heading">#</a></h2>
-<p>Each criterion is computed from the numbers above — nothing is typed by hand. Thresholds are conventional rules of thumb (5% one-sided for the main tests, 10% for the binomial test because there are only ~10 folds). A ✗ means <em>“claim not supported by this evidence”</em>, not <em>“strategy is worthless”</em>.</p>
+<section id="the-validation-scorecard-real-case-only">
+<h2>7. The validation scorecard, real case only<a class="headerlink" href="#the-validation-scorecard-real-case-only" title="Link to this heading">#</a></h2>
+<p>The same six criteria, applied to a strategy, decide whether its edge is claimable. Here they are applied to the <strong>real case</strong>: point-in-time membership, net of costs. Grading the lookahead column with statistics computed from itself would be circular, so that grade happens in section 8 instead. Each criterion is computed from the numbers above; nothing is typed by hand.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">scorecard</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
     <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;Outperforms: active return &gt; 0 and HAC t &gt; 2&quot;</span><span class="p">:</span>        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Active return (ann.)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;HAC t-stat (active return)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="s2">&quot;Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2&quot;</span><span class="p">:</span>      <span class="n">r</span><span class="p">[</span><span class="s2">&quot;CAPM alpha (ann.)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;t-stat of alpha, HAC&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="s2">&quot;Bootstrap: P(active ≤ 0) &lt; 5%&quot;</span><span class="p">:</span>                       <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Bootstrap p: active ≤ 0&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">.05</span><span class="p">,</span>
-        <span class="s2">&quot;Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%&quot;</span><span class="p">:</span>                      <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Bootstrap p: ΔSharpe ≤ 0&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">.05</span><span class="p">,</span>
-        <span class="s2">&quot;Consistency: folds won, binomial p &lt; 10%&quot;</span><span class="p">:</span>            <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Binomial p (folds)&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">.10</span><span class="p">,</span>
-        <span class="s2">&quot;Persistence: ahead in ≥ 75</span><span class="si">% o</span><span class="s2">f rolling 36M windows&quot;</span><span class="p">:</span>  <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Rolling 36M ahead&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">.75</span><span class="p">,</span>
+        <span class="s2">&quot;Outperforms: active return &gt; 0 and HAC t &gt; 2&quot;</span><span class="p">:</span>       <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Active return (ann.)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;HAC t-stat (active return)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2&quot;</span><span class="p">:</span>     <span class="n">r</span><span class="p">[</span><span class="s2">&quot;CAPM alpha (ann.)&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;t-stat of alpha, HAC&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;Bootstrap: P(active ≤ 0) &lt; 5%&quot;</span><span class="p">:</span>                      <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Bootstrap p: active ≤ 0&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">.05</span><span class="p">,</span>
+        <span class="s2">&quot;Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%&quot;</span><span class="p">:</span>                     <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Bootstrap p: ΔSharpe ≤ 0&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">.05</span><span class="p">,</span>
+        <span class="s2">&quot;Consistency: folds won, binomial p &lt; 10%&quot;</span><span class="p">:</span>           <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Binomial p (folds)&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">.10</span><span class="p">,</span>
+        <span class="s2">&quot;Persistence: ahead in ≥ 75</span><span class="si">% o</span><span class="s2">f rolling 36M windows&quot;</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;Rolling 36M ahead&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">.75</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;── </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="s2">&quot;─&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">60</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">checks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;✓&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;✗&#39;</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span><span class="si">}</span><span class="s2"> passed | active </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;Active return (ann.)&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">/yr | &quot;</span>
-          <span class="sa">f</span><span class="s2">&quot;alpha </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;CAPM alpha (ann.)&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">/yr | beta </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;Beta vs benchmark&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | folds won </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;Folds won&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="s1">&#39;✓&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;✗&#39;</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span><span class="si">}</span><span class="s2"> passed | active </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;Active return (ann.)&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">/yr | alpha </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;CAPM alpha (ann.)&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">/yr | beta </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;Beta vs benchmark&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | folds won </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;Folds won&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="nb">len</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span>
 
-<span class="n">k</span><span class="p">,</span> <span class="n">tot</span> <span class="o">=</span> <span class="n">scorecard</span><span class="p">(</span><span class="n">vs_qqq</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs QQQ&quot;</span><span class="p">)</span>
+<span class="n">k</span><span class="p">,</span> <span class="n">tot</span> <span class="o">=</span> <span class="n">scorecard</span><span class="p">(</span><span class="n">vs_qqq</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs QQQ, real case (point-in-time membership)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>── Waterfall (net) vs QQQ ──────────────────────────────────────
-  ✓  Outperforms: active return &gt; 0 and HAC t &gt; 2
-  ✓  Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
-  ✓  Bootstrap: P(active ≤ 0) &lt; 5%
-  ✗  Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
-  ✗  Consistency: folds won, binomial p &lt; 10%
-  ✓  Persistence: ahead in ≥ 75% of rolling 36M windows
-  → 4/6 passed | active 12.8%/yr | alpha 13.8%/yr | beta 0.95 | folds won 8/11
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Waterfall (net) vs QQQ, real case (point-in-time membership)
+  ✓ Outperforms: active return &gt; 0 and HAC t &gt; 2
+  ✓ Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
+  ✓ Bootstrap: P(active ≤ 0) &lt; 5%
+  ✗ Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
+  ✓ Consistency: folds won, binomial p &lt; 10%
+  ✓ Persistence: ahead in ≥ 75% of rolling 36M windows
+  5/6 passed | active 14.1%/yr | alpha 15.0%/yr | beta 0.96 | folds won 10/11
 </pre></div>
 </div>
 </div>
 </div>
-<p><strong>Reading.</strong> Four of the six checks pass against QQQ: outperformance, alpha after beta, bootstrap significance on active return, and persistence across rolling windows. The two that fail are the stricter ones (Sharpe difference and fold consistency). The honest summary is a credible return edge with an unproven Sharpe edge.</p>
+<p><strong>Reading.</strong> The real-case strategy passes <strong>five of six</strong>. It fails exactly one criterion, and it is the noisiest in the battery: the bootstrap on the Sharpe-difference (<strong>p = 12.4%</strong>). Outperformance (HAC t = 2.41), alpha after beta (t = 2.48 at beta 0.96), the return-gap bootstrap (p = 0.3%), fold consistency (binomial p = <strong>0.006</strong>) and persistence (<strong>90%</strong> of rolling 36-month windows ahead) all hold. One ✗ among five ✓s, on the statistic least likely to be stable: we do not declare the risk-adjusted claim proven.</p>
 </section>
 <section id="the-lookahead-bias-check-same-strategy-today-s-membership">
 <h2>8. The lookahead bias check: same strategy, today’s membership<a class="headerlink" href="#the-lookahead-bias-check-same-strategy-today-s-membership" title="Link to this heading">#</a></h2>
-<p>So far every universe decision used actual index membership at each date. Now the classic shortcut: run the <strong>identical</strong> waterfall (same signals, same funnel, same costs, same dates) with <strong>today’s index membership applied to every month since 2016</strong>. That is the backtest most people would ship, and it silently gives the strategy its future self. Section by section we compare results and statistical validation: real case membership vs today’s membership (lookahead).</p>
+<p>Sections 3 and 6 already show how far apart the cases are; this section isolates the effect and grades it. Run the <strong>identical</strong> waterfall (same signals, same funnel, same costs, same dates) with <strong>today’s index membership applied to every month since 2016</strong>: the backtest most people would ship, silently giving the strategy its future self.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">waterfall_biased</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n1</span><span class="o">=</span><span class="n">N1</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="n">N2</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="n">N3</span><span class="p">):</span>
-    <span class="n">pool</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">CURRENT</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>     <span class="c1"># today&#39;s members at every date: the lookahead set</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">m12</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">pool</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">m6</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
-    <span class="k">return</span> <span class="n">m3</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n3</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
-
-<span class="n">S_bias</span> <span class="o">=</span> <span class="n">backtest</span><span class="p">(</span><span class="n">waterfall_biased</span><span class="p">)</span><span class="o">.</span><span class="n">net</span>                    <span class="c1"># everything identical to the real case except the universe</span>
-<span class="n">cmp_perf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">&quot;QQQ (benchmark)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">B</span><span class="p">),</span>
-    <span class="s2">&quot;Real case membership&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S</span><span class="p">),</span>
-    <span class="s2">&quot;Today&#39;s membership (lookahead)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S_bias</span><span class="p">),</span>
-<span class="p">})</span><span class="o">.</span><span class="n">T</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Universe: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="fm">__len__</span><span class="p">())</span><span class="si">}</span><span class="s2"> tickers at every date with today&#39;s membership, vs 107 to 113 actual members in the real case&quot;</span><span class="p">)</span>
-<span class="n">cmp_perf</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scorecard</span><span class="p">(</span><span class="n">bias</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs QQQ, lookahead case (today&#39;s membership at every date)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Universe: 128 tickers at every date with today&#39;s membership, vs 107 to 113 actual members in the real case
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Waterfall (net) vs QQQ, lookahead case (today&#39;s membership at every date)
+  ✓ Outperforms: active return &gt; 0 and HAC t &gt; 2
+  ✓ Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
+  ✓ Bootstrap: P(active ≤ 0) &lt; 5%
+  ✓ Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
+  ✓ Consistency: folds won, binomial p &lt; 10%
+  ✓ Persistence: ahead in ≥ 75% of rolling 36M windows
+  6/6 passed | active 25.1%/yr | alpha 23.7%/yr | beta 1.07 | folds won 10/11
 </pre></div>
 </div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>CAGR</th>
-      <th>Vol</th>
-      <th>Sharpe</th>
-      <th>MaxDD</th>
-      <th>Best month</th>
-      <th>Worst month</th>
-      <th>% months &gt; 0</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>QQQ (benchmark)</th>
-      <td>0.211</td>
-      <td>0.192</td>
-      <td>1.102</td>
-      <td>-0.322</td>
-      <td>0.161</td>
-      <td>-0.138</td>
-      <td>0.664</td>
-    </tr>
-    <tr>
-      <th>Real case membership</th>
-      <td>0.357</td>
-      <td>0.252</td>
-      <td>1.347</td>
-      <td>-0.271</td>
-      <td>0.290</td>
-      <td>-0.222</td>
-      <td>0.664</td>
-    </tr>
-    <tr>
-      <th>Today's membership (lookahead)</th>
-      <td>0.511</td>
-      <td>0.302</td>
-      <td>1.531</td>
-      <td>-0.274</td>
-      <td>0.510</td>
-      <td>-0.274</td>
-      <td>0.695</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(6, 6)
+</pre></div>
 </div>
-<p><strong>Reading.</strong> Lookahead does a lot of work here. With today’s membership at every date the strategy compounds 51% a year (Sharpe 1.53); with actual membership it earns 36% (Sharpe 1.35), while QQQ sits at 21% (Sharpe 1.10). Volatility climbs from about 25% to 30% as well, so part of the extra return is simply owning the winners before everyone else does. In the chart above, the vertical gap between the two strategy lines <strong>is</strong> the size of the membership bias.</p>
+</div>
+</div>
+<p><strong>Reading.</strong> The grade flips. With today’s membership at every date all six criteria pass (CAGR <strong>51%</strong>, Sharpe-difference p = <strong>3.6%</strong>), while the real case scores 5/6 with one borderline item (section 7). Nothing in the code differs between the two cases except <em>which companies were allowed at each date</em>. That single change is worth roughly a third of the measured edge and flips the one failing test from fail to pass: membership lookahead does not just inflate returns, it inflates the confidence with which we would claim them.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height_ratios&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span>
 <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">ls</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">B</span><span class="p">,</span>      <span class="s2">&quot;QQQ&quot;</span><span class="p">,</span>                                        <span class="s2">&quot;#e69f00&quot;</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
                            <span class="p">(</span><span class="n">S_bias</span><span class="p">,</span> <span class="s2">&quot;Strategy with today&#39;s membership (lookahead)&quot;</span><span class="p">,</span> <span class="s2">&quot;#d1495b&quot;</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">),</span>
-                           <span class="p">(</span><span class="n">S</span><span class="p">,</span>      <span class="s2">&quot;Strategy with real case membership&quot;</span><span class="p">,</span>            <span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)]:</span>
+                           <span class="p">(</span><span class="n">S</span><span class="p">,</span>      <span class="s2">&quot;Strategy with real case membership&quot;</span><span class="p">,</span>           <span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)]:</span>
     <span class="n">eq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
     <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">)</span>
     <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span> <span class="o">/</span> <span class="n">eq</span><span class="o">.</span><span class="n">cummax</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Growth of 1 (log)&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="n">usd</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Value of $1 invested&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Drawdown (monthly)&quot;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Same strategy, two universes: the lookahead gap is the vertical distance between the two strategy lines&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">.96</span><span class="p">));</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1465,248 +1392,60 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/3ebec0e7b60b8e88e039efe4b4ab25f57ad4d5f8f4e53a85a17f79a01d9aee79.png" src="_images/3ebec0e7b60b8e88e039efe4b4ab25f57ad4d5f8f4e53a85a17f79a01d9aee79.png" />
+<img alt="_images/1e0c1d039a01d3f6e90b17c733774b4c6822db0517a77846edd8ac11b93c75f9.png" src="_images/1e0c1d039a01d3f6e90b17c733774b4c6822db0517a77846edd8ac11b93c75f9.png" />
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bat_bias</span> <span class="o">=</span> <span class="n">battery</span><span class="p">(</span><span class="n">S_bias</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>                              <span class="c1"># full significance battery, same tests as section 7</span>
-<span class="n">cmp_stat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">&quot;real case&quot;</span><span class="p">:</span>     <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs_qqq</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
-    <span class="s2">&quot;with lookahead&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bat_bias</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
-<span class="p">})</span>
-<span class="n">scorecard</span><span class="p">(</span><span class="n">bat_bias</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs QQQ — with today&#39;s membership at every date&quot;</span><span class="p">)</span>
-<span class="n">cmp_stat</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>── Waterfall (net) vs QQQ — with today&#39;s membership at every date 
-  ✓  Outperforms: active return &gt; 0 and HAC t &gt; 2
-  ✓  Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
-  ✓  Bootstrap: P(active ≤ 0) &lt; 5%
-  ✓  Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
-  ✓  Consistency: folds won, binomial p &lt; 10%
-  ✓  Persistence: ahead in ≥ 75% of rolling 36M windows
-  → 6/6 passed | active 25.1%/yr | alpha 23.7%/yr | beta 1.07 | folds won 10/11
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>real case</th>
-      <th>with lookahead</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Months</th>
-      <td>128</td>
-      <td>128</td>
-    </tr>
-    <tr>
-      <th>Active return (ann.)</th>
-      <td>0.128</td>
-      <td>0.251</td>
-    </tr>
-    <tr>
-      <th>HAC t-stat (active return)</th>
-      <td>2.187</td>
-      <td>3.494</td>
-    </tr>
-    <tr>
-      <th>CAPM alpha (ann.)</th>
-      <td>0.138</td>
-      <td>0.237</td>
-    </tr>
-    <tr>
-      <th>t-stat of alpha, HAC</th>
-      <td>2.271</td>
-      <td>3.318</td>
-    </tr>
-    <tr>
-      <th>Beta vs benchmark</th>
-      <td>0.953</td>
-      <td>1.069</td>
-    </tr>
-    <tr>
-      <th>Sharpe difference</th>
-      <td>0.245</td>
-      <td>0.429</td>
-    </tr>
-    <tr>
-      <th>Bootstrap p: active ≤ 0</th>
-      <td>0.008</td>
-      <td>0.000</td>
-    </tr>
-    <tr>
-      <th>Bootstrap p: ΔSharpe ≤ 0</th>
-      <td>0.167</td>
-      <td>0.036</td>
-    </tr>
-    <tr>
-      <th>Folds won</th>
-      <td>8/11</td>
-      <td>10/11</td>
-    </tr>
-    <tr>
-      <th>Binomial p (folds)</th>
-      <td>0.113</td>
-      <td>0.006</td>
-    </tr>
-    <tr>
-      <th>Rolling 36M ahead</th>
-      <td>0.914</td>
-      <td>1.000</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<p><strong>Reading.</strong> Here it gets interesting. Both versions beat QQQ convincingly on active return and CAPM alpha (HAC t between about 2.2 and 3.5), and the bootstrap probability of losing money is near zero in both. The difference shows up in the two stricter checks. With today’s membership, P(ΔSharpe ≤ 0) drops from 0.17 to 0.04 (pass instead of fail), and fold consistency improves from 8 wins out of 11 (binomial p = 0.113) to 10 out of 11 (p = 0.006). The perfect six of six scorecard is therefore a product of membership lookahead; the real case earns four of six, with outperformance and alpha still significant while Sharpe difference and fold consistency miss their bars.</p>
 </section>
-<hr class="docutils" />
 <section id="how-far-can-this-conclusion-be-pushed">
 <h2>9. How far can this conclusion be pushed?<a class="headerlink" href="#how-far-can-this-conclusion-be-pushed" title="Link to this heading">#</a></h2>
 <p>A significant result against QQQ is <strong>necessary, not sufficient</strong>. The honest boundaries:</p>
-<p><strong>1. Membership timing (quantified in section 8).</strong> The universe uses point-in-time membership from <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code>: a recorded addition only becomes eligible in the year <em>after</em> its addition year (its whole addition year is ignored), and a removal stays eligible through its exit year, so no signal relies on information that had not yet become public. Residual approximations: (i) effective dates within a year are unknown; (ii) current members with no recorded change are assumed to have been in the index since before 2015; (iii) tickers without downloadable price history drop out wherever they would be needed. The cell below runs the <em>same battery</em> against an <strong>equal-weight portfolio of the same universe</strong>: if the waterfall’s edge over <em>that</em> is weak, much of the advantage over QQQ is simply “owning today’s winners”. Passing this is necessary, still not proof.</p>
-<p><strong>2. Hindsight in the design.</strong> No parameters were searched, but 12/6/3 months and 50/25/10 were chosen by someone who had seen this history. Only genuinely new data — a forward test — removes this.</p>
-<p><strong>3. One regime.</strong> About ten years dominated by US mega-cap tech. The Sharpe ratio’s standard error at this length is roughly 0.3.</p>
+<p><strong>1. Membership timing (quantified in section 8).</strong> The universe uses point-in-time membership from <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code>: a recorded addition only becomes eligible the year <em>after</em> its record year, and a removal stays eligible through its exit year, so no signal relies on information that had not yet become public. Residual approximations: (i) effective dates within a year are unknown; (ii) current members with no recorded change are assumed to have been in the index since before 2015; (iii) names without downloadable US price history drop out wherever they would be needed. The cell below runs the <em>same battery</em> against an <strong>equal-weight portfolio of the same universe</strong>: if the waterfall’s edge over <em>that</em> is weak, much of the advantage over QQQ is simply “owning today’s winners”. Passing this is necessary, still not proof.</p>
+<p><strong>2. Hindsight in the design.</strong> No parameters were searched, but 12/6/3 months and 50/25/10 were chosen by someone who had seen this history. Only genuinely new data, i.e. a forward test, removes this.</p>
+<p><strong>3. One regime.</strong> About ten years dominated by US mega-cap tech; the standard error of a Sharpe ratio at this length is roughly <strong>0.3</strong>.</p>
 <p><strong>4. Simplified costs.</strong> Flat 10 bp on traded notional; no market impact, no taxes.</p>
-<p><strong>5. Multiple tests.</strong> The scorecard reports six related criteria; they are correlated, not independent, but a single ✓ among ✗s should not be oversold.</p>
+<p><strong>5. Multiple tests.</strong> The scorecard reports six related criteria; they are correlated, not independent, so one ✓ among ✗s should not be oversold.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vs_ew</span> <span class="o">=</span> <span class="n">battery</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">ew</span><span class="o">.</span><span class="n">gross</span><span class="p">)</span>       <span class="c1"># same universe, equal-weight, no skill — the membership-adjusted yardstick</span>
-<span class="n">k2</span><span class="p">,</span> <span class="n">tot2</span> <span class="o">=</span> <span class="n">scorecard</span><span class="p">(</span><span class="n">vs_ew</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs equal-weight universe&quot;</span><span class="p">)</span>
-<span class="n">show</span><span class="p">({</span><span class="s2">&quot;vs QQQ&quot;</span><span class="p">:</span> <span class="n">vs_qqq</span><span class="p">,</span> <span class="s2">&quot;vs equal-weight universe&quot;</span><span class="p">:</span> <span class="n">vs_ew</span><span class="p">})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vs_ew</span> <span class="o">=</span> <span class="n">battery</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">ew</span><span class="o">.</span><span class="n">gross</span><span class="p">)</span>       <span class="c1"># same universe, equal-weight, no selection skill: the membership-adjusted yardstick</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;Real case, benchmark QQQ&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs_qqq</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
+    <span class="s2">&quot;Real case, benchmark equal-weight universe&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs_ew</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
+<span class="p">})</span>
+
+<span class="n">scorecard</span><span class="p">(</span><span class="n">vs_ew</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs equal-weight universe, real case&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>── Waterfall (net) vs equal-weight universe ────────────────────
-  ✓  Outperforms: active return &gt; 0 and HAC t &gt; 2
-  ✓  Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
-  ✓  Bootstrap: P(active ≤ 0) &lt; 5%
-  ✗  Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
-  ✗  Consistency: folds won, binomial p &lt; 10%
-  ✓  Persistence: ahead in ≥ 75% of rolling 36M windows
-  → 4/6 passed | active 13.6%/yr | alpha 14.0%/yr | beta 0.98 | folds won 8/11
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Waterfall (net) vs equal-weight universe, real case
+  ✓ Outperforms: active return &gt; 0 and HAC t &gt; 2
+  ✓ Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
+  ✓ Bootstrap: P(active ≤ 0) &lt; 5%
+  ✗ Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
+  ✓ Consistency: folds won, binomial p &lt; 10%
+  ✓ Persistence: ahead in ≥ 75% of rolling 36M windows
+  5/6 passed | active 14.9%/yr | alpha 15.0%/yr | beta 0.99 | folds won 9/11
 </pre></div>
 </div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>vs QQQ</th>
-      <th>vs equal-weight universe</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Months</th>
-      <td>128</td>
-      <td>128</td>
-    </tr>
-    <tr>
-      <th>Active return (ann.)</th>
-      <td>0.128</td>
-      <td>0.136</td>
-    </tr>
-    <tr>
-      <th>HAC t-stat (active return)</th>
-      <td>2.187</td>
-      <td>2.348</td>
-    </tr>
-    <tr>
-      <th>CAPM alpha (ann.)</th>
-      <td>0.138</td>
-      <td>0.140</td>
-    </tr>
-    <tr>
-      <th>t-stat of alpha, HAC</th>
-      <td>2.271</td>
-      <td>2.564</td>
-    </tr>
-    <tr>
-      <th>Beta vs benchmark</th>
-      <td>0.953</td>
-      <td>0.978</td>
-    </tr>
-    <tr>
-      <th>Sharpe difference</th>
-      <td>0.245</td>
-      <td>0.231</td>
-    </tr>
-    <tr>
-      <th>Bootstrap p: active ≤ 0</th>
-      <td>0.008</td>
-      <td>0.004</td>
-    </tr>
-    <tr>
-      <th>Bootstrap p: ΔSharpe ≤ 0</th>
-      <td>0.167</td>
-      <td>0.162</td>
-    </tr>
-    <tr>
-      <th>Folds won</th>
-      <td>8/11</td>
-      <td>8/11</td>
-    </tr>
-    <tr>
-      <th>Binomial p (folds)</th>
-      <td>0.113</td>
-      <td>0.113</td>
-    </tr>
-    <tr>
-      <th>Rolling 36M ahead</th>
-      <td>0.914</td>
-      <td>0.946</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(5, 6)
+</pre></div>
 </div>
-<p><strong>Reading.</strong> The same battery passes against an equal weight basket of real index membership: about 14% active return per year, HAC t near 2.4 to 2.6, and P(active ≤ 0) at 0.4%. Simply owning today’s winners therefore does not explain the whole edge. What it also cannot fix is the same pair of failures (Sharpe difference, fold consistency), which persist against both benchmarks.</p>
+</div>
+</div>
+<p><strong>Reading.</strong> The waterfall also beats an <strong>equal-weight portfolio of the same point-in-time universe</strong>: <strong>+14.9%/year</strong>, HAC t = <strong>2.57</strong>, alpha <strong>+15%</strong> (t = 2.75), beta ≈ 1, wins in <strong>9 of 11</strong> folds (binomial p = 0.033). A meaningful slice of the edge over QQQ is therefore genuine stock selection within the index, not merely owning today’s winners. The caveat travels with it: the Sharpe-difference bootstrap again lands at <strong>p = 12.7%</strong>, so even this cleaner comparison supports the return claim more firmly than the risk-adjusted one.</p>
 <p><strong>Next steps to make the claim stronger:</strong> (1) exact effective dates for each addition/removal in <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> (currently year-resolution); (2) extend to Russell 1000 / global equities as a genuinely different sample; (3) regress on Fama-French + momentum factors to see whether the alpha is more than known factor exposure; (4) paper-trade and accumulate a live forward record before sizing up.</p>
 <hr class="docutils" />
 <p><em>Research for educational purposes. Nothing herein constitutes investment advice.</em></p>
 </section>
 <section id="main-findings">
 <h2>10. Main findings<a class="headerlink" href="#main-findings" title="Link to this heading">#</a></h2>
-<p>This notebook runs the same strategy twice and puts both against QQQ, because the comparison itself is the story: benchmark versus strategy with membership lookahead versus real case.</p>
-<p>Net of costs, the real case waterfall beats QQQ by about 13% a year (CAGR 36% against 21%, Sharpe 1.35 against 1.10), with a marginally shallower drawdown. That outperformance is statistically credible: HAC t near 2.2 on active return, positive CAPM alpha after beta (t near 2.3), and a bootstrap probability of losing money below one percent.</p>
-<p>What does not survive is the finer print. With actual membership the strategy wins in only 8 of the 11 independent folds, each one year long (binomial p = 0.113), and the Sharpe difference misses its bar (P(ΔSharpe ≤ 0) = 0.17). Scorecard: four of six.</p>
-<p>The lookahead run explains exactly that gap. With today’s membership at every date, CAGR climbs from 36% to 51%, and both failed checks flip to pass (P(ΔSharpe ≤ 0) = 0.04; folds won 10 out of 11, p = 0.006). Scorecard: six of six. In other words, the perfect statistical validation is a product of membership lookahead; in the real case only outperformance and alpha remain significant.</p>
-<p>The practical takeaway: momentum selection over this index has a genuine but moderate edge over holding QQQ, and how much of it you keep depends on picking from actual members at each date rather than from today’s list. Twenty five historical constituents had no downloadable price history and were excluded wherever needed (the list is in section 1).</p>
+<p><strong>The strategy, honestly run, has a real and well-supported edge over QQQ.</strong> With point-in-time membership (additions eligible only from the year after their record), the monthly waterfall delivers <strong>CAGR 37% versus 21%</strong> for QQQ, <strong>Sharpe 1.39 versus 1.10</strong>, a shallower max drawdown (<strong>-27% versus -32%</strong>), and passes <strong>five of six</strong> significance criteria: HAC t = 2.41 on active return, CAPM alpha <strong>+15%/year at beta 0.96</strong> (t = 2.48), bootstrap P(active ≤ 0) = 0.3%, wins in <strong>10 of 11</strong> annual folds (binomial p = 0.006), and ahead in <strong>90%</strong> of rolling 36-month windows. The only failure is the noisiest statistic: the Sharpe-difference bootstrap at <strong>p = 12.4%</strong>.</p>
+<p><strong>How much was lookahead?</strong> Re-running the identical strategy with today’s membership at every date lifts CAGR to <strong>51%</strong> and turns the scorecard into a clean <strong>6 of 6</strong>: hindsight does not merely add return, it also cleans up borderline statistics (the Sharpe-difference p drops from 12.4% to 3.6%). That gap is precisely the amount of the original backtest that was quietly written from today’s vantage point.</p>
+<p><strong>What remains genuinely new.</strong> The edge over an equal-weight portfolio of the same historical universe (<strong>+14.9%/year</strong>, HAC t = 2.57) shows selection, not just index membership doing the work.</p>
+<p><strong>The defensible claim.</strong> <em>The momentum waterfall has a real return edge on the Nasdaq-100 that survives point-in-time membership and robust inference; its risk-adjusted superiority is supported but not yet proven at the 5% level.</em></p>
+<p><strong>Data left out, honestly stated.</strong> Twenty-nine names in <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> left the universe: twenty-six had no downloadable US price history on Yahoo Finance (mostly companies taken private or merged away), three carried symbols that now map to different companies. Four further names carried an early-exit record contradicting their later membership; those stray events were removed so each ticker follows one consistent timeline. None of this flatters the strategy: it only slightly shrinks the eligible pool in some months.</p>
+<p><strong>What would make the claim stronger.</strong> Exact effective dates from an exchange source, a forward test, and more independent evidence for the Sharpe-difference p to drop below 5%.</p>
 </section>
 </section>
 
@@ -1772,10 +1511,10 @@ Eligible pool at each signal: 107–113 constituents (point-in-time membership)
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-data">1. Parameters &amp; data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signals-and-backtest-engine">2. Signals and backtest engine</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-out-of-sample-track-record">3. The out-of-sample track record</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds-is-the-edge-consistent">4. Walk-forward folds — is the edge consistent?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">5. Evidence accumulation — does the case get stronger, and does it stay strong?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance">6. Statistical significance</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scorecard">7. Scorecard</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds-is-the-edge-consistent">4. Walk-forward folds: is the edge consistent?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">5. Evidence accumulation: does the case get stronger, and does it stay strong?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance-robust-tests-that-do-not-assume-normality">6. Statistical significance: robust tests that do not assume normality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-validation-scorecard-real-case-only">7. The validation scorecard, real case only</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lookahead-bias-check-same-strategy-today-s-membership">8. The lookahead bias check: same strategy, today’s membership</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-far-can-this-conclusion-be-pushed">9. How far can this conclusion be pushed?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">10. Main findings</a></li>
