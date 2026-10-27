@@ -425,20 +425,19 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-of-an-edge-tested-twice-with-and-without-membership-lookahead-bias">Evidence of an edge, tested twice: with and without membership lookahead bias</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-of-an-edge-tested-twice-with-and-without-survivorship-bias">Evidence of an edge, tested twice: with and without survivorship bias</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#research-question">Research question</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-strategy">The strategy</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-walk-forward-without-optimisation">Why a walk-forward <em>without</em> optimisation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-data">1. Parameters &amp; data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signals-and-backtest-engine">2. Signals and backtest engine</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-out-of-sample-track-record">3. The out-of-sample track record</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds-is-the-edge-consistent">4. Walk-forward folds: is the edge consistent?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">5. Evidence accumulation: does the case get stronger, and does it stay strong?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance-robust-tests-that-do-not-assume-normality">6. Statistical significance: robust tests that do not assume normality</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-validation-scorecard-real-case-only">7. The validation scorecard, real case only</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lookahead-bias-check-same-strategy-today-s-membership">8. The lookahead bias check: same strategy, today’s membership</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-far-can-this-conclusion-be-pushed">9. How far can this conclusion be pushed?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">10. Main findings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-data">Parameters &amp; data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signals-backtest-engine">Signals &amp; backtest engine</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#track-record">Track record</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds">Walk-forward folds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation">Evidence accumulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance">Statistical significance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scorecard">Scorecard</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#survivorship-bias">Survivorship bias</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">Main findings</a></li>
 </ul>
             </nav>
         </div>
@@ -452,8 +451,8 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="nasdaq-100-momentum-waterfall">
 <h1>Nasdaq-100 Momentum Waterfall<a class="headerlink" href="#nasdaq-100-momentum-waterfall" title="Link to this heading">#</a></h1>
-<section id="evidence-of-an-edge-tested-twice-with-and-without-membership-lookahead-bias">
-<h2>Evidence of an edge, tested twice: with and without membership lookahead bias<a class="headerlink" href="#evidence-of-an-edge-tested-twice-with-and-without-membership-lookahead-bias" title="Link to this heading">#</a></h2>
+<section id="evidence-of-an-edge-tested-twice-with-and-without-survivorship-bias">
+<h2>Evidence of an edge, tested twice: with and without survivorship bias<a class="headerlink" href="#evidence-of-an-edge-tested-twice-with-and-without-survivorship-bias" title="Link to this heading">#</a></h2>
 </section>
 <section id="research-question">
 <h2>Research question<a class="headerlink" href="#research-question" title="Link to this heading">#</a></h2>
@@ -478,7 +477,7 @@ document.write(`
 <tbody>
 <tr class="row-even"><td><p>Signal</p></td>
 <td><p>Last close of month <em>t</em>, prices ≤ <em>t</em> only</p></td>
-<td><p>No lookahead</p></td>
+<td><p>Point in time only</p></td>
 </tr>
 <tr class="row-odd"><td><p>Execution</p></td>
 <td><p>Buy at the <strong>open of t+1</strong>, hold to the next rebalance open</p></td>
@@ -510,7 +509,7 @@ document.write(`
 </div>
 </section>
 <section id="parameters-data">
-<h2>1. Parameters &amp; data<a class="headerlink" href="#parameters-data" title="Link to this heading">#</a></h2>
+<h2>Parameters &amp; data<a class="headerlink" href="#parameters-data" title="Link to this heading">#</a></h2>
 <p>All tunables live in one cell. Prices come from Yahoo Finance with <code class="docutils literal notranslate"><span class="pre">auto_adjust=True</span></code> (splits <strong>and</strong> dividends, stocks and benchmark alike) and are cached on disk, so the notebook is reproducible offline.</p>
 <p><strong>Point-in-time universe.</strong> <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> lists index additions (<em>Ticker entrati</em>) and removals (<em>Ticker usciti</em>) by calendar year (2015 to 2025). We do not have exact effective dates, so a change recorded in year Y takes effect from <strong>Jan 1 of Y+1</strong>: an addition is usable only starting the following year (its whole addition year is ignored), and a removal stays eligible through Dec 31 of its exit year. By January of the next year each event is unambiguously past, so no signal ever uses information that had not yet become public.</p>
 <div class="cell docutils container">
@@ -597,7 +596,7 @@ document.write(`
         <span class="n">ivals</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lo</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">))</span> <span class="c1"># still a member: open interval</span>
     <span class="k">return</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">ivals</span><span class="p">])</span>
 
-<span class="n">CURRENT</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">nasdaq100_tickers</span><span class="p">()}</span>   <span class="c1"># today&#39;s membership (lookahead set of section 8)</span>
+<span class="n">CURRENT</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">nasdaq100_tickers</span><span class="p">()}</span>   <span class="c1"># today&#39;s membership (survivorship case)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">load_prices</span><span class="p">():</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">yfinance</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">yf</span>
@@ -639,8 +638,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="signals-and-backtest-engine">
-<h2>2. Signals and backtest engine<a class="headerlink" href="#signals-and-backtest-engine" title="Link to this heading">#</a></h2>
+<section id="signals-backtest-engine">
+<h2>Signals &amp; backtest engine<a class="headerlink" href="#signals-backtest-engine" title="Link to this heading">#</a></h2>
 <p>Momentum is the simple return over 3, 6 and 12 months on month-end closes. Holding-period returns are <strong>open-to-open</strong>: buy at the open of the first trading day after the signal, sell at the open of the first trading day of the next month (the same price at which the next portfolio is bought). Positions are buy-and-hold within the month. The engine takes any selection rule mapping a date to tickers, so the strategy and the baselines run through identical code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -711,7 +710,7 @@ document.write(`
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average monthly turnover (two-way): </span><span class="si">{</span><span class="n">strat</span><span class="o">.</span><span class="n">turn</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> of the book&quot;</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">waterfall_biased</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n1</span><span class="o">=</span><span class="n">N1</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="n">N2</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="n">N3</span><span class="p">):</span>
-    <span class="n">pool</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">CURRENT</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>     <span class="c1"># today&#39;s members at every date: the lookahead set (section 8)</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">CURRENT</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">close</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>     <span class="c1"># today&#39;s members at every date: the survivorship case</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">m12</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">pool</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">m6</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
     <span class="k">return</span> <span class="n">m3</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n3</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
@@ -729,9 +728,9 @@ document.write(`
 </div>
 </section>
 <hr class="docutils" />
-<section id="the-out-of-sample-track-record">
-<h2>3. The out-of-sample track record<a class="headerlink" href="#the-out-of-sample-track-record" title="Link to this heading">#</a></h2>
-<p>One table, three cases side by side: <strong>QQQ</strong> as the benchmark, the strategy on <strong>actual index membership at each date</strong> (the real case under test), and the identical strategy run with <strong>today’s membership applied to every month</strong> (the lookahead case graded in section 8). Net of costs; Sharpe is annualised mean excess return over volatility (one definition used everywhere); max drawdown on monthly data understates intra-month drawdowns.</p>
+<section id="track-record">
+<h2>Track record<a class="headerlink" href="#track-record" title="Link to this heading">#</a></h2>
+<p>One table, three cases side by side: <strong>QQQ</strong> as the benchmark, the strategy on <strong>actual index membership at each date</strong> (the real case under test), and the identical strategy run with <strong>today’s membership applied to every month</strong> (the survivorship case, section 8). Net of costs; Sharpe is annualised mean excess return over volatility (one definition used everywhere); max drawdown on monthly data understates intra-month drawdowns.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">perf</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">rf</span><span class="o">=</span><span class="n">RF</span><span class="p">):</span>
@@ -745,7 +744,7 @@ document.write(`
 <span class="n">cmp_perf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s2">&quot;QQQ&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">B</span><span class="p">),</span>
     <span class="s2">&quot;Real case (point-in-time membership)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S</span><span class="p">),</span>
-    <span class="s2">&quot;Lookahead (today&#39;s membership at every date)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S_bias</span><span class="p">),</span>
+    <span class="s2">&quot;Survivorship (today&#39;s membership)&quot;</span><span class="p">:</span> <span class="n">perf</span><span class="p">(</span><span class="n">S_bias</span><span class="p">),</span>
 <span class="p">})</span><span class="o">.</span><span class="n">T</span>
 <span class="n">cmp_perf</span>
 </pre></div>
@@ -801,7 +800,7 @@ document.write(`
       <td>0.648</td>
     </tr>
     <tr>
-      <th>Lookahead (today's membership at every date)</th>
+      <th>Survivorship (today's membership)</th>
       <td>0.511</td>
       <td>0.302</td>
       <td>1.531</td>
@@ -814,7 +813,7 @@ document.write(`
 </table>
 </div></div></div>
 </div>
-<p><strong>Reading.</strong> Three cases, one table. <strong>QQQ</strong> delivered CAGR <strong>21%</strong> and Sharpe <strong>1.10</strong> over this span. The real case beats it on every headline number: CAGR <strong>37%</strong>, Sharpe <strong>1.39</strong>, max drawdown <strong>-27% versus -32%</strong>. The third column is the same strategy run with hindsight (section 8): CAGR <strong>51%</strong>, Sharpe <strong>1.53</strong>. The gap between columns two and three is membership lookahead in one view: roughly a third of the measured edge, plus the statistics that let us claim it.</p>
+<p><strong>Reading.</strong> Three cases, one table. <strong>QQQ</strong> delivered CAGR <strong>21%</strong> and Sharpe <strong>1.10</strong> over this span. The real case beats it on every headline number: CAGR <strong>37%</strong>, Sharpe <strong>1.39</strong>, max drawdown <strong>-27% versus -32%</strong>. The third column is the same strategy run with today’s membership (the survivorship case): CAGR <strong>51%</strong>, Sharpe <strong>1.53</strong>. The gap between columns two and three is the survivorship case in one view: roughly a third of the measured edge, plus the statistics that let us claim it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">FuncFormatter</span>
@@ -840,12 +839,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/82bfa838c90a707ce2e66a8013dab7c626913e373042694046202fc74e13f049.png" src="_images/82bfa838c90a707ce2e66a8013dab7c626913e373042694046202fc74e13f049.png" />
+<img alt="_images/572f3e7518fc2c34a06bfc7f22eabec0483359f7dd1011d0442d8a6646654f1e.png" src="_images/572f3e7518fc2c34a06bfc7f22eabec0483359f7dd1011d0442d8a6646654f1e.png" />
 </div>
 </div>
 </section>
-<section id="walk-forward-folds-is-the-edge-consistent">
-<h2>4. Walk-forward folds: is the edge consistent?<a class="headerlink" href="#walk-forward-folds-is-the-edge-consistent" title="Link to this heading">#</a></h2>
+<section id="walk-forward-folds">
+<h2>Walk-forward folds<a class="headerlink" href="#walk-forward-folds" title="Link to this heading">#</a></h2>
 <p>The track record is cut into <strong>independent, non-overlapping 12-month folds</strong>. In each fold nothing was fitted on that data, so each one is a clean out-of-sample test of the <em>frozen</em> rule. A single total can hide the fact that one spectacular year did all the work; the fold view cannot.</p>
 <p>Two numbers summarise it: the <strong>hit rate</strong> (folds in which the strategy beat QQQ) and an exact <strong>one-sided binomial p-value</strong>: the probability of seeing at least that many wins if each fold were a coin flip.</p>
 <div class="cell docutils container">
@@ -1049,11 +1048,11 @@ document.write(`
 </div>
 </div>
 <p><strong>Reading.</strong> The strategy wins in <strong>10 of the 11</strong> one-year folds, and the exact binomial p-value is <strong>0.006</strong>: if every fold were a coin flip, a record at least this good would happen fewer than once in 100. Consistency clears even the strict bar we set (p &lt; 0.10). The single losing block is March 2023 to February 2024 (<strong>-21%</strong> active): one rough year, not a pattern.</p>
-<p>(The same 10/11 win rate appears for the lookahead column in section 6’s table: hindsight changes <em>how strongly</em> the edge is measured, not its consistency across time.)</p>
+<p>(The same 10/11 win rate appears for the survivorship column in section 6’s table: hindsight changes <em>how strongly</em> the edge is measured, not its consistency across time.)</p>
 </section>
 <hr class="docutils" />
-<section id="evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">
-<h2>5. Evidence accumulation: does the case get stronger, and does it stay strong?<a class="headerlink" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong" title="Link to this heading">#</a></h2>
+<section id="evidence-accumulation">
+<h2>Evidence accumulation<a class="headerlink" href="#evidence-accumulation" title="Link to this heading">#</a></h2>
 <p>Here the walk-forward is applied to the <strong>statistic itself</strong>. At each month <em>m</em> we use only the history up to <em>m</em> and compute the t-statistic of the mean monthly active return (strategy − QQQ). Two things are being checked:</p>
 <ul class="simple">
 <li><p>does the t-stat <strong>climb and stay above ~2</strong> as data accumulates (a real edge accumulates evidence ∝ √time), or does it spike and decay (an episode)?</p></li>
@@ -1085,12 +1084,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/0e5274f931639bcdffc8f10b8a309b1be79e568fd62fb74894951f0781e7678d.png" src="_images/0e5274f931639bcdffc8f10b8a309b1be79e568fd62fb74894951f0781e7678d.png" />
+<img alt="_images/0fb1dbc4f6f625aada6f9eb2f38b8c519b92c9c58dd75e24d41ef164806809fc.png" src="_images/0fb1dbc4f6f625aada6f9eb2f38b8c519b92c9c58dd75e24d41ef164806809fc.png" />
 </div>
 </div>
 </section>
-<section id="statistical-significance-robust-tests-that-do-not-assume-normality">
-<h2>6. Statistical significance: robust tests that do not assume normality<a class="headerlink" href="#statistical-significance-robust-tests-that-do-not-assume-normality" title="Link to this heading">#</a></h2>
+<section id="statistical-significance">
+<h2>Statistical significance<a class="headerlink" href="#statistical-significance" title="Link to this heading">#</a></h2>
 <p>Monthly active returns are autocorrelated and fat-tailed, so the naive standard error is too optimistic and a plain t-test overstates confidence. The battery below uses <strong>HAC (Newey-West type) inference</strong> for anything based on moments, and <strong>block bootstrap</strong> for distributions:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -1186,11 +1185,11 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bias</span> <span class="o">=</span> <span class="n">battery</span><span class="p">(</span><span class="n">S_bias</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>      <span class="c1"># same tests on the lookahead case: today&#39;s membership at every date (section 8)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bias</span> <span class="o">=</span> <span class="n">battery</span><span class="p">(</span><span class="n">S_bias</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>      <span class="c1"># same tests on the survivorship case: today&#39;s membership at every date</span>
 
 <span class="n">battery_cmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s2">&quot;Real case (point-in-time)&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs_qqq</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
-    <span class="s2">&quot;Lookahead (today&#39;s membership)&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bias</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
+    <span class="s2">&quot;Survivorship (today&#39;s membership)&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bias</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)},</span>
 <span class="p">})</span>
 <span class="n">battery_cmp</span>
 </pre></div>
@@ -1216,7 +1215,7 @@ document.write(`
     <tr style="text-align: right;">
       <th></th>
       <th>Real case (point-in-time)</th>
-      <th>Lookahead (today's membership)</th>
+      <th>Survivorship (today's membership)</th>
     </tr>
   </thead>
   <tbody>
@@ -1305,12 +1304,12 @@ document.write(`
 <img alt="_images/839b385f089e140c82cff3bd36223f824123e534c417f083cd12227696a72938.png" src="_images/839b385f089e140c82cff3bd36223f824123e534c417f083cd12227696a72938.png" />
 </div>
 </div>
-<p><strong>Reading.</strong> Both cases beat QQQ on every active-return test; they differ at the margin. The real case column is what we are allowed to claim: HAC t = <strong>2.41</strong>, CAPM alpha <strong>+15%</strong> (t = <strong>2.48</strong>), Sharpe-difference bootstrap p = <strong>0.12</strong>. The lookahead column runs the same strategy with hindsight: every t-statistic above 3, and that borderline p falls to <strong>3.6%</strong>. Section 8 grades both cases against the full scorecard; here it simply shows why one borderline test deserves attention instead of being smoothed over.</p>
+<p><strong>Reading.</strong> Both cases beat QQQ on every active-return test; they differ at the margin. The real case column is what we are allowed to claim: HAC t = <strong>2.41</strong>, CAPM alpha <strong>+15%</strong> (t = <strong>2.48</strong>), Sharpe-difference bootstrap p = <strong>0.12</strong>. The survivorship column runs the same strategy with hindsight: every t-statistic above 3, and that borderline p falls to <strong>3.6%</strong>. That is why section 6 reports both columns side by side while section 7 scores the real case alone.</p>
 </section>
 <hr class="docutils" />
-<section id="the-validation-scorecard-real-case-only">
-<h2>7. The validation scorecard, real case only<a class="headerlink" href="#the-validation-scorecard-real-case-only" title="Link to this heading">#</a></h2>
-<p>The same six criteria, applied to a strategy, decide whether its edge is claimable. Here they are applied to the <strong>real case</strong>: point-in-time membership, net of costs. Grading the lookahead column with statistics computed from itself would be circular, so that grade happens in section 8 instead. Each criterion is computed from the numbers above; nothing is typed by hand.</p>
+<section id="scorecard">
+<h2>Scorecard<a class="headerlink" href="#scorecard" title="Link to this heading">#</a></h2>
+<p>The same six criteria, applied to a strategy, decide whether its edge is claimable. Here they are applied to the <strong>real case</strong>: point-in-time membership, net of costs. The survivorship case gets no scorecard: it is an unrealistic benchmark for what hindsight would have produced, and sections 3 and 6 already show where it stands against the real one. Each criterion is computed from the numbers above; nothing is typed by hand.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">scorecard</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
@@ -1347,37 +1346,15 @@ document.write(`
 </div>
 <p><strong>Reading.</strong> The real-case strategy passes <strong>five of six</strong>. It fails exactly one criterion, and it is the noisiest in the battery: the bootstrap on the Sharpe-difference (<strong>p = 12.4%</strong>). Outperformance (HAC t = 2.41), alpha after beta (t = 2.48 at beta 0.96), the return-gap bootstrap (p = 0.3%), fold consistency (binomial p = <strong>0.006</strong>) and persistence (<strong>90%</strong> of rolling 36-month windows ahead) all hold. One ✗ among five ✓s, on the statistic least likely to be stable: we do not declare the risk-adjusted claim proven.</p>
 </section>
-<section id="the-lookahead-bias-check-same-strategy-today-s-membership">
-<h2>8. The lookahead bias check: same strategy, today’s membership<a class="headerlink" href="#the-lookahead-bias-check-same-strategy-today-s-membership" title="Link to this heading">#</a></h2>
-<p>Sections 3 and 6 already show how far apart the cases are; this section isolates the effect and grades it. Run the <strong>identical</strong> waterfall (same signals, same funnel, same costs, same dates) with <strong>today’s index membership applied to every month since 2016</strong>: the backtest most people would ship, silently giving the strategy its future self.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scorecard</span><span class="p">(</span><span class="n">bias</span><span class="p">,</span> <span class="s2">&quot;Waterfall (net) vs QQQ, lookahead case (today&#39;s membership at every date)&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Waterfall (net) vs QQQ, lookahead case (today&#39;s membership at every date)
-  ✓ Outperforms: active return &gt; 0 and HAC t &gt; 2
-  ✓ Alpha after beta: CAPM alpha &gt; 0 and HAC t &gt; 2
-  ✓ Bootstrap: P(active ≤ 0) &lt; 5%
-  ✓ Bootstrap: P(ΔSharpe ≤ 0) &lt; 5%
-  ✓ Consistency: folds won, binomial p &lt; 10%
-  ✓ Persistence: ahead in ≥ 75% of rolling 36M windows
-  6/6 passed | active 25.1%/yr | alpha 23.7%/yr | beta 1.07 | folds won 10/11
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(6, 6)
-</pre></div>
-</div>
-</div>
-</div>
-<p><strong>Reading.</strong> The grade flips. With today’s membership at every date all six criteria pass (CAGR <strong>51%</strong>, Sharpe-difference p = <strong>3.6%</strong>), while the real case scores 5/6 with one borderline item (section 7). Nothing in the code differs between the two cases except <em>which companies were allowed at each date</em>. That single change is worth roughly a third of the measured edge and flips the one failing test from fail to pass: membership lookahead does not just inflate returns, it inflates the confidence with which we would claim them.</p>
+<section id="survivorship-bias">
+<h2>Survivorship bias<a class="headerlink" href="#survivorship-bias" title="Link to this heading">#</a></h2>
+<p>The tables above carry the comparison; here the effect is isolated on its own. The <strong>identical</strong> waterfall, same signals, same funnel, same costs, same dates, run with <strong>today’s index membership applied to every month since 2016</strong>: the backtest most people would ship, silently keeping only the companies that survived to today.</p>
+<p><strong>Reading.</strong> Nothing in the code differs between the two cases except <em>which companies were allowed at each date</em>. That single change lifts CAGR from <strong>37% to 51%</strong> and flips the one borderline statistic of section 6 (Sharpe-difference p, 0.12 down to 0.36%). Hindsight adds both return and confidence, which is exactly why only the real case gets scored.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height_ratios&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span>
 <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">ls</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">B</span><span class="p">,</span>      <span class="s2">&quot;QQQ&quot;</span><span class="p">,</span>                                        <span class="s2">&quot;#e69f00&quot;</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
-                           <span class="p">(</span><span class="n">S_bias</span><span class="p">,</span> <span class="s2">&quot;Strategy with today&#39;s membership (lookahead)&quot;</span><span class="p">,</span> <span class="s2">&quot;#d1495b&quot;</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">),</span>
+                           <span class="p">(</span><span class="n">S_bias</span><span class="p">,</span> <span class="s2">&quot;Survivorship case (today&#39;s membership)&quot;</span><span class="p">,</span> <span class="s2">&quot;#d1495b&quot;</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">),</span>
                            <span class="p">(</span><span class="n">S</span><span class="p">,</span>      <span class="s2">&quot;Strategy with real case membership&quot;</span><span class="p">,</span>           <span class="s2">&quot;#00a37f&quot;</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)]:</span>
     <span class="n">eq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
     <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">)</span>
@@ -1386,18 +1363,16 @@ document.write(`
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Value of $1 invested&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Drawdown (monthly)&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Same strategy, two universes: the lookahead gap is the vertical distance between the two strategy lines&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Same strategy, two universes: the survivorship gap is the vertical distance between the two strategy lines&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">.96</span><span class="p">));</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/1e0c1d039a01d3f6e90b17c733774b4c6822db0517a77846edd8ac11b93c75f9.png" src="_images/1e0c1d039a01d3f6e90b17c733774b4c6822db0517a77846edd8ac11b93c75f9.png" />
+<img alt="_images/f05fdea6438a4c5eefc470a4d85a11f3935f4d8089ac54bb9e9dbd280b6d0efd.png" src="_images/f05fdea6438a4c5eefc470a4d85a11f3935f4d8089ac54bb9e9dbd280b6d0efd.png" />
 </div>
 </div>
-</section>
-<section id="how-far-can-this-conclusion-be-pushed">
-<h2>9. How far can this conclusion be pushed?<a class="headerlink" href="#how-far-can-this-conclusion-be-pushed" title="Link to this heading">#</a></h2>
+<p>Robustness</p>
 <p>A significant result against QQQ is <strong>necessary, not sufficient</strong>. The honest boundaries:</p>
 <p><strong>1. Membership timing (quantified in section 8).</strong> The universe uses point-in-time membership from <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code>: a recorded addition only becomes eligible the year <em>after</em> its record year, and a removal stays eligible through its exit year, so no signal relies on information that had not yet become public. Residual approximations: (i) effective dates within a year are unknown; (ii) current members with no recorded change are assumed to have been in the index since before 2015; (iii) names without downloadable US price history drop out wherever they would be needed. The cell below runs the <em>same battery</em> against an <strong>equal-weight portfolio of the same universe</strong>: if the waterfall’s edge over <em>that</em> is weak, much of the advantage over QQQ is simply “owning today’s winners”. Passing this is necessary, still not proof.</p>
 <p><strong>2. Hindsight in the design.</strong> No parameters were searched, but 12/6/3 months and 50/25/10 were chosen by someone who had seen this history. Only genuinely new data, i.e. a forward test, removes this.</p>
@@ -1439,10 +1414,10 @@ document.write(`
 <p><em>Research for educational purposes. Nothing herein constitutes investment advice.</em></p>
 </section>
 <section id="main-findings">
-<h2>10. Main findings<a class="headerlink" href="#main-findings" title="Link to this heading">#</a></h2>
-<p><strong>The strategy, honestly run, has a real and well-supported edge over QQQ.</strong> With point-in-time membership (additions eligible only from the year after their record), the monthly waterfall delivers <strong>CAGR 37% versus 21%</strong> for QQQ, <strong>Sharpe 1.39 versus 1.10</strong>, a shallower max drawdown (<strong>-27% versus -32%</strong>), and passes <strong>five of six</strong> significance criteria: HAC t = 2.41 on active return, CAPM alpha <strong>+15%/year at beta 0.96</strong> (t = 2.48), bootstrap P(active ≤ 0) = 0.3%, wins in <strong>10 of 11</strong> annual folds (binomial p = 0.006), and ahead in <strong>90%</strong> of rolling 36-month windows. The only failure is the noisiest statistic: the Sharpe-difference bootstrap at <strong>p = 12.4%</strong>.</p>
-<p><strong>How much was lookahead?</strong> Re-running the identical strategy with today’s membership at every date lifts CAGR to <strong>51%</strong> and turns the scorecard into a clean <strong>6 of 6</strong>: hindsight does not merely add return, it also cleans up borderline statistics (the Sharpe-difference p drops from 12.4% to 3.6%). That gap is precisely the amount of the original backtest that was quietly written from today’s vantage point.</p>
-<p><strong>What remains genuinely new.</strong> The edge over an equal-weight portfolio of the same historical universe (<strong>+14.9%/year</strong>, HAC t = 2.57) shows selection, not just index membership doing the work.</p>
+<h2>Main findings<a class="headerlink" href="#main-findings" title="Link to this heading">#</a></h2>
+<p><strong>The honest result.</strong> With point-in-time membership and costs included, the waterfall beats a plain QQQ holding on every headline number: <strong>CAGR 37% versus 21%</strong>, <strong>Sharpe 1.39 versus 1.10</strong>, max drawdown <strong>-27% versus -32%</strong>. The active edge is <strong>+14%/year</strong> (HAC t = 2.41) and CAPM alpha <strong>+15%/year at beta 0.96</strong> (t = 2.48); the strategy wins <strong>10 of 11</strong> annual folds (binomial p = 0.006) and stays ahead in <strong>90%</strong> of rolling 36-month windows. One statistic stays borderline: the Sharpe-difference bootstrap at p = 12.4%.</p>
+<p><strong>What survivorship bias was hiding.</strong> Re-run with today’s membership at every date, CAGR rises to <strong>51%</strong>, Sharpe to 1.53, and that same borderline test flips below 5% (p = 3.6%). Excluding the bias therefore costs roughly a third of the measured edge plus the confidence around it, and what remains is still clearly ahead of QQQ once every assumption has been netted out.</p>
+<p><strong>What remains genuinely new.</strong> The edge over an equal-weight portfolio of the same historical universe (<strong>+14.9%/year</strong>, HAC t = 2.57) shows selection doing the work, not just index membership.</p>
 <p><strong>The defensible claim.</strong> <em>The momentum waterfall has a real return edge on the Nasdaq-100 that survives point-in-time membership and robust inference; its risk-adjusted superiority is supported but not yet proven at the 5% level.</em></p>
 <p><strong>Data left out, honestly stated.</strong> Twenty-nine names in <code class="docutils literal notranslate"><span class="pre">inout.xlsx</span></code> left the universe: twenty-six had no downloadable US price history on Yahoo Finance (mostly companies taken private or merged away), three carried symbols that now map to different companies. Four further names carried an early-exit record contradicting their later membership; those stray events were removed so each ticker follows one consistent timeline. None of this flatters the strategy: it only slightly shrinks the eligible pool in some months.</p>
 <p><strong>What would make the claim stronger.</strong> Exact effective dates from an exchange source, a forward test, and more independent evidence for the Sharpe-difference p to drop below 5%.</p>
@@ -1504,20 +1479,19 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-of-an-edge-tested-twice-with-and-without-membership-lookahead-bias">Evidence of an edge, tested twice: with and without membership lookahead bias</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-of-an-edge-tested-twice-with-and-without-survivorship-bias">Evidence of an edge, tested twice: with and without survivorship bias</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#research-question">Research question</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-strategy">The strategy</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-walk-forward-without-optimisation">Why a walk-forward <em>without</em> optimisation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-data">1. Parameters &amp; data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signals-and-backtest-engine">2. Signals and backtest engine</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-out-of-sample-track-record">3. The out-of-sample track record</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds-is-the-edge-consistent">4. Walk-forward folds: is the edge consistent?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation-does-the-case-get-stronger-and-does-it-stay-strong">5. Evidence accumulation: does the case get stronger, and does it stay strong?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance-robust-tests-that-do-not-assume-normality">6. Statistical significance: robust tests that do not assume normality</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-validation-scorecard-real-case-only">7. The validation scorecard, real case only</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lookahead-bias-check-same-strategy-today-s-membership">8. The lookahead bias check: same strategy, today’s membership</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-far-can-this-conclusion-be-pushed">9. How far can this conclusion be pushed?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">10. Main findings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-data">Parameters &amp; data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signals-backtest-engine">Signals &amp; backtest engine</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#track-record">Track record</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#walk-forward-folds">Walk-forward folds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-accumulation">Evidence accumulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-significance">Statistical significance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scorecard">Scorecard</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#survivorship-bias">Survivorship bias</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">Main findings</a></li>
 </ul>
   </nav></div>
 
