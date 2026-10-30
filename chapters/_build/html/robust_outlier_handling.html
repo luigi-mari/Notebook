@@ -724,30 +724,34 @@ Mean Leverage of Outlier Cluster: 0.0014
 <hr class="docutils" />
 <section id="ols">
 <h3>OLS<a class="headerlink" href="#ols" title="Link to this heading">#</a></h3>
-<p>Minimizes the sum of squared residuals:
-$<span class="math notranslate nohighlight">\(\hat{\beta}_{\text{OLS}} = \arg\min_\beta \sum_{t=1}^N (y_t - X_t \beta)^2 = (X^T X)^{-1} X^T y\)</span><span class="math notranslate nohighlight">\(
-The quadratic loss function weights an outlier with \)</span>r_i = 15<span class="math notranslate nohighlight">\( by a factor of \)</span>15^2 = 225<span class="math notranslate nohighlight">\( relative to an inlier with \)</span>r_i = 1<span class="math notranslate nohighlight">\(. Its theoretical breakdown point is **\)</span>0%$**.</p>
+<p>Minimizes the sum of squared residuals:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\beta}_{\text{OLS}} = \arg\min_\beta \sum_{t=1}^N (y_t - X_t \beta)^2 = (X^T X)^{-1} X^T y\]</div>
+<p>The quadratic loss function weights an outlier with <span class="math notranslate nohighlight">\(r_i = 15\)</span> by a factor of <span class="math notranslate nohighlight">\(15^2 = 225\)</span> relative to an inlier with <span class="math notranslate nohighlight">\(r_i = 1\)</span>. Its theoretical breakdown point is <strong>0%</strong>.</p>
 </section>
 <hr class="docutils" />
 <section id="winsorized-ols">
 <h3>Winsorized OLS<a class="headerlink" href="#winsorized-ols" title="Link to this heading">#</a></h3>
-<p>In commercial multi-factor equity risk models (e.g., Barra, Axioma), cross-sectional variables are winsorized via the Median Absolute Deviation (<strong>MAD</strong>):
-$<span class="math notranslate nohighlight">\(\tilde{y}_t = \text{clip}\left(y_t, \; \text{Med}(y) - k \cdot \hat{\sigma}_{\text{MAD}}, \; \text{Med}(y) + k \cdot \hat{\sigma}_{\text{MAD}}\right)\)</span><span class="math notranslate nohighlight">\(
-where \)</span>\hat{\sigma}_{\text{MAD}} = \frac{\text{median}(|y - \text{median}(y)|)}{0.6745}$ provides a consistent estimator of standard deviation under normality.</p>
+<p>In commercial multi-factor equity risk models (e.g., Barra, Axioma), cross-sectional variables are winsorized via the Median Absolute Deviation (<strong>MAD</strong>):</p>
+<div class="math notranslate nohighlight">
+\[\tilde{y}_t = \text{clip}\left(y_t, \; \text{Med}(y) - k \cdot \hat{\sigma}_{\text{MAD}}, \; \text{Med}(y) + k \cdot \hat{\sigma}_{\text{MAD}}\right)\]</div>
+<p>The scale estimator <span class="math notranslate nohighlight">\(\hat{\sigma}_{\text{MAD}} = \frac{\text{median}(|y - \text{median}(y)|)}{0.6745}\)</span> provides a consistent estimate of the standard deviation under normality.</p>
 </section>
 <hr class="docutils" />
 <section id="irls-huber">
 <h3>IRLS (Huber)<a class="headerlink" href="#irls-huber" title="Link to this heading">#</a></h3>
-<p>Replaces the <span class="math notranslate nohighlight">\(L_2\)</span> loss with the hybrid Huber loss function <span class="math notranslate nohighlight">\(\rho_k(r)\)</span>:
-$<span class="math notranslate nohighlight">\(\rho_k(r) = \begin{cases} \frac{1}{2} r^2 &amp; \text{if } |r| \leq k\hat{\sigma} \\ k\hat{\sigma} |r| - \frac{1}{2} (k\hat{\sigma})^2 &amp; \text{if } |r| &gt; k\hat{\sigma} \end{cases}\)</span><span class="math notranslate nohighlight">\(
-Optimized iteratively with data-dependent weights \)</span>w_i = \min\left(1, \frac{k\hat{\sigma}}{|r_i|}\right)<span class="math notranslate nohighlight">\(. With \)</span>k = 1.345$, the estimator preserves <strong>95% asymptotic efficiency</strong> under Gaussianity while downgrading extreme residual penalties from quadratic to linear.</p>
+<p>Replaces the <span class="math notranslate nohighlight">\(L_2\)</span> loss with the hybrid Huber loss function <span class="math notranslate nohighlight">\(\rho_k(r)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\rho_k(r) = \begin{cases} \frac{1}{2} r^2 &amp; \text{if } |r| \leq k\hat{\sigma} \\ k\hat{\sigma} |r| - \frac{1}{2} (k\hat{\sigma})^2 &amp; \text{if } |r| &gt; k\hat{\sigma} \end{cases}\end{split}\]</div>
+<p>Optimized iteratively with data-dependent weights <span class="math notranslate nohighlight">\(w_i = \min\left(1, \frac{k\hat{\sigma}}{|r_i|}\right)\)</span>. With <span class="math notranslate nohighlight">\(k = 1.345\)</span>, the estimator preserves <strong>95% asymptotic efficiency</strong> under Gaussianity while downgrading extreme residual penalties from quadratic to linear.</p>
 </section>
 <hr class="docutils" />
 <section id="theil-sen">
 <h3>Theil-Sen<a class="headerlink" href="#theil-sen" title="Link to this heading">#</a></h3>
-<p>A non-parametric estimator defined by the median of all pairwise bivariate slopes:
-$<span class="math notranslate nohighlight">\(\hat{\beta}_1 = \text{median}\left( \left\{ \frac{y_j - y_i}{x_j - x_i} \;\middle|\; x_i \neq x_j \right\} \right), \quad \hat{\beta}_0 = \text{median}(y - \hat{\beta}_1 x)\)</span>$
-Provides an asymptotic breakdown point of <strong>~29.3%</strong> and is resilient against severe asymmetric distortions.</p>
+<p>A non-parametric estimator defined by the median of all pairwise bivariate slopes:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\beta}_1 = \text{median}\left( \left\{ \frac{y_j - y_i}{x_j - x_i} \;\middle|\; x_i \neq x_j \right\} \right), \quad \hat{\beta}_0 = \text{median}(y - \hat{\beta}_1 x)\]</div>
+<p>Provides an asymptotic breakdown point of <strong>~29.3%</strong> and is resilient against severe asymmetric distortions.</p>
 </section>
 <hr class="docutils" />
 <section id="ransac">
@@ -1174,9 +1178,11 @@ Quantitative systems require online algorithms that satisfy two competing object
 <hr class="docutils" />
 <section id="kalman-filter">
 <h3>Kalman Filter<a class="headerlink" href="#kalman-filter" title="Link to this heading">#</a></h3>
-<p>Models time-varying regression coefficients <span class="math notranslate nohighlight">\(\theta_t = [\beta_{0,t}, \beta_{1,t}]^T\)</span> as unobserved latent states:
-$<span class="math notranslate nohighlight">\(\theta_t = \theta_{t-1} + w_t, \quad w_t \sim \mathcal{N}(0, Q)\)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\(y_t = H_t \theta_t + v_t, \quad v_t \sim \mathcal{N}(0, R), \quad H_t = [1, \; x_t]\)</span>$</p>
+<p>Models time-varying regression coefficients <span class="math notranslate nohighlight">\(\theta_t = [\beta_{0,t}, \beta_{1,t}]^T\)</span> as unobserved latent states:</p>
+<div class="math notranslate nohighlight">
+\[\theta_t = \theta_{t-1} + w_t, \quad w_t \sim \mathcal{N}(0, Q)\]</div>
+<div class="math notranslate nohighlight">
+\[y_t = H_t \theta_t + v_t, \quad v_t \sim \mathcal{N}(0, R), \quad H_t = [1, \; x_t]\]</div>
 <ul class="simple">
 <li><p><strong>Limitation:</strong> The measurement innovation <span class="math notranslate nohighlight">\(\nu_t = y_t - H_t \hat{\theta}_t^-\)</span> updates the state linearly through the Kalman gain <span class="math notranslate nohighlight">\(K_t\)</span>. It lacks an endogenous outlier-rejection mechanism; setting <span class="math notranslate nohighlight">\(Q \approx 0\)</span> suppresses outlier impact only by sacrificing adaptivity entirely.</p></li>
 </ul>
@@ -1185,11 +1191,15 @@ $<span class="math notranslate nohighlight">\(\theta_t = \theta_{t-1} + w_t, \qu
 <section id="robust-kalman-filter">
 <h3>Robust Kalman Filter<a class="headerlink" href="#robust-kalman-filter" title="Link to this heading">#</a></h3>
 <p>Combines real-time dynamic tracking with an <strong>M-estimator dampening rule on the normalized innovation</strong>:</p>
-<ol class="arabic simple">
-<li><p>Compute standardized innovation:
-$<span class="math notranslate nohighlight">\(s_t = \frac{|\nu_t|}{\sqrt{S_t}}, \quad S_t = H_t P_t^- H_t^T + R\)</span>$</p></li>
-<li><p>Compute the Huber attenuation factor:
-$<span class="math notranslate nohighlight">\(\psi_t = \begin{cases} 1 &amp; \text{if } s_t \leq k \\ \frac{k}{s_t} &amp; \text{if } s_t &gt; k \end{cases}\)</span>$</p></li>
+<ol class="arabic">
+<li><p>Compute standardized innovation:</p>
+<div class="math notranslate nohighlight">
+\[s_t = \frac{|\nu_t|}{\sqrt{S_t}}, \quad S_t = H_t P_t^- H_t^T + R\]</div>
+</li>
+<li><p>Compute the Huber attenuation factor:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\psi_t = \begin{cases} 1 &amp; \text{if } s_t \leq k \\ \frac{k}{s_t} &amp; \text{if } s_t &gt; k \end{cases}\end{split}\]</div>
+</li>
 <li><p><strong>Robust State Update:</strong> Attenuate the innovation before state correction: <span class="math notranslate nohighlight">\(\nu_t^* = \psi_t \cdot \nu_t\)</span>. Under regular observations, <span class="math notranslate nohighlight">\(\psi_t = 1.0\)</span> (100% standard Kalman efficiency); during outliers, impact is bounded linearly.</p></li>
 </ol>
 <div class="cell docutils container">
