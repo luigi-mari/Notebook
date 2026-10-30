@@ -8,3 +8,4 @@ This repo is also published as a book at **https://luigi-mari.github.io/Notebook
 
 - [Naked Options Simulation in Python](https://luigi-mari.github.io/Notebook/optionspnl.html)
 - [Nasdaq-100 Momentum Waterfall](https://luigi-mari.github.io/Notebook/nasdaq100_momentum_waterfall.html)
+- [Robust Regression & Outlier Handling in Quantitative Finance](https://luigi-mari.github.io/Notebook/robust_outlier_handling.html)
