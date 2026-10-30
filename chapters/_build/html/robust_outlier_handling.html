@@ -434,31 +434,31 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-estimator-methodology-matrix">Batch Estimator Methodology Matrix</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-plotting-standards">0. Environment Setup &amp; Plotting Standards</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generating-process-dgp-leverage-outlier-cluster">1. Data Generating Process (DGP) &amp; Leverage Outlier Cluster</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generating-process">Data Generating Process</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-an-adversarial-leverage-cluster">Generating an Adversarial Leverage Cluster</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-batch-estimation-methods">2. Static Batch Estimation Methods</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ols-ordinary-least-squares">2.1 OLS (Ordinary Least Squares)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mad-based-winsorized-ols-financial-industry-standard">2.2 MAD-Based Winsorized OLS (Financial Industry Standard)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#irls-iteratively-reweighted-least-squares-with-huber-m-estimator">2.3 IRLS (Iteratively Reweighted Least Squares with Huber M-Estimator)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#theil-sen-robust-estimator">2.4 Theil-Sen Robust Estimator</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ransac-random-sample-consensus">2.5 RANSAC (Random Sample Consensus)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-static-batch-estimation">PART 1: Static Batch Estimation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ols">OLS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#winsorized-ols">Winsorized OLS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#irls-huber">IRLS (Huber)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#theil-sen">Theil-Sen</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ransac">RANSAC</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-performance-benchmark">3. Quantitative Performance Benchmark</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-benchmark">Performance Benchmark</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-contaminated-in-sample-rmse-paradox">The Contaminated In-Sample RMSE Paradox</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostic-analytics-monte-carlo-simulation-m-200">4. Diagnostic Analytics &amp; Monte Carlo Simulation (<span class="math notranslate nohighlight">\(M = 200\)</span>)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-adaptive-online-estimation-streaming-rolling-ols-and-robust-kalman-filter">5. Part 2 – Adaptive Online Estimation: Streaming, Rolling OLS, and Robust Kalman Filter</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rolling-ols-rigid-trailing-window">5.1 Rolling OLS (Rigid Trailing Window)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-linear-kalman-filter">5.2 Standard Linear Kalman Filter</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-kalman-filter-huber-dampened-innovation">5.3 Robust Kalman Filter (Huber-Dampened Innovation)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monte-carlo-diagnostics">Monte Carlo Diagnostics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-adaptive-online-estimation">PART 2: Adaptive Online Estimation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rolling-ols">Rolling OLS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kalman-filter">Kalman Filter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-kalman-filter">Robust Kalman Filter</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-quantitative-practitioner-decision-framework">6. Conclusions &amp; Quantitative Practitioner Decision Framework</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions">Conclusions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-empirical-findings">Summary of Empirical Findings</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-practitioner-decision-flowchart">Quantitative Practitioner Decision Flowchart</a></li>
 </ul>
@@ -487,7 +487,7 @@ document.write(`
 <p>This research addresses the question through a rigorous two-part framework:</p>
 <ol class="arabic simple">
 <li><p><strong>Part 1 – Static Batch Estimation:</strong> Comparative analysis of OLS, MAD-based Winsorized OLS, Iteratively Reweighted Least Squares (IRLS with Huber M-estimator), Theil-Sen, and RANSAC under an adversarial local bad-leverage outlier cluster. We demonstrate why contaminated in-sample RMSE is a misleading metric and validate estimator distributions via a Monte Carlo simulation (<span class="math notranslate nohighlight">\(M = 200\)</span>).</p></li>
-<li><p><strong>Part 2 – Adaptive Online Time-Series Estimation:</strong> Evaluation of Rolling OLS (fixed trailing window), Standard Kalman Filter (infinite exponential memory), and an explicit <strong>Robust Kalman Filter (Huber-dampened innovation)</strong> engineered to reject transient anomalies in real-time streaming data.</p></li>
+<li><p><strong>Part 2 – Adaptive Online Estimation:</strong> Evaluation of Rolling OLS (fixed trailing window), Standard Kalman Filter (infinite exponential memory), and an explicit <strong>Robust Kalman Filter (Huber-dampened innovation)</strong> engineered to reject transient anomalies in real-time streaming data.</p></li>
 </ol>
 </section>
 <hr class="docutils" />
@@ -574,8 +574,8 @@ document.write(`
 </div>
 </section>
 </section>
-<section id="environment-setup-plotting-standards">
-<h2>0. Environment Setup &amp; Plotting Standards<a class="headerlink" href="#environment-setup-plotting-standards" title="Link to this heading">#</a></h2>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
 <p>We initialize numerical packages and configure Matplotlib aesthetics to adhere to publication-grade quantitative research standards.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -627,8 +627,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="data-generating-process-dgp-leverage-outlier-cluster">
-<h2>1. Data Generating Process (DGP) &amp; Leverage Outlier Cluster<a class="headerlink" href="#data-generating-process-dgp-leverage-outlier-cluster" title="Link to this heading">#</a></h2>
+<section id="data-generating-process">
+<h2>Data Generating Process<a class="headerlink" href="#data-generating-process" title="Link to this heading">#</a></h2>
 <p>We specify a ground-truth linear DGP:</p>
 <div class="math notranslate nohighlight">
 \[y_t = \beta_0^* + \beta_1^* \cdot x_t + \varepsilon_t, \quad \varepsilon_t \sim \mathcal{N}(0, \sigma^2)\]</div>
@@ -718,40 +718,40 @@ Mean Leverage of Outlier Cluster: 0.0014
 </div>
 </section>
 </section>
-<section id="static-batch-estimation-methods">
-<h2>2. Static Batch Estimation Methods<a class="headerlink" href="#static-batch-estimation-methods" title="Link to this heading">#</a></h2>
+<section id="part-1-static-batch-estimation">
+<h2>PART 1: Static Batch Estimation<a class="headerlink" href="#part-1-static-batch-estimation" title="Link to this heading">#</a></h2>
 <p>We implement and evaluate five distinct estimation approaches to neutralize the outlier cluster:</p>
 <hr class="docutils" />
-<section id="ols-ordinary-least-squares">
-<h3>2.1 OLS (Ordinary Least Squares)<a class="headerlink" href="#ols-ordinary-least-squares" title="Link to this heading">#</a></h3>
+<section id="ols">
+<h3>OLS<a class="headerlink" href="#ols" title="Link to this heading">#</a></h3>
 <p>Minimizes the sum of squared residuals:
 $<span class="math notranslate nohighlight">\(\hat{\beta}_{\text{OLS}} = \arg\min_\beta \sum_{t=1}^N (y_t - X_t \beta)^2 = (X^T X)^{-1} X^T y\)</span><span class="math notranslate nohighlight">\(
 The quadratic loss function weights an outlier with \)</span>r_i = 15<span class="math notranslate nohighlight">\( by a factor of \)</span>15^2 = 225<span class="math notranslate nohighlight">\( relative to an inlier with \)</span>r_i = 1<span class="math notranslate nohighlight">\(. Its theoretical breakdown point is **\)</span>0%$**.</p>
 </section>
 <hr class="docutils" />
-<section id="mad-based-winsorized-ols-financial-industry-standard">
-<h3>2.2 MAD-Based Winsorized OLS (Financial Industry Standard)<a class="headerlink" href="#mad-based-winsorized-ols-financial-industry-standard" title="Link to this heading">#</a></h3>
+<section id="winsorized-ols">
+<h3>Winsorized OLS<a class="headerlink" href="#winsorized-ols" title="Link to this heading">#</a></h3>
 <p>In commercial multi-factor equity risk models (e.g., Barra, Axioma), cross-sectional variables are winsorized via the Median Absolute Deviation (<strong>MAD</strong>):
 $<span class="math notranslate nohighlight">\(\tilde{y}_t = \text{clip}\left(y_t, \; \text{Med}(y) - k \cdot \hat{\sigma}_{\text{MAD}}, \; \text{Med}(y) + k \cdot \hat{\sigma}_{\text{MAD}}\right)\)</span><span class="math notranslate nohighlight">\(
 where \)</span>\hat{\sigma}_{\text{MAD}} = \frac{\text{median}(|y - \text{median}(y)|)}{0.6745}$ provides a consistent estimator of standard deviation under normality.</p>
 </section>
 <hr class="docutils" />
-<section id="irls-iteratively-reweighted-least-squares-with-huber-m-estimator">
-<h3>2.3 IRLS (Iteratively Reweighted Least Squares with Huber M-Estimator)<a class="headerlink" href="#irls-iteratively-reweighted-least-squares-with-huber-m-estimator" title="Link to this heading">#</a></h3>
+<section id="irls-huber">
+<h3>IRLS (Huber)<a class="headerlink" href="#irls-huber" title="Link to this heading">#</a></h3>
 <p>Replaces the <span class="math notranslate nohighlight">\(L_2\)</span> loss with the hybrid Huber loss function <span class="math notranslate nohighlight">\(\rho_k(r)\)</span>:
 $<span class="math notranslate nohighlight">\(\rho_k(r) = \begin{cases} \frac{1}{2} r^2 &amp; \text{if } |r| \leq k\hat{\sigma} \\ k\hat{\sigma} |r| - \frac{1}{2} (k\hat{\sigma})^2 &amp; \text{if } |r| &gt; k\hat{\sigma} \end{cases}\)</span><span class="math notranslate nohighlight">\(
 Optimized iteratively with data-dependent weights \)</span>w_i = \min\left(1, \frac{k\hat{\sigma}}{|r_i|}\right)<span class="math notranslate nohighlight">\(. With \)</span>k = 1.345$, the estimator preserves <strong>95% asymptotic efficiency</strong> under Gaussianity while downgrading extreme residual penalties from quadratic to linear.</p>
 </section>
 <hr class="docutils" />
-<section id="theil-sen-robust-estimator">
-<h3>2.4 Theil-Sen Robust Estimator<a class="headerlink" href="#theil-sen-robust-estimator" title="Link to this heading">#</a></h3>
+<section id="theil-sen">
+<h3>Theil-Sen<a class="headerlink" href="#theil-sen" title="Link to this heading">#</a></h3>
 <p>A non-parametric estimator defined by the median of all pairwise bivariate slopes:
 $<span class="math notranslate nohighlight">\(\hat{\beta}_1 = \text{median}\left( \left\{ \frac{y_j - y_i}{x_j - x_i} \;\middle|\; x_i \neq x_j \right\} \right), \quad \hat{\beta}_0 = \text{median}(y - \hat{\beta}_1 x)\)</span>$
 Provides an asymptotic breakdown point of <strong>~29.3%</strong> and is resilient against severe asymmetric distortions.</p>
 </section>
 <hr class="docutils" />
-<section id="ransac-random-sample-consensus">
-<h3>2.5 RANSAC (Random Sample Consensus)<a class="headerlink" href="#ransac-random-sample-consensus" title="Link to this heading">#</a></h3>
+<section id="ransac">
+<h3>RANSAC<a class="headerlink" href="#ransac" title="Link to this heading">#</a></h3>
 <p>An iterative non-deterministic algorithm based on minimal sample consensus:</p>
 <ol class="arabic simple">
 <li><p>Randomly sample 2 points to fit a candidate hypothesis line.</p></li>
@@ -886,8 +886,8 @@ Provides an asymptotic breakdown point of <strong>~29.3%</strong> and is resilie
 </div>
 </section>
 </section>
-<section id="quantitative-performance-benchmark">
-<h2>3. Quantitative Performance Benchmark<a class="headerlink" href="#quantitative-performance-benchmark" title="Link to this heading">#</a></h2>
+<section id="performance-benchmark">
+<h2>Performance Benchmark<a class="headerlink" href="#performance-benchmark" title="Link to this heading">#</a></h2>
 <section id="the-contaminated-in-sample-rmse-paradox">
 <h3>The Contaminated In-Sample RMSE Paradox<a class="headerlink" href="#the-contaminated-in-sample-rmse-paradox" title="Link to this heading">#</a></h3>
 <p>A critical pitfall in quantitative modeling is evaluating estimator quality via in-sample root mean squared error on the contaminated dataset (<span class="math notranslate nohighlight">\(RMSE_{\text{dirty}}\)</span>).<br />
@@ -1044,8 +1044,8 @@ Because <strong>OLS is mathematically constrained to minimize this exact quantit
 </div>
 </section>
 </section>
-<section id="diagnostic-analytics-monte-carlo-simulation-m-200">
-<h2>4. Diagnostic Analytics &amp; Monte Carlo Simulation (<span class="math notranslate nohighlight">\(M = 200\)</span>)<a class="headerlink" href="#diagnostic-analytics-monte-carlo-simulation-m-200" title="Link to this heading">#</a></h2>
+<section id="monte-carlo-diagnostics">
+<h2>Monte Carlo Diagnostics<a class="headerlink" href="#monte-carlo-diagnostics" title="Link to this heading">#</a></h2>
 <p>To validate robustness beyond a single pseudo-random realization, we execute an empirical <strong>Monte Carlo experiment</strong> across <span class="math notranslate nohighlight">\(M = 200\)</span> independent simulations and evaluate the sampling distribution of <span class="math notranslate nohighlight">\(\hat{\beta}_1\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1155,8 +1155,8 @@ Because <strong>OLS is mathematically constrained to minimize this exact quantit
 </div>
 </div>
 </section>
-<section id="part-2-adaptive-online-estimation-streaming-rolling-ols-and-robust-kalman-filter">
-<h2>5. Part 2 – Adaptive Online Estimation: Streaming, Rolling OLS, and Robust Kalman Filter<a class="headerlink" href="#part-2-adaptive-online-estimation-streaming-rolling-ols-and-robust-kalman-filter" title="Link to this heading">#</a></h2>
+<section id="part-2-adaptive-online-estimation">
+<h2>PART 2: Adaptive Online Estimation<a class="headerlink" href="#part-2-adaptive-online-estimation" title="Link to this heading">#</a></h2>
 <p>In quantitative trading strategies (such as statistical arbitrage, <strong>Pairs Trading cointegration hedge ratios</strong>, and dynamic market-making), data arrives sequentially, and parameter relations drift over time.
 Quantitative systems require online algorithms that satisfy two competing objectives:</p>
 <ol class="arabic simple">
@@ -1164,16 +1164,16 @@ Quantitative systems require online algorithms that satisfy two competing object
 <li><p><strong>Robustness:</strong> Reject micro-structural market noise, flash crashes, and transient data recording errors.</p></li>
 </ol>
 <hr class="docutils" />
-<section id="rolling-ols-rigid-trailing-window">
-<h3>5.1 Rolling OLS (Rigid Trailing Window)<a class="headerlink" href="#rolling-ols-rigid-trailing-window" title="Link to this heading">#</a></h3>
+<section id="rolling-ols">
+<h3>Rolling OLS<a class="headerlink" href="#rolling-ols" title="Link to this heading">#</a></h3>
 <p>Re-estimates OLS on trailing observations <span class="math notranslate nohighlight">\(\{(x_i, y_i)\}_{i=t-W}^{t-1}\)</span>.</p>
 <ul class="simple">
 <li><p><strong>The Window-Exit Shock:</strong> An anomaly receives full <span class="math notranslate nohighlight">\(1/W\)</span> weight upon entry and pollutes the hedge ratio for <span class="math notranslate nohighlight">\(W\)</span> steps. When it drops out of the window, a second abrupt and spurious parameter jump occurs.</p></li>
 </ul>
 </section>
 <hr class="docutils" />
-<section id="standard-linear-kalman-filter">
-<h3>5.2 Standard Linear Kalman Filter<a class="headerlink" href="#standard-linear-kalman-filter" title="Link to this heading">#</a></h3>
+<section id="kalman-filter">
+<h3>Kalman Filter<a class="headerlink" href="#kalman-filter" title="Link to this heading">#</a></h3>
 <p>Models time-varying regression coefficients <span class="math notranslate nohighlight">\(\theta_t = [\beta_{0,t}, \beta_{1,t}]^T\)</span> as unobserved latent states:
 $<span class="math notranslate nohighlight">\(\theta_t = \theta_{t-1} + w_t, \quad w_t \sim \mathcal{N}(0, Q)\)</span><span class="math notranslate nohighlight">\(
 \)</span><span class="math notranslate nohighlight">\(y_t = H_t \theta_t + v_t, \quad v_t \sim \mathcal{N}(0, R), \quad H_t = [1, \; x_t]\)</span>$</p>
@@ -1182,8 +1182,8 @@ $<span class="math notranslate nohighlight">\(\theta_t = \theta_{t-1} + w_t, \qu
 </ul>
 </section>
 <hr class="docutils" />
-<section id="robust-kalman-filter-huber-dampened-innovation">
-<h3>5.3 Robust Kalman Filter (Huber-Dampened Innovation)<a class="headerlink" href="#robust-kalman-filter-huber-dampened-innovation" title="Link to this heading">#</a></h3>
+<section id="robust-kalman-filter">
+<h3>Robust Kalman Filter<a class="headerlink" href="#robust-kalman-filter" title="Link to this heading">#</a></h3>
 <p>Combines real-time dynamic tracking with an <strong>M-estimator dampening rule on the normalized innovation</strong>:</p>
 <ol class="arabic simple">
 <li><p>Compute standardized innovation:
@@ -1334,8 +1334,8 @@ Robust Kalman Final beta_1: 1.5067 (True Value: 1.5000)
 </div>
 </section>
 </section>
-<section id="conclusions-quantitative-practitioner-decision-framework">
-<h2>6. Conclusions &amp; Quantitative Practitioner Decision Framework<a class="headerlink" href="#conclusions-quantitative-practitioner-decision-framework" title="Link to this heading">#</a></h2>
+<section id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Link to this heading">#</a></h2>
 <section id="summary-of-empirical-findings">
 <h3>Summary of Empirical Findings<a class="headerlink" href="#summary-of-empirical-findings" title="Link to this heading">#</a></h3>
 <ol class="arabic simple">
@@ -1430,31 +1430,31 @@ STATIC / CROSS-SECTIONAL                       DYNAMIC / STREAMING
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-estimator-methodology-matrix">Batch Estimator Methodology Matrix</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-plotting-standards">0. Environment Setup &amp; Plotting Standards</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generating-process-dgp-leverage-outlier-cluster">1. Data Generating Process (DGP) &amp; Leverage Outlier Cluster</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generating-process">Data Generating Process</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-an-adversarial-leverage-cluster">Generating an Adversarial Leverage Cluster</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-batch-estimation-methods">2. Static Batch Estimation Methods</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ols-ordinary-least-squares">2.1 OLS (Ordinary Least Squares)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mad-based-winsorized-ols-financial-industry-standard">2.2 MAD-Based Winsorized OLS (Financial Industry Standard)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#irls-iteratively-reweighted-least-squares-with-huber-m-estimator">2.3 IRLS (Iteratively Reweighted Least Squares with Huber M-Estimator)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#theil-sen-robust-estimator">2.4 Theil-Sen Robust Estimator</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ransac-random-sample-consensus">2.5 RANSAC (Random Sample Consensus)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-static-batch-estimation">PART 1: Static Batch Estimation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ols">OLS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#winsorized-ols">Winsorized OLS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#irls-huber">IRLS (Huber)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#theil-sen">Theil-Sen</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ransac">RANSAC</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-performance-benchmark">3. Quantitative Performance Benchmark</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-benchmark">Performance Benchmark</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-contaminated-in-sample-rmse-paradox">The Contaminated In-Sample RMSE Paradox</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostic-analytics-monte-carlo-simulation-m-200">4. Diagnostic Analytics &amp; Monte Carlo Simulation (<span class="math notranslate nohighlight">\(M = 200\)</span>)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-adaptive-online-estimation-streaming-rolling-ols-and-robust-kalman-filter">5. Part 2 – Adaptive Online Estimation: Streaming, Rolling OLS, and Robust Kalman Filter</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rolling-ols-rigid-trailing-window">5.1 Rolling OLS (Rigid Trailing Window)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-linear-kalman-filter">5.2 Standard Linear Kalman Filter</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-kalman-filter-huber-dampened-innovation">5.3 Robust Kalman Filter (Huber-Dampened Innovation)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monte-carlo-diagnostics">Monte Carlo Diagnostics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-adaptive-online-estimation">PART 2: Adaptive Online Estimation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rolling-ols">Rolling OLS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kalman-filter">Kalman Filter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-kalman-filter">Robust Kalman Filter</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-quantitative-practitioner-decision-framework">6. Conclusions &amp; Quantitative Practitioner Decision Framework</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions">Conclusions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-empirical-findings">Summary of Empirical Findings</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-practitioner-decision-flowchart">Quantitative Practitioner Decision Flowchart</a></li>
 </ul>
