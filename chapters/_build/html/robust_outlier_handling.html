@@ -1,0 +1,1516 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Robust Regression &amp; Outlier Handling in Quantitative Finance &#8212; Notebook</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'robust_outlier_handling';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Nasdaq-100 Momentum Waterfall" href="nasdaq100_momentum_waterfall.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Notebook - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Notebook - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="optionspnl.html">Naked Options Simulation in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nasdaq100_momentum_waterfall.html">Nasdaq-100 Momentum Waterfall</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Robust Regression &amp; Outlier Handling in Quantitative Finance</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/luigi-mari/Notebook/master?urlpath=lab/tree/docs/robust_outlier_handling.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/luigi-mari/Notebook" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/luigi-mari/Notebook/issues/new?title=Issue%20on%20page%20%2Frobust_outlier_handling.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/robust_outlier_handling.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Robust Regression & Outlier Handling in Quantitative Finance</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-methodological-and-econometric-guide-to-high-breakdown-estimation">A Methodological and Econometric Guide to High-Breakdown Estimation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executive-summary-research-question">Executive Summary &amp; Research Question</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outlier-taxonomy-in-quantitative-finance">Outlier Taxonomy in Quantitative Finance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-estimator-methodology-matrix">Batch Estimator Methodology Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-plotting-standards">0. Environment Setup &amp; Plotting Standards</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generating-process-dgp-leverage-outlier-cluster">1. Data Generating Process (DGP) &amp; Leverage Outlier Cluster</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-an-adversarial-leverage-cluster">Generating an Adversarial Leverage Cluster</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-batch-estimation-methods">2. Static Batch Estimation Methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ols-ordinary-least-squares">2.1 OLS (Ordinary Least Squares)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mad-based-winsorized-ols-financial-industry-standard">2.2 MAD-Based Winsorized OLS (Financial Industry Standard)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#irls-iteratively-reweighted-least-squares-with-huber-m-estimator">2.3 IRLS (Iteratively Reweighted Least Squares with Huber M-Estimator)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#theil-sen-robust-estimator">2.4 Theil-Sen Robust Estimator</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ransac-random-sample-consensus">2.5 RANSAC (Random Sample Consensus)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-performance-benchmark">3. Quantitative Performance Benchmark</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-contaminated-in-sample-rmse-paradox">The Contaminated In-Sample RMSE Paradox</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostic-analytics-monte-carlo-simulation-m-200">4. Diagnostic Analytics &amp; Monte Carlo Simulation (<span class="math notranslate nohighlight">\(M = 200\)</span>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-adaptive-online-estimation-streaming-rolling-ols-and-robust-kalman-filter">5. Part 2 – Adaptive Online Estimation: Streaming, Rolling OLS, and Robust Kalman Filter</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rolling-ols-rigid-trailing-window">5.1 Rolling OLS (Rigid Trailing Window)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-linear-kalman-filter">5.2 Standard Linear Kalman Filter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-kalman-filter-huber-dampened-innovation">5.3 Robust Kalman Filter (Huber-Dampened Innovation)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-quantitative-practitioner-decision-framework">6. Conclusions &amp; Quantitative Practitioner Decision Framework</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-empirical-findings">Summary of Empirical Findings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-practitioner-decision-flowchart">Quantitative Practitioner Decision Flowchart</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="robust-regression-outlier-handling-in-quantitative-finance">
+<h1>Robust Regression &amp; Outlier Handling in Quantitative Finance<a class="headerlink" href="#robust-regression-outlier-handling-in-quantitative-finance" title="Link to this heading">#</a></h1>
+<section id="a-methodological-and-econometric-guide-to-high-breakdown-estimation">
+<h2>A Methodological and Econometric Guide to High-Breakdown Estimation<a class="headerlink" href="#a-methodological-and-econometric-guide-to-high-breakdown-estimation" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
+<section id="executive-summary-research-question">
+<h3>Executive Summary &amp; Research Question<a class="headerlink" href="#executive-summary-research-question" title="Link to this heading">#</a></h3>
+<p><strong>Research Question:</strong><br />
+<em>How to reliably detect, model, and mitigate the impact of outliers in linear regression parameter estimation across both cross-sectional batch analysis and dynamic time-series / streaming environments?</em></p>
+<p>In financial econometrics and quantitative trading, return and spread distributions consistently display <strong>heavy tails (leptokurtosis)</strong>, discrete regime shifts, structural breaks, liquidity micro-structure dislocations, and data recording errors (bad ticks). The naive application of Ordinary Least Squares (<strong>OLS</strong>) results in severe parameter distortions–such as biased market <span class="math notranslate nohighlight">\(\beta\)</span> sensitivities or unstable cointegration hedge ratios–leading to flawed portfolio construction, erratic rebalancing, and unhedged risk exposure.</p>
+<p>This research addresses the question through a rigorous two-part framework:</p>
+<ol class="arabic simple">
+<li><p><strong>Part 1 – Static Batch Estimation:</strong> Comparative analysis of OLS, MAD-based Winsorized OLS, Iteratively Reweighted Least Squares (IRLS with Huber M-estimator), Theil-Sen, and RANSAC under an adversarial local bad-leverage outlier cluster. We demonstrate why contaminated in-sample RMSE is a misleading metric and validate estimator distributions via a Monte Carlo simulation (<span class="math notranslate nohighlight">\(M = 200\)</span>).</p></li>
+<li><p><strong>Part 2 – Adaptive Online Time-Series Estimation:</strong> Evaluation of Rolling OLS (fixed trailing window), Standard Kalman Filter (infinite exponential memory), and an explicit <strong>Robust Kalman Filter (Huber-dampened innovation)</strong> engineered to reject transient anomalies in real-time streaming data.</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="outlier-taxonomy-in-quantitative-finance">
+<h3>Outlier Taxonomy in Quantitative Finance<a class="headerlink" href="#outlier-taxonomy-in-quantitative-finance" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Outlier Type</p></th>
+<th class="head text-left"><p>Econometric Definition</p></th>
+<th class="head text-left"><p>Financial Consequence</p></th>
+<th class="head text-left"><p>Recommended Treatment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>Vertical Outliers</strong></p></td>
+<td class="text-left"><p>Anomalies purely in the dependent variable <span class="math notranslate nohighlight">\(y\)</span></p></td>
+<td class="text-left"><p>Inflates residual variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>, biases the intercept <span class="math notranslate nohighlight">\(\beta_0\)</span></p></td>
+<td class="text-left"><p>M-Estimators (Huber/Bisquare), Winsorization</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Good Leverage Points</strong></p></td>
+<td class="text-left"><p>Extreme in feature space <span class="math notranslate nohighlight">\(x\)</span>, but consistent with the true linear manifold</p></td>
+<td class="text-left"><p>Reduces parameter standard errors, preserves slope</p></td>
+<td class="text-left"><p>Retain in estimation set</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Bad Leverage Points</strong></p></td>
+<td class="text-left"><p>Extreme in feature space <span class="math notranslate nohighlight">\(x\)</span> with high vertical residual</p></td>
+<td class="text-left"><p>Severely rotates the regression slope <span class="math notranslate nohighlight">\(\beta_1\)</span> and shifts intercept</p></td>
+<td class="text-left"><p>High-breakdown estimators (RANSAC, Theil-Sen)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Regime Shifts / Clusters</strong></p></td>
+<td class="text-left"><p>Temporally or spatially correlated pockets of anomalies</p></td>
+<td class="text-left"><p>Causes window-exit shocks in rolling models and filter divergence</p></td>
+<td class="text-left"><p>Robust Kalman Filter, Markov-Switching models</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="batch-estimator-methodology-matrix">
+<h3>Batch Estimator Methodology Matrix<a class="headerlink" href="#batch-estimator-methodology-matrix" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Estimator</p></th>
+<th class="head text-left"><p>Optimization Objective</p></th>
+<th class="head text-center"><p>Breakdown Point</p></th>
+<th class="head text-center"><p>Gaussian Efficiency</p></th>
+<th class="head text-left"><p>Primary Quantitative Use Case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>OLS</strong></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\min_\beta \sum r_i^2\)</span></p></td>
+<td class="text-center"><p><strong>0%</strong> (1 point suffices)</p></td>
+<td class="text-center"><p>100% (BLUE)</p></td>
+<td class="text-left"><p>Benchmark under strict i.i.d. Gaussian assumptions</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Winsorized OLS (MAD)</strong></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\min_\beta \sum (\tilde{y}_i - X_i\beta)^2\)</span> via MAD clamping</p></td>
+<td class="text-center"><p>Threshold-dependent (~5%)</p></td>
+<td class="text-center"><p>High</p></td>
+<td class="text-left"><p>Standard in multi-factor equity models (Barra, Axioma)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>IRLS (Huber M-Est.)</strong></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\min_\beta \sum \rho_k(r_i)\)</span> via weights <span class="math notranslate nohighlight">\(w_i(r_i)\)</span></p></td>
+<td class="text-center"><p><strong>0%</strong> (leverage), <strong>50%</strong> (vertical)</p></td>
+<td class="text-center"><p>95% (with <span class="math notranslate nohighlight">\(k=1.345\)</span>)</p></td>
+<td class="text-left"><p>Market Beta estimation, yield curve term structure fitting</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Theil-Sen</strong></p></td>
+<td class="text-left"><p>Median of pairwise slopes</p></td>
+<td class="text-center"><p><strong>~29.3%</strong></p></td>
+<td class="text-center"><p>~64%</p></td>
+<td class="text-left"><p>Non-parametric bivarate regression, robust trendlines</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>RANSAC</strong></p></td>
+<td class="text-left"><p>Maximize inlier consensus cardinality</p></td>
+<td class="text-center"><p><strong>up to 50%</strong></p></td>
+<td class="text-center"><p>Variable (hard rejection)</p></td>
+<td class="text-left"><p>High-noise signal extraction, tick-data anomaly filtering</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="environment-setup-plotting-standards">
+<h2>0. Environment Setup &amp; Plotting Standards<a class="headerlink" href="#environment-setup-plotting-standards" title="Link to this heading">#</a></h2>
+<p>We initialize numerical packages and configure Matplotlib aesthetics to adhere to publication-grade quantitative research standards.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+
+<span class="c1"># Visualization settings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s1">&#39;axes.spines.top&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;axes.spines.right&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;axes.grid&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s1">&#39;grid.alpha&#39;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="s1">&#39;grid.linestyle&#39;</span><span class="p">:</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;figure.facecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;axes.facecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s1">&#39;axes.labelsize&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+    <span class="s1">&#39;axes.titlesize&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s1">&#39;legend.fontsize&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="s1">&#39;figure.titlesize&#39;</span><span class="p">:</span> <span class="mi">14</span>
+<span class="p">})</span>
+
+<span class="c1"># Harmonized color palette across estimators</span>
+<span class="n">COLORS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;clean&#39;</span><span class="p">:</span> <span class="s1">&#39;#1F3A60&#39;</span><span class="p">,</span>          <span class="c1"># Deep Navy for regular inliers</span>
+    <span class="s1">&#39;outlier&#39;</span><span class="p">:</span> <span class="s1">&#39;#D9381E&#39;</span><span class="p">,</span>        <span class="c1"># Crimson Red for outliers</span>
+    <span class="s1">&#39;true&#39;</span><span class="p">:</span> <span class="s1">&#39;#111111&#39;</span><span class="p">,</span>           <span class="c1"># Charcoal Black for Ground Truth</span>
+    <span class="s1">&#39;ols&#39;</span><span class="p">:</span> <span class="s1">&#39;#D9381E&#39;</span><span class="p">,</span>            <span class="c1"># Crimson for biased OLS</span>
+    <span class="s1">&#39;winsor&#39;</span><span class="p">:</span> <span class="s1">&#39;#E67E22&#39;</span><span class="p">,</span>         <span class="c1"># Amber Orange for Winsorized OLS</span>
+    <span class="s1">&#39;irls&#39;</span><span class="p">:</span> <span class="s1">&#39;#6C3483&#39;</span><span class="p">,</span>           <span class="c1"># Royal Purple for IRLS Huber</span>
+    <span class="s1">&#39;theilsen&#39;</span><span class="p">:</span> <span class="s1">&#39;#2980B9&#39;</span><span class="p">,</span>       <span class="c1"># Cobalt Blue for Theil-Sen</span>
+    <span class="s1">&#39;ransac&#39;</span><span class="p">:</span> <span class="s1">&#39;#27AE60&#39;</span><span class="p">,</span>         <span class="c1"># Emerald Green for RANSAC</span>
+    <span class="s1">&#39;kalman&#39;</span><span class="p">:</span> <span class="s1">&#39;#16A085&#39;</span><span class="p">,</span>         <span class="c1"># Teal for Standard Kalman</span>
+    <span class="s1">&#39;robust_kalman&#39;</span><span class="p">:</span> <span class="s1">&#39;#8E44AD&#39;</span>   <span class="c1"># Deep Violet for Robust Kalman</span>
+<span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Environment configured successfully.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Environment configured successfully.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-generating-process-dgp-leverage-outlier-cluster">
+<h2>1. Data Generating Process (DGP) &amp; Leverage Outlier Cluster<a class="headerlink" href="#data-generating-process-dgp-leverage-outlier-cluster" title="Link to this heading">#</a></h2>
+<p>We specify a ground-truth linear DGP:</p>
+<div class="math notranslate nohighlight">
+\[y_t = \beta_0^* + \beta_1^* \cdot x_t + \varepsilon_t, \quad \varepsilon_t \sim \mathcal{N}(0, \sigma^2)\]</div>
+<p>with underlying structural parameters:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\beta_0^* = 2.0\)</span> (true intercept)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta_1^* = 1.5\)</span> (true slope / sensitivity)</p></li>
+<li><p>Gaussian error <span class="math notranslate nohighlight">\(\sigma = 1.0\)</span> across <span class="math notranslate nohighlight">\(N = 1000\)</span> observations.</p></li>
+</ul>
+<section id="generating-an-adversarial-leverage-cluster">
+<h3>Generating an Adversarial Leverage Cluster<a class="headerlink" href="#generating-an-adversarial-leverage-cluster" title="Link to this heading">#</a></h3>
+<p>Rather than introducing isolated, randomly dispersed outliers, we inject an adversarial cluster of <strong><span class="math notranslate nohighlight">\(N_{\text{out}} = 50\)</span> observations (5.0% of the sample)</strong> localized around <span class="math notranslate nohighlight">\(x \approx 1.0\)</span> (semi-bandwidth <span class="math notranslate nohighlight">\(\pm 0.6\)</span>).
+This simultaneously creates:</p>
+<ol class="arabic simple">
+<li><p><strong>High Leverage Coordinates (<span class="math notranslate nohighlight">\(h_{ii}\)</span>):</strong> Observations located away from the sample center <span class="math notranslate nohighlight">\(\bar{x} = 0\)</span>, giving them strong structural pull.</p></li>
+<li><p><strong>Substantial Vertical Displacement (offset <span class="math notranslate nohighlight">\(\approx +13.0\)</span>, <span class="math notranslate nohighlight">\(\sigma_{\text{out}} = 4.0\)</span>):</strong> Incompatible with the true data-generating manifold.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">N_OUT</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># Exactly 5.0% of sample size</span>
+<span class="n">BETA0_TRUE</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">BETA1_TRUE</span> <span class="o">=</span> <span class="mf">1.5</span>
+
+<span class="c1"># Exogenous regressor grid and standard i.i.d. noise</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">y_clean</span> <span class="o">=</span> <span class="n">BETA0_TRUE</span> <span class="o">+</span> <span class="n">BETA1_TRUE</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">eps</span>
+
+<span class="c1"># Injection of an adversarial bad-leverage cluster</span>
+<span class="n">out_x_center</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">out_x_window</span> <span class="o">=</span> <span class="mf">0.6</span>
+<span class="n">out_y_offset</span> <span class="o">=</span> <span class="mf">13.0</span>
+<span class="n">out_y_spread</span> <span class="o">=</span> <span class="mf">4.0</span>
+
+<span class="n">candidate_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">out_x_center</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">out_x_window</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">out_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">candidate_idx</span><span class="p">,</span> <span class="n">N_OUT</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">y_dirty</span> <span class="o">=</span> <span class="n">y_clean</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">y_line_at_cluster</span> <span class="o">=</span> <span class="n">BETA0_TRUE</span> <span class="o">+</span> <span class="n">BETA1_TRUE</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">out_idx</span><span class="p">]</span>
+<span class="n">y_dirty</span><span class="p">[</span><span class="n">out_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_line_at_cluster</span> <span class="o">+</span> <span class="n">out_y_offset</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">out_y_spread</span><span class="p">,</span> <span class="n">N_OUT</span><span class="p">)</span>
+
+<span class="n">is_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<span class="n">is_out</span><span class="p">[</span><span class="n">out_idx</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># Design matrix X with column of ones</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">x</span><span class="p">])</span>
+
+<span class="c1"># Leverage diagnostics via Hat Matrix H = X(X^T X)^(-1) X^T</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span>
+<span class="n">leverage_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+<span class="n">leverage_threshold</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">N</span>  <span class="c1"># Standard rule of thumb: 2p/N</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total Sample Size: N = </span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Contaminated Outliers: N_out = </span><span class="si">{</span><span class="n">N_OUT</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">N_OUT</span><span class="o">/</span><span class="n">N</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2"> of dataset)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ground Truth Parameters: beta_0 = </span><span class="si">{</span><span class="n">BETA0_TRUE</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, beta_1 = </span><span class="si">{</span><span class="n">BETA1_TRUE</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean Leverage h_ii: </span><span class="si">{</span><span class="n">leverage_h</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | Alert Leverage Threshold (2p/N): </span><span class="si">{</span><span class="n">leverage_threshold</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean Leverage of Outlier Cluster: </span><span class="si">{</span><span class="n">leverage_h</span><span class="p">[</span><span class="n">is_out</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Exploratory scatter plot of contaminated data</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">y_dirty</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;clean&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Regular Observations (Inliers, 95%)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">y_dirty</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;outlier&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Outlier Cluster (N=</span><span class="si">{</span><span class="n">N_OUT</span><span class="si">}</span><span class="s1">, 5%)&#39;</span><span class="p">)</span>
+<span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">300</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">BETA0_TRUE</span> <span class="o">+</span> <span class="n">BETA1_TRUE</span> <span class="o">*</span> <span class="n">x_grid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;True DGP (beta_0=</span><span class="si">{</span><span class="n">BETA0_TRUE</span><span class="si">}</span><span class="s1">, beta_1=</span><span class="si">{</span><span class="n">BETA1_TRUE</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Contaminated Data Generating Process with Localized Bad-Leverage Cluster&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Exogenous Regressor (x)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Endogenous Response (y)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total Sample Size: N = 1000
+Contaminated Outliers: N_out = 50 (5.0% of dataset)
+Ground Truth Parameters: beta_0 = 2.00, beta_1 = 1.50
+Mean Leverage h_ii: 0.0020 | Alert Leverage Threshold (2p/N): 0.0040
+Mean Leverage of Outlier Cluster: 0.0014
+</pre></div>
+</div>
+<img alt="_images/3f24bb290cc06dee8a811b815f8801ce320eb725c4cb5d911f75fa789e3fcdf3.png" src="_images/3f24bb290cc06dee8a811b815f8801ce320eb725c4cb5d911f75fa789e3fcdf3.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="static-batch-estimation-methods">
+<h2>2. Static Batch Estimation Methods<a class="headerlink" href="#static-batch-estimation-methods" title="Link to this heading">#</a></h2>
+<p>We implement and evaluate five distinct estimation approaches to neutralize the outlier cluster:</p>
+<hr class="docutils" />
+<section id="ols-ordinary-least-squares">
+<h3>2.1 OLS (Ordinary Least Squares)<a class="headerlink" href="#ols-ordinary-least-squares" title="Link to this heading">#</a></h3>
+<p>Minimizes the sum of squared residuals:
+$<span class="math notranslate nohighlight">\(\hat{\beta}_{\text{OLS}} = \arg\min_\beta \sum_{t=1}^N (y_t - X_t \beta)^2 = (X^T X)^{-1} X^T y\)</span><span class="math notranslate nohighlight">\(
+The quadratic loss function weights an outlier with \)</span>r_i = 15<span class="math notranslate nohighlight">\( by a factor of \)</span>15^2 = 225<span class="math notranslate nohighlight">\( relative to an inlier with \)</span>r_i = 1<span class="math notranslate nohighlight">\(. Its theoretical breakdown point is **\)</span>0%$**.</p>
+</section>
+<hr class="docutils" />
+<section id="mad-based-winsorized-ols-financial-industry-standard">
+<h3>2.2 MAD-Based Winsorized OLS (Financial Industry Standard)<a class="headerlink" href="#mad-based-winsorized-ols-financial-industry-standard" title="Link to this heading">#</a></h3>
+<p>In commercial multi-factor equity risk models (e.g., Barra, Axioma), cross-sectional variables are winsorized via the Median Absolute Deviation (<strong>MAD</strong>):
+$<span class="math notranslate nohighlight">\(\tilde{y}_t = \text{clip}\left(y_t, \; \text{Med}(y) - k \cdot \hat{\sigma}_{\text{MAD}}, \; \text{Med}(y) + k \cdot \hat{\sigma}_{\text{MAD}}\right)\)</span><span class="math notranslate nohighlight">\(
+where \)</span>\hat{\sigma}_{\text{MAD}} = \frac{\text{median}(|y - \text{median}(y)|)}{0.6745}$ provides a consistent estimator of standard deviation under normality.</p>
+</section>
+<hr class="docutils" />
+<section id="irls-iteratively-reweighted-least-squares-with-huber-m-estimator">
+<h3>2.3 IRLS (Iteratively Reweighted Least Squares with Huber M-Estimator)<a class="headerlink" href="#irls-iteratively-reweighted-least-squares-with-huber-m-estimator" title="Link to this heading">#</a></h3>
+<p>Replaces the <span class="math notranslate nohighlight">\(L_2\)</span> loss with the hybrid Huber loss function <span class="math notranslate nohighlight">\(\rho_k(r)\)</span>:
+$<span class="math notranslate nohighlight">\(\rho_k(r) = \begin{cases} \frac{1}{2} r^2 &amp; \text{if } |r| \leq k\hat{\sigma} \\ k\hat{\sigma} |r| - \frac{1}{2} (k\hat{\sigma})^2 &amp; \text{if } |r| &gt; k\hat{\sigma} \end{cases}\)</span><span class="math notranslate nohighlight">\(
+Optimized iteratively with data-dependent weights \)</span>w_i = \min\left(1, \frac{k\hat{\sigma}}{|r_i|}\right)<span class="math notranslate nohighlight">\(. With \)</span>k = 1.345$, the estimator preserves <strong>95% asymptotic efficiency</strong> under Gaussianity while downgrading extreme residual penalties from quadratic to linear.</p>
+</section>
+<hr class="docutils" />
+<section id="theil-sen-robust-estimator">
+<h3>2.4 Theil-Sen Robust Estimator<a class="headerlink" href="#theil-sen-robust-estimator" title="Link to this heading">#</a></h3>
+<p>A non-parametric estimator defined by the median of all pairwise bivariate slopes:
+$<span class="math notranslate nohighlight">\(\hat{\beta}_1 = \text{median}\left( \left\{ \frac{y_j - y_i}{x_j - x_i} \;\middle|\; x_i \neq x_j \right\} \right), \quad \hat{\beta}_0 = \text{median}(y - \hat{\beta}_1 x)\)</span>$
+Provides an asymptotic breakdown point of <strong>~29.3%</strong> and is resilient against severe asymmetric distortions.</p>
+</section>
+<hr class="docutils" />
+<section id="ransac-random-sample-consensus">
+<h3>2.5 RANSAC (Random Sample Consensus)<a class="headerlink" href="#ransac-random-sample-consensus" title="Link to this heading">#</a></h3>
+<p>An iterative non-deterministic algorithm based on minimal sample consensus:</p>
+<ol class="arabic simple">
+<li><p>Randomly sample 2 points to fit a candidate hypothesis line.</p></li>
+<li><p>Quantify inliers whose absolute residual is within an automated threshold <span class="math notranslate nohighlight">\(\tau = 3 \cdot \hat{\sigma}_{\text{MAD}}\)</span>.</p></li>
+<li><p>Retain the model that maximizes the inlier consensus set.</p></li>
+<li><p>Perform an OLS refit <strong>strictly on the consensus inlier subset</strong>. Theoretical breakdown point reaches up to <strong>50%</strong>.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># 2.1 Standard OLS</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="n">beta_ols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_dirty</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">b0_ols</span><span class="p">,</span> <span class="n">b1_ols</span> <span class="o">=</span> <span class="n">beta_ols</span>
+<span class="n">r_ols</span> <span class="o">=</span> <span class="n">y_dirty</span> <span class="o">-</span> <span class="p">(</span><span class="n">b0_ols</span> <span class="o">+</span> <span class="n">b1_ols</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># 2.2 MAD-Based Winsorized OLS</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_winsorized_ols</span><span class="p">(</span><span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">k_mad</span><span class="o">=</span><span class="mf">3.0</span><span class="p">):</span>
+    <span class="n">med_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">y_arr</span><span class="p">)</span>
+    <span class="n">mad_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_arr</span> <span class="o">-</span> <span class="n">med_y</span><span class="p">))</span> <span class="o">/</span> <span class="mf">0.6745</span>
+    <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">med_y</span> <span class="o">-</span> <span class="n">k_mad</span> <span class="o">*</span> <span class="n">mad_y</span>
+    <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">med_y</span> <span class="o">+</span> <span class="n">k_mad</span> <span class="o">*</span> <span class="n">mad_y</span>
+    <span class="n">y_win</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">y_arr</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+    <span class="n">X_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_arr</span><span class="p">)),</span> <span class="n">x_arr</span><span class="p">])</span>
+    <span class="n">beta_win</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X_mat</span><span class="p">,</span> <span class="n">y_win</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">beta_win</span><span class="p">,</span> <span class="n">y_win</span>
+
+<span class="n">beta_win</span><span class="p">,</span> <span class="n">y_winsorized</span> <span class="o">=</span> <span class="n">fit_winsorized_ols</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_dirty</span><span class="p">,</span> <span class="n">k_mad</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+<span class="n">b0_win</span><span class="p">,</span> <span class="n">b1_win</span> <span class="o">=</span> <span class="n">beta_win</span>
+<span class="n">r_win</span> <span class="o">=</span> <span class="n">y_dirty</span> <span class="o">-</span> <span class="p">(</span><span class="n">b0_win</span> <span class="o">+</span> <span class="n">b1_win</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># 2.3 IRLS with Huber M-Estimator</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_irls_huber</span><span class="p">(</span><span class="n">X_mat</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mf">1.345</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X_mat</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_arr</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">y_arr</span> <span class="o">-</span> <span class="n">X_mat</span> <span class="o">@</span> <span class="n">beta</span>
+        <span class="n">sigma_mad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">r</span><span class="p">))</span> <span class="o">/</span> <span class="mf">0.6745</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">sigma_mad</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">u</span><span class="p">)</span>
+        
+        <span class="c1"># Weighted Least Squares step</span>
+        <span class="n">W_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">w</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">X_w</span> <span class="o">=</span> <span class="n">X_mat</span> <span class="o">*</span> <span class="n">W_half</span>
+        <span class="n">y_w</span> <span class="o">=</span> <span class="n">y_arr</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        <span class="n">beta_next</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X_w</span><span class="p">,</span> <span class="n">y_w</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">beta_next</span> <span class="o">-</span> <span class="n">beta</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">beta_next</span>
+    <span class="k">return</span> <span class="n">beta</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">it</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">beta_irls</span><span class="p">,</span> <span class="n">w_final</span><span class="p">,</span> <span class="n">irls_iters</span> <span class="o">=</span> <span class="n">fit_irls_huber</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_dirty</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mf">1.345</span><span class="p">)</span>
+<span class="n">b0_irls</span><span class="p">,</span> <span class="n">b1_irls</span> <span class="o">=</span> <span class="n">beta_irls</span>
+<span class="n">r_irls</span> <span class="o">=</span> <span class="n">y_dirty</span> <span class="o">-</span> <span class="p">(</span><span class="n">b0_irls</span> <span class="o">+</span> <span class="n">b1_irls</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># 2.4 Theil-Sen Estimator (Vectorized Subsampling for Computational Efficiency)</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_theil_sen</span><span class="p">(</span><span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">max_pairs</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">rng_seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_arr</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">)</span>
+    <span class="n">idx_i</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">max_pairs</span><span class="p">)</span>
+    <span class="n">idx_j</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">max_pairs</span><span class="p">)</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">idx_i</span> <span class="o">!=</span> <span class="n">idx_j</span>
+    <span class="n">idx_i</span><span class="p">,</span> <span class="n">idx_j</span> <span class="o">=</span> <span class="n">idx_i</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">idx_j</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">x_arr</span><span class="p">[</span><span class="n">idx_j</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_arr</span><span class="p">[</span><span class="n">idx_i</span><span class="p">]</span>
+    <span class="n">non_zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-9</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">dx</span><span class="p">[</span><span class="n">non_zero</span><span class="p">]</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">idx_j</span><span class="p">[</span><span class="n">non_zero</span><span class="p">]]</span> <span class="o">-</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">idx_i</span><span class="p">[</span><span class="n">non_zero</span><span class="p">]]</span>
+    <span class="n">slopes</span> <span class="o">=</span> <span class="n">dy</span> <span class="o">/</span> <span class="n">dx</span>
+    <span class="n">slope_med</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">slopes</span><span class="p">)</span>
+    <span class="n">intercept_med</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">y_arr</span> <span class="o">-</span> <span class="n">slope_med</span> <span class="o">*</span> <span class="n">x_arr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">intercept_med</span><span class="p">,</span> <span class="n">slope_med</span><span class="p">])</span>
+
+<span class="n">beta_theilsen</span> <span class="o">=</span> <span class="n">fit_theil_sen</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_dirty</span><span class="p">)</span>
+<span class="n">b0_ts</span><span class="p">,</span> <span class="n">b1_ts</span> <span class="o">=</span> <span class="n">beta_theilsen</span>
+<span class="n">r_ts</span> <span class="o">=</span> <span class="n">y_dirty</span> <span class="o">-</span> <span class="p">(</span><span class="n">b0_ts</span> <span class="o">+</span> <span class="n">b1_ts</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># 2.5 RANSAC Regression</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_ransac</span><span class="p">(</span><span class="n">X_mat</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">residual_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rng_seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">X_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="c1"># Automatic robust threshold via MAD of initial residuals</span>
+    <span class="k">if</span> <span class="n">residual_threshold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">b_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X_mat</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">r_init</span> <span class="o">=</span> <span class="n">y_arr</span> <span class="o">-</span> <span class="n">X_mat</span> <span class="o">@</span> <span class="n">b_init</span>
+        <span class="n">residual_threshold</span> <span class="o">=</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">r_init</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">r_init</span><span class="p">)))</span> <span class="o">/</span> <span class="mf">0.6745</span><span class="p">)</span>
+        
+    <span class="n">best_inliers</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">best_count</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">best_beta</span> <span class="o">=</span> <span class="kc">None</span>
+    
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iter</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">b_sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X_mat</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_arr</span> <span class="o">-</span> <span class="n">X_mat</span> <span class="o">@</span> <span class="n">b_sample</span><span class="p">)</span>
+        <span class="n">inliers</span> <span class="o">=</span> <span class="n">res</span> <span class="o">&lt;</span> <span class="n">residual_threshold</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">inliers</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">best_count</span><span class="p">:</span>
+            <span class="n">best_count</span> <span class="o">=</span> <span class="n">count</span>
+            <span class="n">best_inliers</span> <span class="o">=</span> <span class="n">inliers</span>
+            <span class="n">best_beta</span> <span class="o">=</span> <span class="n">b_sample</span>
+            
+    <span class="c1"># Final OLS refit on the identified consensus set</span>
+    <span class="n">beta_refined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X_mat</span><span class="p">[</span><span class="n">best_inliers</span><span class="p">],</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">best_inliers</span><span class="p">],</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">beta_refined</span><span class="p">,</span> <span class="n">best_inliers</span><span class="p">,</span> <span class="n">residual_threshold</span>
+
+<span class="n">beta_ransac</span><span class="p">,</span> <span class="n">inliers_ransac</span><span class="p">,</span> <span class="n">tau_ransac</span> <span class="o">=</span> <span class="n">fit_ransac</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_dirty</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">b0_ransac</span><span class="p">,</span> <span class="n">b1_ransac</span> <span class="o">=</span> <span class="n">beta_ransac</span>
+<span class="n">r_ransac</span> <span class="o">=</span> <span class="n">y_dirty</span> <span class="o">-</span> <span class="p">(</span><span class="n">b0_ransac</span> <span class="o">+</span> <span class="n">b1_ransac</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch model estimation completed successfully.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch model estimation completed successfully.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="quantitative-performance-benchmark">
+<h2>3. Quantitative Performance Benchmark<a class="headerlink" href="#quantitative-performance-benchmark" title="Link to this heading">#</a></h2>
+<section id="the-contaminated-in-sample-rmse-paradox">
+<h3>The Contaminated In-Sample RMSE Paradox<a class="headerlink" href="#the-contaminated-in-sample-rmse-paradox" title="Link to this heading">#</a></h3>
+<p>A critical pitfall in quantitative modeling is evaluating estimator quality via in-sample root mean squared error on the contaminated dataset (<span class="math notranslate nohighlight">\(RMSE_{\text{dirty}}\)</span>).<br />
+Because <strong>OLS is mathematically constrained to minimize this exact quantity</strong>, it will artificially report the lowest <span class="math notranslate nohighlight">\(RMSE_{\text{dirty}}\)</span>, while severely distorting the structural slope!</p>
+<p>The statistically sound evaluation criteria are:</p>
+<ol class="arabic simple">
+<li><p><strong>Parameter Bias:</strong> <span class="math notranslate nohighlight">\(\text{Bias}(\beta_0) = |\hat{\beta}_0 - \beta_0^*|\)</span> and <span class="math notranslate nohighlight">\(\text{Bias}(\beta_1) = |\hat{\beta}_1 - \beta_1^*|\)</span></p></li>
+<li><p><strong>Total Parameter Loss:</strong> <span class="math notranslate nohighlight">\(\|\hat{\beta} - \beta^*\|_2 = \sqrt{(\hat{\beta}_0 - \beta_0^*)^2 + (\hat{\beta}_1 - \beta_1^*)^2}\)</span></p></li>
+<li><p><strong>Out-of-Sample / Clean RMSE (<span class="math notranslate nohighlight">\(RMSE_{\text{clean}}\)</span>):</strong> Prediction error evaluated strictly on the 95% regular inlier observations.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Quantitative performance metric computation</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_metrics</span><span class="p">(</span><span class="n">b0</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">y_obs</span><span class="p">,</span> <span class="n">is_out_mask</span><span class="p">):</span>
+    <span class="n">b_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">b0</span> <span class="o">-</span> <span class="n">BETA0_TRUE</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">b1</span> <span class="o">-</span> <span class="n">BETA1_TRUE</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">b0</span> <span class="o">+</span> <span class="n">b1</span> <span class="o">*</span> <span class="n">x</span>
+    <span class="n">rmse_dirty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_obs</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">rmse_clean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_obs</span><span class="p">[</span><span class="o">~</span><span class="n">is_out_mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">[</span><span class="o">~</span><span class="n">is_out_mask</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">b0</span> <span class="o">-</span> <span class="n">BETA0_TRUE</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">b1</span> <span class="o">-</span> <span class="n">BETA1_TRUE</span><span class="p">),</span> <span class="n">b_err</span><span class="p">,</span> <span class="n">rmse_clean</span><span class="p">,</span> <span class="n">rmse_dirty</span>
+
+<span class="n">metrics_data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">models</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;True DGP (Oracle)&#39;</span><span class="p">,</span> <span class="n">BETA0_TRUE</span><span class="p">,</span> <span class="n">BETA1_TRUE</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Standard OLS&#39;</span><span class="p">,</span> <span class="n">b0_ols</span><span class="p">,</span> <span class="n">b1_ols</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Winsorized OLS (MAD)&#39;</span><span class="p">,</span> <span class="n">b0_win</span><span class="p">,</span> <span class="n">b1_win</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;IRLS (Huber M-Est.)&#39;</span><span class="p">,</span> <span class="n">b0_irls</span><span class="p">,</span> <span class="n">b1_irls</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;Theil-Sen&#39;</span><span class="p">,</span> <span class="n">b0_ts</span><span class="p">,</span> <span class="n">b1_ts</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;RANSAC&#39;</span><span class="p">,</span> <span class="n">b0_ransac</span><span class="p">,</span> <span class="n">b1_ransac</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">b1</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s1">&#39;Oracle&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+        <span class="n">metrics_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;Estimator&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;beta_0&#39;</span><span class="p">:</span> <span class="n">b0</span><span class="p">,</span> <span class="s1">&#39;beta_1&#39;</span><span class="p">:</span> <span class="n">b1</span><span class="p">,</span>
+            <span class="s1">&#39;Bias beta_0&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Bias beta_1&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Parametric Loss ||beta-beta*||&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="s1">&#39;Clean RMSE&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_dirty</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">b0</span> <span class="o">+</span> <span class="n">b1</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">]))</span><span class="o">**</span><span class="mi">2</span><span class="p">)),</span>
+            <span class="s1">&#39;Contaminated RMSE (Misleading)&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_dirty</span> <span class="o">-</span> <span class="p">(</span><span class="n">b0</span> <span class="o">+</span> <span class="n">b1</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="p">})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">e0</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">b_err</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">b0</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">y_dirty</span><span class="p">,</span> <span class="n">is_out</span><span class="p">)</span>
+        <span class="n">metrics_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;Estimator&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;beta_0&#39;</span><span class="p">:</span> <span class="n">b0</span><span class="p">,</span> <span class="s1">&#39;beta_1&#39;</span><span class="p">:</span> <span class="n">b1</span><span class="p">,</span>
+            <span class="s1">&#39;Bias beta_0&#39;</span><span class="p">:</span> <span class="n">e0</span><span class="p">,</span> <span class="s1">&#39;Bias beta_1&#39;</span><span class="p">:</span> <span class="n">e1</span><span class="p">,</span> <span class="s1">&#39;Parametric Loss ||beta-beta*||&#39;</span><span class="p">:</span> <span class="n">b_err</span><span class="p">,</span>
+            <span class="s1">&#39;Clean RMSE&#39;</span><span class="p">:</span> <span class="n">rc</span><span class="p">,</span> <span class="s1">&#39;Contaminated RMSE (Misleading)&#39;</span><span class="p">:</span> <span class="n">rd</span>
+        <span class="p">})</span>
+
+<span class="n">df_results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">metrics_data</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Estimator&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df_results</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>beta_0</th>
+      <th>beta_1</th>
+      <th>Bias beta_0</th>
+      <th>Bias beta_1</th>
+      <th>Parametric Loss ||beta-beta*||</th>
+      <th>Clean RMSE</th>
+      <th>Contaminated RMSE (Misleading)</th>
+    </tr>
+    <tr>
+      <th>Estimator</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>True DGP (Oracle)</th>
+      <td>2.0000</td>
+      <td>1.5000</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.9742</td>
+      <td>3.2826</td>
+    </tr>
+    <tr>
+      <th>Standard OLS</th>
+      <td>2.6887</td>
+      <td>1.7598</td>
+      <td>0.6887</td>
+      <td>0.2598</td>
+      <td>0.7360</td>
+      <td>1.2480</td>
+      <td>3.1778</td>
+    </tr>
+    <tr>
+      <th>Winsorized OLS (MAD)</th>
+      <td>2.4649</td>
+      <td>1.6779</td>
+      <td>0.4649</td>
+      <td>0.1779</td>
+      <td>0.4978</td>
+      <td>1.1031</td>
+      <td>3.1888</td>
+    </tr>
+    <tr>
+      <th>IRLS (Huber M-Est.)</th>
+      <td>2.0995</td>
+      <td>1.5562</td>
+      <td>0.0995</td>
+      <td>0.0562</td>
+      <td>0.1143</td>
+      <td>0.9787</td>
+      <td>3.2512</td>
+    </tr>
+    <tr>
+      <th>Theil-Sen</th>
+      <td>2.0894</td>
+      <td>1.5524</td>
+      <td>0.0894</td>
+      <td>0.0524</td>
+      <td>0.1036</td>
+      <td>0.9775</td>
+      <td>3.2537</td>
+    </tr>
+    <tr>
+      <th>RANSAC</th>
+      <td>2.0129</td>
+      <td>1.5231</td>
+      <td>0.0129</td>
+      <td>0.0231</td>
+      <td>0.0264</td>
+      <td>0.9734</td>
+      <td>3.2747</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="diagnostic-analytics-monte-carlo-simulation-m-200">
+<h2>4. Diagnostic Analytics &amp; Monte Carlo Simulation (<span class="math notranslate nohighlight">\(M = 200\)</span>)<a class="headerlink" href="#diagnostic-analytics-monte-carlo-simulation-m-200" title="Link to this heading">#</a></h2>
+<p>To validate robustness beyond a single pseudo-random realization, we execute an empirical <strong>Monte Carlo experiment</strong> across <span class="math notranslate nohighlight">\(M = 200\)</span> independent simulations and evaluate the sampling distribution of <span class="math notranslate nohighlight">\(\hat{\beta}_1\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># Monte Carlo Simulation (M = 200 independent trials)</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="n">M_SIM</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">mc_results</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;OLS&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;Winsor&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;IRLS&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;Theil-Sen&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;RANSAC&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+
+<span class="n">mc_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M_SIM</span><span class="p">):</span>
+    <span class="n">e_m</span> <span class="o">=</span> <span class="n">mc_rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">y_m</span> <span class="o">=</span> <span class="n">BETA0_TRUE</span> <span class="o">+</span> <span class="n">BETA1_TRUE</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">e_m</span>
+    <span class="n">c_idx</span> <span class="o">=</span> <span class="n">mc_rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">candidate_idx</span><span class="p">,</span> <span class="n">N_OUT</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">y_m</span><span class="p">[</span><span class="n">c_idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">BETA0_TRUE</span> <span class="o">+</span> <span class="n">BETA1_TRUE</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">c_idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">out_y_offset</span> <span class="o">+</span> <span class="n">mc_rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_y_spread</span><span class="p">,</span> <span class="n">N_OUT</span><span class="p">))</span>
+    
+    <span class="c1"># OLS fit</span>
+    <span class="n">b_ols_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_m</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">mc_results</span><span class="p">[</span><span class="s1">&#39;OLS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b_ols_m</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="c1"># Winsorized OLS fit</span>
+    <span class="n">b_win_m</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fit_winsorized_ols</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_m</span><span class="p">)</span>
+    <span class="n">mc_results</span><span class="p">[</span><span class="s1">&#39;Winsor&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b_win_m</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="c1"># IRLS Huber fit</span>
+    <span class="n">b_irls_m</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fit_irls_huber</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_m</span><span class="p">)</span>
+    <span class="n">mc_results</span><span class="p">[</span><span class="s1">&#39;IRLS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b_irls_m</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="c1"># Theil-Sen fit</span>
+    <span class="n">b_ts_m</span> <span class="o">=</span> <span class="n">fit_theil_sen</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_m</span><span class="p">,</span> <span class="n">max_pairs</span><span class="o">=</span><span class="mi">30000</span><span class="p">,</span> <span class="n">rng_seed</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">mc_results</span><span class="p">[</span><span class="s1">&#39;Theil-Sen&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b_ts_m</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="c1"># RANSAC fit</span>
+    <span class="n">b_ran_m</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fit_ransac</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_m</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">rng_seed</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">mc_results</span><span class="p">[</span><span class="s1">&#39;RANSAC&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b_ran_m</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">df_mc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">mc_results</span><span class="p">)</span>
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># 4-Panel Visualization</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span>
+<span class="n">x_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">300</span><span class="p">)</span>
+
+<span class="c1"># PANEL A: Fitted Regression Lines</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">y_dirty</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;clean&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Inliers&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">y_dirty</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;outlier&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Outliers (N=</span><span class="si">{</span><span class="n">N_OUT</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">BETA0_TRUE</span> <span class="o">+</span> <span class="n">BETA1_TRUE</span> <span class="o">*</span> <span class="n">x_grid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;True DGP (beta_1=</span><span class="si">{</span><span class="n">BETA1_TRUE</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">b0_ols</span> <span class="o">+</span> <span class="n">b1_ols</span> <span class="o">*</span> <span class="n">x_grid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ols&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;OLS (beta_1=</span><span class="si">{</span><span class="n">b1_ols</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">b0_win</span> <span class="o">+</span> <span class="n">b1_win</span> <span class="o">*</span> <span class="n">x_grid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;winsor&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Winsor (beta_1=</span><span class="si">{</span><span class="n">b1_win</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">b0_irls</span> <span class="o">+</span> <span class="n">b1_irls</span> <span class="o">*</span> <span class="n">x_grid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;irls&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;IRLS (beta_1=</span><span class="si">{</span><span class="n">b1_irls</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">b0_ts</span> <span class="o">+</span> <span class="n">b1_ts</span> <span class="o">*</span> <span class="n">x_grid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;theilsen&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-.&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Theil-Sen (beta_1=</span><span class="si">{</span><span class="n">b1_ts</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">b0_ransac</span> <span class="o">+</span> <span class="n">b1_ransac</span> <span class="o">*</span> <span class="n">x_grid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ransac&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;RANSAC (beta_1=</span><span class="si">{</span><span class="n">b1_ransac</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(A) Fitted Regression Lines Under Bad Leverage Cluster&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Exogenous Regressor (x)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Endogenous Response (y)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+
+<span class="c1"># PANEL B: IRLS Weights &amp; RANSAC Classification</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">w_final</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;clean&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Inliers (w_t ~ 1.0)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">w_final</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;irls&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Huber Downweighted Outliers&#39;</span><span class="p">)</span>
+<span class="n">ransac_flagged</span> <span class="o">=</span> <span class="o">~</span><span class="n">inliers_ransac</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">ransac_flagged</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ransac_flagged</span><span class="p">)),</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ransac&#39;</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;RANSAC Hard Rejection Set&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(B) Diagnostic IRLS Huber Weights w_t &amp; RANSAC Rejections&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Exogenous Regressor (x)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Huber Weight w_t&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">)</span>
+
+<span class="c1"># PANEL C: Residual Scatter Profiles</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">r_ols</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ols&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">r_ols</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ols&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;OLS Residuals (Biased)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">r_irls</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;irls&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">r_irls</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;irls&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;IRLS Huber Residuals&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">r_ransac</span><span class="p">[</span><span class="o">~</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ransac&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">r_ransac</span><span class="p">[</span><span class="n">is_out</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ransac&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;RANSAC Residuals&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(C) Residual Profiles: OLS vs IRLS vs RANSAC&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Exogenous Regressor (x)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Residual r_t = y_t - y_hat_t&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+
+<span class="c1"># PANEL D: Monte Carlo Slope Distribution Boxplot</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">box_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_mc</span><span class="p">[</span><span class="s1">&#39;OLS&#39;</span><span class="p">],</span> <span class="n">df_mc</span><span class="p">[</span><span class="s1">&#39;Winsor&#39;</span><span class="p">],</span> <span class="n">df_mc</span><span class="p">[</span><span class="s1">&#39;IRLS&#39;</span><span class="p">],</span> <span class="n">df_mc</span><span class="p">[</span><span class="s1">&#39;Theil-Sen&#39;</span><span class="p">],</span> <span class="n">df_mc</span><span class="p">[</span><span class="s1">&#39;RANSAC&#39;</span><span class="p">]]</span>
+<span class="n">bp</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">box_data</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;OLS&#39;</span><span class="p">,</span> <span class="s1">&#39;Winsor&#39;</span><span class="p">,</span> <span class="s1">&#39;IRLS&#39;</span><span class="p">,</span> <span class="s1">&#39;Theil-Sen&#39;</span><span class="p">,</span> <span class="s1">&#39;RANSAC&#39;</span><span class="p">],</span> <span class="n">patch_artist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">box_colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ols&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;winsor&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;irls&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;theilsen&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ransac&#39;</span><span class="p">]]</span>
+<span class="k">for</span> <span class="n">patch</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bp</span><span class="p">[</span><span class="s1">&#39;boxes&#39;</span><span class="p">],</span> <span class="n">box_colors</span><span class="p">):</span>
+    <span class="n">patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">patch</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">BETA1_TRUE</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;True beta_1 = </span><span class="si">{</span><span class="n">BETA1_TRUE</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(D) Monte Carlo Sampling Distribution of beta_1 (M=</span><span class="si">{</span><span class="n">M_SIM</span><span class="si">}</span><span class="s1"> Trials)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Estimated Slope beta_1&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Comparative Robust Regression Benchmark: N=</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s1">, Contaminated Outliers=</span><span class="si">{</span><span class="n">N_OUT</span><span class="si">}</span><span class="s1"> (5.0%)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.995</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/8a50b908544594827663eb0a4db634130b30e7e4b08565502a9f4543aba53b96.png" src="_images/8a50b908544594827663eb0a4db634130b30e7e4b08565502a9f4543aba53b96.png" />
+</div>
+</div>
+</section>
+<section id="part-2-adaptive-online-estimation-streaming-rolling-ols-and-robust-kalman-filter">
+<h2>5. Part 2 – Adaptive Online Estimation: Streaming, Rolling OLS, and Robust Kalman Filter<a class="headerlink" href="#part-2-adaptive-online-estimation-streaming-rolling-ols-and-robust-kalman-filter" title="Link to this heading">#</a></h2>
+<p>In quantitative trading strategies (such as statistical arbitrage, <strong>Pairs Trading cointegration hedge ratios</strong>, and dynamic market-making), data arrives sequentially, and parameter relations drift over time.
+Quantitative systems require online algorithms that satisfy two competing objectives:</p>
+<ol class="arabic simple">
+<li><p><strong>Adaptivity:</strong> Rapidly update parameters when true structural market changes occur.</p></li>
+<li><p><strong>Robustness:</strong> Reject micro-structural market noise, flash crashes, and transient data recording errors.</p></li>
+</ol>
+<hr class="docutils" />
+<section id="rolling-ols-rigid-trailing-window">
+<h3>5.1 Rolling OLS (Rigid Trailing Window)<a class="headerlink" href="#rolling-ols-rigid-trailing-window" title="Link to this heading">#</a></h3>
+<p>Re-estimates OLS on trailing observations <span class="math notranslate nohighlight">\(\{(x_i, y_i)\}_{i=t-W}^{t-1}\)</span>.</p>
+<ul class="simple">
+<li><p><strong>The Window-Exit Shock:</strong> An anomaly receives full <span class="math notranslate nohighlight">\(1/W\)</span> weight upon entry and pollutes the hedge ratio for <span class="math notranslate nohighlight">\(W\)</span> steps. When it drops out of the window, a second abrupt and spurious parameter jump occurs.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="standard-linear-kalman-filter">
+<h3>5.2 Standard Linear Kalman Filter<a class="headerlink" href="#standard-linear-kalman-filter" title="Link to this heading">#</a></h3>
+<p>Models time-varying regression coefficients <span class="math notranslate nohighlight">\(\theta_t = [\beta_{0,t}, \beta_{1,t}]^T\)</span> as unobserved latent states:
+$<span class="math notranslate nohighlight">\(\theta_t = \theta_{t-1} + w_t, \quad w_t \sim \mathcal{N}(0, Q)\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(y_t = H_t \theta_t + v_t, \quad v_t \sim \mathcal{N}(0, R), \quad H_t = [1, \; x_t]\)</span>$</p>
+<ul class="simple">
+<li><p><strong>Limitation:</strong> The measurement innovation <span class="math notranslate nohighlight">\(\nu_t = y_t - H_t \hat{\theta}_t^-\)</span> updates the state linearly through the Kalman gain <span class="math notranslate nohighlight">\(K_t\)</span>. It lacks an endogenous outlier-rejection mechanism; setting <span class="math notranslate nohighlight">\(Q \approx 0\)</span> suppresses outlier impact only by sacrificing adaptivity entirely.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="robust-kalman-filter-huber-dampened-innovation">
+<h3>5.3 Robust Kalman Filter (Huber-Dampened Innovation)<a class="headerlink" href="#robust-kalman-filter-huber-dampened-innovation" title="Link to this heading">#</a></h3>
+<p>Combines real-time dynamic tracking with an <strong>M-estimator dampening rule on the normalized innovation</strong>:</p>
+<ol class="arabic simple">
+<li><p>Compute standardized innovation:
+$<span class="math notranslate nohighlight">\(s_t = \frac{|\nu_t|}{\sqrt{S_t}}, \quad S_t = H_t P_t^- H_t^T + R\)</span>$</p></li>
+<li><p>Compute the Huber attenuation factor:
+$<span class="math notranslate nohighlight">\(\psi_t = \begin{cases} 1 &amp; \text{if } s_t \leq k \\ \frac{k}{s_t} &amp; \text{if } s_t &gt; k \end{cases}\)</span>$</p></li>
+<li><p><strong>Robust State Update:</strong> Attenuate the innovation before state correction: <span class="math notranslate nohighlight">\(\nu_t^* = \psi_t \cdot \nu_t\)</span>. Under regular observations, <span class="math notranslate nohighlight">\(\psi_t = 1.0\)</span> (100% standard Kalman efficiency); during outliers, impact is bounded linearly.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># 5.1 Rolling OLS</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rolling_ols</span><span class="p">(</span><span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_arr</span><span class="p">)</span>
+    <span class="n">b0_path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">b1_path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">x_arr</span><span class="p">[</span><span class="n">t</span><span class="o">-</span><span class="n">window</span><span class="p">:</span><span class="n">t</span><span class="p">]</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">t</span><span class="o">-</span><span class="n">window</span><span class="p">:</span><span class="n">t</span><span class="p">]</span>
+        <span class="n">v_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v_x</span> <span class="o">&gt;</span> <span class="mf">1e-12</span><span class="p">:</span>
+            <span class="n">b1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">v_x</span>
+            <span class="n">b0</span> <span class="o">=</span> <span class="n">ys</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">b1</span> <span class="o">*</span> <span class="n">xs</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">b0_path</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">b0</span>
+            <span class="n">b1_path</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">b1</span>
+    <span class="k">return</span> <span class="n">b0_path</span><span class="p">,</span> <span class="n">b1_path</span>
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># 5.2 Standard Kalman Filter</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kalman_filter</span><span class="p">(</span><span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">Q_scale</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">R_val</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_arr</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>  <span class="c1"># Prior state initialization</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">5.0</span>           <span class="c1"># Initial state covariance</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">Q_scale</span>       <span class="c1"># Process noise covariance</span>
+    
+    <span class="n">b0_path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">b1_path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">Ht</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">x_arr</span><span class="p">[</span><span class="n">t</span><span class="p">]]])</span>
+        
+        <span class="c1"># Prediction step</span>
+        <span class="n">theta_pred</span> <span class="o">=</span> <span class="n">theta</span>
+        <span class="n">P_pred</span> <span class="o">=</span> <span class="n">P</span> <span class="o">+</span> <span class="n">Q</span>
+        
+        <span class="c1"># Innovation step</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">Ht</span> <span class="o">@</span> <span class="n">theta_pred</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ht</span> <span class="o">@</span> <span class="n">P_pred</span> <span class="o">@</span> <span class="n">Ht</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">R_val</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        
+        <span class="c1"># Gain and State Update</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="n">P_pred</span> <span class="o">@</span> <span class="n">Ht</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">S</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_pred</span> <span class="o">+</span> <span class="n">K</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">*</span> <span class="n">nu</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">K</span> <span class="o">@</span> <span class="n">Ht</span><span class="p">)</span> <span class="o">@</span> <span class="n">P_pred</span>
+        
+        <span class="n">b0_path</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">b1_path</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        
+    <span class="k">return</span> <span class="n">b0_path</span><span class="p">,</span> <span class="n">b1_path</span>
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># 5.3 Robust Kalman Filter (Huber-Dampened Innovation)</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">robust_kalman_filter</span><span class="p">(</span><span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">Q_scale</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">R_val</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">k_huber</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_arr</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">5.0</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">Q_scale</span>
+    
+    <span class="n">b0_path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">b1_path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">weights_path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">Ht</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">x_arr</span><span class="p">[</span><span class="n">t</span><span class="p">]]])</span>
+        
+        <span class="c1"># Prediction step</span>
+        <span class="n">theta_pred</span> <span class="o">=</span> <span class="n">theta</span>
+        <span class="n">P_pred</span> <span class="o">=</span> <span class="n">P</span> <span class="o">+</span> <span class="n">Q</span>
+        
+        <span class="c1"># Innovation step</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">Ht</span> <span class="o">@</span> <span class="n">theta_pred</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ht</span> <span class="o">@</span> <span class="n">P_pred</span> <span class="o">@</span> <span class="n">Ht</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">R_val</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        
+        <span class="c1"># Standardized innovation and Huber attenuation</span>
+        <span class="n">s_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">nu</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">s_std</span> <span class="o">&lt;=</span> <span class="n">k_huber</span> <span class="k">else</span> <span class="p">(</span><span class="n">k_huber</span> <span class="o">/</span> <span class="n">s_std</span><span class="p">)</span>
+        <span class="n">weights_path</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">psi</span>
+        
+        <span class="c1"># Robust Update step</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="n">P_pred</span> <span class="o">@</span> <span class="n">Ht</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">S</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_pred</span> <span class="o">+</span> <span class="n">K</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">psi</span> <span class="o">*</span> <span class="n">nu</span><span class="p">)</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">K</span> <span class="o">@</span> <span class="n">Ht</span><span class="p">)</span> <span class="o">@</span> <span class="n">P_pred</span>
+        
+        <span class="n">b0_path</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">b1_path</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        
+    <span class="k">return</span> <span class="n">b0_path</span><span class="p">,</span> <span class="n">b1_path</span><span class="p">,</span> <span class="n">weights_path</span>
+
+<span class="n">WINDOW</span> <span class="o">=</span> <span class="mi">60</span>
+<span class="n">b0_roll</span><span class="p">,</span> <span class="n">b1_roll</span> <span class="o">=</span> <span class="n">rolling_ols</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_dirty</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">WINDOW</span><span class="p">)</span>
+<span class="n">b0_kal</span><span class="p">,</span> <span class="n">b1_kal</span> <span class="o">=</span> <span class="n">kalman_filter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_dirty</span><span class="p">,</span> <span class="n">Q_scale</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">R_val</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">b0_rkal</span><span class="p">,</span> <span class="n">b1_rkal</span><span class="p">,</span> <span class="n">k_weights</span> <span class="o">=</span> <span class="n">robust_kalman_filter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_dirty</span><span class="p">,</span> <span class="n">Q_scale</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">R_val</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">k_huber</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rolling OLS Final beta_1: </span><span class="si">{</span><span class="n">b1_roll</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Standard Kalman Final beta_1: </span><span class="si">{</span><span class="n">b1_kal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Robust Kalman Final beta_1: </span><span class="si">{</span><span class="n">b1_rkal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (True Value: </span><span class="si">{</span><span class="n">BETA1_TRUE</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visualization: Adaptive Time-Series Tracking Comparison</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;height_ratios&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]})</span>
+
+<span class="n">out_start</span><span class="p">,</span> <span class="n">out_end</span> <span class="o">=</span> <span class="n">out_idx</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">out_idx</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">out_start</span><span class="p">,</span> <span class="n">out_end</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;outlier&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Outlier Cluster Interval&#39;</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">b1_roll</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;ols&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Rolling OLS (Window=</span><span class="si">{</span><span class="n">WINDOW</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">b1_kal</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;kalman&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Standard Kalman (Q=1e-5)&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">b1_rkal</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;robust_kalman&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Robust Kalman (Huber k=2.0)&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">BETA1_TRUE</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;True beta_1 (</span><span class="si">{</span><span class="n">BETA1_TRUE</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Dynamic Tracking of beta_1(t): Rolling OLS vs Standard Kalman vs Robust Kalman&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Estimated Slope beta_1(t)&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">)</span>
+
+<span class="c1"># Subplot: Huber attenuation weights assigned in real time</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k_weights</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;robust_kalman&#39;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Huber Attenuation Factor psi_t&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">out_start</span><span class="p">,</span> <span class="n">out_end</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;outlier&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Robust Kalman Dynamic Innovation Weights (Automated Outlier Rejection)&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time Step (t)&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Weight psi_t&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Rolling OLS Final beta_1: 0.5978
+Standard Kalman Final beta_1: 1.3593
+Robust Kalman Final beta_1: 1.5067 (True Value: 1.5000)
+</pre></div>
+</div>
+<img alt="_images/1eb9fd71a038fe827bb0f781e6fb0006533db8eb4b77a35dc2cd4f87a723bca3.png" src="_images/1eb9fd71a038fe827bb0f781e6fb0006533db8eb4b77a35dc2cd4f87a723bca3.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="conclusions-quantitative-practitioner-decision-framework">
+<h2>6. Conclusions &amp; Quantitative Practitioner Decision Framework<a class="headerlink" href="#conclusions-quantitative-practitioner-decision-framework" title="Link to this heading">#</a></h2>
+<section id="summary-of-empirical-findings">
+<h3>Summary of Empirical Findings<a class="headerlink" href="#summary-of-empirical-findings" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>OLS Fails Under Leverage Clusters:</strong><br />
+Even a modest 5.0% localized bad-leverage cluster inflates the slope from <span class="math notranslate nohighlight">\(\beta_1 = 1.50\)</span> to <span class="math notranslate nohighlight">\(1.76\)</span>, substantially deteriorating clean out-of-sample prediction (<span class="math notranslate nohighlight">\(RMSE_{\text{clean}} = 1.248\)</span> vs <span class="math notranslate nohighlight">\(0.974\)</span>).</p></li>
+<li><p><strong>Winsorized OLS (MAD):</strong><br />
+Provides rapid, computationally lightweight filtering suitable for cross-sectional factor ranking, but remains vulnerable when vertical anomalies align with extreme leverage coordinates.</p></li>
+<li><p><strong>IRLS with Huber Loss:</strong><br />
+Delivers near-optimal parameter recovery (<span class="math notranslate nohighlight">\(\|\hat{\beta} - \beta^*\|_2 \approx 0.11\)</span>) while preserving 95% efficiency. It represents the best general-purpose static robust estimator.</p></li>
+<li><p><strong>Theil-Sen &amp; RANSAC:</strong><br />
+Provide unmatched empirical resistance against high-breakdown contamination. RANSAC achieves near-perfect parameter recovery (<span class="math notranslate nohighlight">\(\|\hat{\beta} - \beta^*\|_2 = 0.026\)</span>) by isolating the true linear manifold.</p></li>
+<li><p><strong>Time-Series Streaming Dominance of Robust Kalman:</strong><br />
+Rolling OLS suffers from catastrophic window-exit volatility. Standard Kalman slowly incorporates anomalous observations. The <strong>Robust Kalman Filter</strong>, by dynamically dampening non-Gaussian innovations, maintains accurate tracking throughout the outlier shock.</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="quantitative-practitioner-decision-flowchart">
+<h3>Quantitative Practitioner Decision Flowchart<a class="headerlink" href="#quantitative-practitioner-decision-flowchart" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                          PROBLEM TYPE
+                               │
+        ┌──────────────────────┴──────────────────────┐
+        ▼                                             ▼
+STATIC / CROSS-SECTIONAL                       DYNAMIC / STREAMING
+        │                                             │
+   High Leverage Present?                     Stationary Parameters?
+   ├── NO  ──► IRLS (Huber) / MAD Winsor       ├── YES ──► Kalman Filter (Small Q)
+   └── YES ──► RANSAC / Theil-Sen              └── NO  ──► Robust Kalman Filter (Huber)
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "luigi-mari/Notebook",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="nasdaq100_momentum_waterfall.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Nasdaq-100 Momentum Waterfall</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-methodological-and-econometric-guide-to-high-breakdown-estimation">A Methodological and Econometric Guide to High-Breakdown Estimation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executive-summary-research-question">Executive Summary &amp; Research Question</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outlier-taxonomy-in-quantitative-finance">Outlier Taxonomy in Quantitative Finance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-estimator-methodology-matrix">Batch Estimator Methodology Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup-plotting-standards">0. Environment Setup &amp; Plotting Standards</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generating-process-dgp-leverage-outlier-cluster">1. Data Generating Process (DGP) &amp; Leverage Outlier Cluster</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-an-adversarial-leverage-cluster">Generating an Adversarial Leverage Cluster</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-batch-estimation-methods">2. Static Batch Estimation Methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ols-ordinary-least-squares">2.1 OLS (Ordinary Least Squares)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mad-based-winsorized-ols-financial-industry-standard">2.2 MAD-Based Winsorized OLS (Financial Industry Standard)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#irls-iteratively-reweighted-least-squares-with-huber-m-estimator">2.3 IRLS (Iteratively Reweighted Least Squares with Huber M-Estimator)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#theil-sen-robust-estimator">2.4 Theil-Sen Robust Estimator</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ransac-random-sample-consensus">2.5 RANSAC (Random Sample Consensus)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-performance-benchmark">3. Quantitative Performance Benchmark</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-contaminated-in-sample-rmse-paradox">The Contaminated In-Sample RMSE Paradox</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostic-analytics-monte-carlo-simulation-m-200">4. Diagnostic Analytics &amp; Monte Carlo Simulation (<span class="math notranslate nohighlight">\(M = 200\)</span>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-adaptive-online-estimation-streaming-rolling-ols-and-robust-kalman-filter">5. Part 2 – Adaptive Online Estimation: Streaming, Rolling OLS, and Robust Kalman Filter</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rolling-ols-rigid-trailing-window">5.1 Rolling OLS (Rigid Trailing Window)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-linear-kalman-filter">5.2 Standard Linear Kalman Filter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#robust-kalman-filter-huber-dampened-innovation">5.3 Robust Kalman Filter (Huber-Dampened Innovation)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-quantitative-practitioner-decision-framework">6. Conclusions &amp; Quantitative Practitioner Decision Framework</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-empirical-findings">Summary of Empirical Findings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantitative-practitioner-decision-flowchart">Quantitative Practitioner Decision Flowchart</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Luigi Mari
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
