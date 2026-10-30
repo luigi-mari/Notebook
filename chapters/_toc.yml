@@ -8,3 +8,5 @@ chapters:
   title: Naked Options Simulation in Python
 - file: nasdaq100_momentum_waterfall
   title: Nasdaq-100 Momentum Waterfall
+- file: robust_outlier_handling
+  title: Robust Regression & Outlier Handling in Quantitative Finance
