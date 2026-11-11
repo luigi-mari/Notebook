@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -430,12 +430,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-methodological-and-econometric-guide-to-high-breakdown-estimation">A Methodological and Econometric Guide to High-Breakdown Estimation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executive-summary-research-question">Executive Summary &amp; Research Question</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outlier-taxonomy-in-quantitative-finance">Outlier Taxonomy in Quantitative Finance</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-estimator-methodology-matrix">Batch Estimator Methodology Matrix</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executive-summary-research-question">Executive Summary &amp; Research Question</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outlier-taxonomy-in-quantitative-finance">Outlier Taxonomy in Quantitative Finance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-estimator-methodology-matrix">Batch Estimator Methodology Matrix</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generating-process">Data Generating Process</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-an-adversarial-leverage-cluster">Generating an Adversarial Leverage Cluster</a></li>
@@ -478,11 +475,9 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="robust-regression-outlier-handling-in-quantitative-finance">
 <h1>Robust Regression &amp; Outlier Handling in Quantitative Finance<a class="headerlink" href="#robust-regression-outlier-handling-in-quantitative-finance" title="Link to this heading">#</a></h1>
-<section id="a-methodological-and-econometric-guide-to-high-breakdown-estimation">
-<h2>A Methodological and Econometric Guide to High-Breakdown Estimation<a class="headerlink" href="#a-methodological-and-econometric-guide-to-high-breakdown-estimation" title="Link to this heading">#</a></h2>
 <hr class="docutils" />
 <section id="executive-summary-research-question">
-<h3>Executive Summary &amp; Research Question<a class="headerlink" href="#executive-summary-research-question" title="Link to this heading">#</a></h3>
+<h2>Executive Summary &amp; Research Question<a class="headerlink" href="#executive-summary-research-question" title="Link to this heading">#</a></h2>
 <p><strong>Research Question:</strong><br />
 <em>How to reliably detect, model, and mitigate the impact of outliers in linear regression parameter estimation across both cross-sectional batch analysis and dynamic time-series / streaming environments?</em></p>
 <p>In financial econometrics and quantitative trading, return and spread distributions consistently display <strong>heavy tails (leptokurtosis)</strong>, discrete regime shifts, structural breaks, liquidity micro-structure dislocations, and data recording errors (bad ticks). The naive application of Ordinary Least Squares (<strong>OLS</strong>) results in severe parameter distortions–such as biased market <span class="math notranslate nohighlight">\(\beta\)</span> sensitivities or unstable cointegration hedge ratios–leading to flawed portfolio construction, erratic rebalancing, and unhedged risk exposure.</p>
@@ -491,10 +486,10 @@ document.write(`
 <li><p><strong>Part 1 – Static Batch Estimation:</strong> Comparative analysis of OLS, MAD-based Winsorized OLS, Iteratively Reweighted Least Squares (IRLS with Huber M-estimator), Theil-Sen, and RANSAC under an adversarial local bad-leverage outlier cluster. We demonstrate why contaminated in-sample RMSE is a misleading metric and validate estimator distributions via a Monte Carlo simulation (<span class="math notranslate nohighlight">\(M = 200\)</span>).</p></li>
 <li><p><strong>Part 2 – Adaptive Online Estimation:</strong> Evaluation of Rolling OLS (fixed trailing window), Standard Kalman Filter (infinite exponential memory), and an explicit <strong>Robust Kalman Filter (Huber-dampened innovation)</strong> engineered to reject transient anomalies in real-time streaming data.</p></li>
 </ol>
-</section>
 <hr class="docutils" />
+</section>
 <section id="outlier-taxonomy-in-quantitative-finance">
-<h3>Outlier Taxonomy in Quantitative Finance<a class="headerlink" href="#outlier-taxonomy-in-quantitative-finance" title="Link to this heading">#</a></h3>
+<h2>Outlier Taxonomy in Quantitative Finance<a class="headerlink" href="#outlier-taxonomy-in-quantitative-finance" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head text-left"><p>Outlier Type</p></th>
@@ -527,10 +522,10 @@ document.write(`
 </tbody>
 </table>
 </div>
-</section>
 <hr class="docutils" />
+</section>
 <section id="batch-estimator-methodology-matrix">
-<h3>Batch Estimator Methodology Matrix<a class="headerlink" href="#batch-estimator-methodology-matrix" title="Link to this heading">#</a></h3>
+<h2>Batch Estimator Methodology Matrix<a class="headerlink" href="#batch-estimator-methodology-matrix" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head text-left"><p>Estimator</p></th>
@@ -574,7 +569,6 @@ document.write(`
 </tbody>
 </table>
 </div>
-</section>
 </section>
 <section id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
@@ -1445,12 +1439,9 @@ STATIC / CROSS-SECTIONAL                       DYNAMIC / STREAMING
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-methodological-and-econometric-guide-to-high-breakdown-estimation">A Methodological and Econometric Guide to High-Breakdown Estimation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executive-summary-research-question">Executive Summary &amp; Research Question</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outlier-taxonomy-in-quantitative-finance">Outlier Taxonomy in Quantitative Finance</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-estimator-methodology-matrix">Batch Estimator Methodology Matrix</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executive-summary-research-question">Executive Summary &amp; Research Question</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outlier-taxonomy-in-quantitative-finance">Outlier Taxonomy in Quantitative Finance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-estimator-methodology-matrix">Batch Estimator Methodology Matrix</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generating-process">Data Generating Process</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-an-adversarial-leverage-cluster">Generating an Adversarial Leverage Cluster</a></li>
