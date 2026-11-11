@@ -9,4 +9,4 @@ This repo is also published as a book at **https://luigi-mari.github.io/Notebook
 - [Naked Options Simulation in Python](https://luigi-mari.github.io/Notebook/optionspnl.html)
 - [Nasdaq-100 Momentum Waterfall](https://luigi-mari.github.io/Notebook/nasdaq100_momentum_waterfall.html)
 - [Robust Regression & Outlier Handling in Quantitative Finance](https://luigi-mari.github.io/Notebook/robust_outlier_handling.html)
-- [Daily Lower-Wick Overlap vs. Random Noise](https://luigi-mari.github.io/Notebook/volstrat.html)
+- [Daily Lower-Wick Overlap vs. Random Noise](https://luigi-mari.github.io/Notebook/lower_wick_overlap.html)
