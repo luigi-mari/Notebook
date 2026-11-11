@@ -10,5 +10,5 @@ chapters:
   title: Nasdaq-100 Momentum Waterfall
 - file: robust_outlier_handling
   title: Robust Regression & Outlier Handling in Quantitative Finance
-- file: volstrat
+- file: lower_wick_overlap
   title: Daily Lower-Wick Overlap vs. Random Noise

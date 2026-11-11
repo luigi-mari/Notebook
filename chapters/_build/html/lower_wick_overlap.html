@@ -59,7 +59,7 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'volstrat';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'lower_wick_overlap';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Robust Regression &amp; Outlier Handling in Quantitative Finance" href="robust_outlier_handling.html" />
@@ -239,7 +239,7 @@
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/luigi-mari/Notebook/master?urlpath=lab/tree/docs/volstrat.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/luigi-mari/Notebook/master?urlpath=lab/tree/docs/lower_wick_overlap.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch on Binder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -305,7 +305,7 @@
       
       
       
-      <li><a href="https://github.com/luigi-mari/Notebook/issues/new?title=Issue%20on%20page%20%2Fvolstrat.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/luigi-mari/Notebook/issues/new?title=Issue%20on%20page%20%2Flower_wick_overlap.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -335,7 +335,7 @@
       
       
       
-      <li><a href="_sources/volstrat.ipynb" target="_blank"
+      <li><a href="_sources/lower_wick_overlap.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -429,10 +429,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-1-signal-geometry-wick-conditions">Section 1 — Signal Geometry &amp; Wick Conditions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-2-multi-asset-simulation-core-metrics-standalone-event-study">Section 2 — Multi-Asset Simulation &amp; Core Metrics (Standalone Event Study)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-3-sensitivity-across-risk-reward-ratios-rr-stop-widths">Section 3 — Sensitivity Across Risk:Reward Ratios (<span class="math notranslate nohighlight">\(RR\)</span>) &amp; Stop Widths</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-4-validation-vs-random-entries-h-0-monthly-ols-drift-regression">Section 4 — Validation vs. Random Entries (<span class="math notranslate nohighlight">\(H_0\)</span>) &amp; Monthly OLS Drift Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-setup">Signal Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#track-record">Track Record</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity">Sensitivity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">Main Findings</a></li>
 </ul>
             </nav>
         </div>
@@ -446,10 +447,10 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="quantitative-signal-validation-daily-lower-wick-overlap-vs-random-noise">
 <h1>Quantitative Signal Validation: Daily Lower-Wick Overlap vs. Random Noise<a class="headerlink" href="#quantitative-signal-validation-daily-lower-wick-overlap-vs-random-noise" title="Link to this heading">#</a></h1>
-<p><strong>Assets:</strong> <code class="docutils literal notranslate"><span class="pre">BTCUSDT</span></code>, <code class="docutils literal notranslate"><span class="pre">ETHUSDT</span></code>, <code class="docutils literal notranslate"><span class="pre">SOLUSDT</span></code> (Daily <code class="docutils literal notranslate"><span class="pre">1D</span></code> Bars)  |  <strong>Sample:</strong> January 2021 – November 2026 (<span class="math notranslate nohighlight">\(2,141\)</span> daily observations per asset)</p>
+<p><strong>Assets:</strong> <code class="docutils literal notranslate"><span class="pre">BTCUSDT</span></code>, <code class="docutils literal notranslate"><span class="pre">ETHUSDT</span></code>, <code class="docutils literal notranslate"><span class="pre">SOLUSDT</span></code> (Daily <code class="docutils literal notranslate"><span class="pre">1D</span></code> Bars)  |  <strong>Sample:</strong> January 2021 to November 2026 (<span class="math notranslate nohighlight">\(2,141\)</span> daily observations per asset)</p>
 <hr class="docutils" />
-<section id="section-1-signal-geometry-wick-conditions">
-<h2>Section 1 — Signal Geometry &amp; Wick Conditions<a class="headerlink" href="#section-1-signal-geometry-wick-conditions" title="Link to this heading">#</a></h2>
+<section id="signal-setup">
+<h2>Signal Setup<a class="headerlink" href="#signal-setup" title="Link to this heading">#</a></h2>
 <p>We test whether placing a resting <strong>Limit Buy</strong> order at the midpoint of two consecutive daily candles’ overlapping lower wicks generates statistically significant excess return (<em>Alpha</em>) over random entries sharing the exact same stop and target.</p>
 <p>For daily candle <span class="math notranslate nohighlight">\(t\)</span>, let <span class="math notranslate nohighlight">\(B_t = \min(O_t, C_t)\)</span> denote the bottom of the candle body. The <strong>lower wick</strong> is the interval <span class="math notranslate nohighlight">\(W_t = [L_t, B_t]\)</span>, with relative wick ratio <span class="math notranslate nohighlight">\(w_t = \frac{B_t - L_t}{H_t - L_t}\)</span>. Given two consecutive candles <span class="math notranslate nohighlight">\(t-1\)</span> and <span class="math notranslate nohighlight">\(t\)</span>, their <strong>Overlap Zone</strong> is:</p>
 <div class="math notranslate nohighlight">
@@ -457,7 +458,7 @@ document.write(`
 <p>A setup triggers at the close of day <span class="math notranslate nohighlight">\(t\)</span> if:</p>
 <ol class="arabic simple">
 <li><p><strong>Non-empty intersection:</strong> <span class="math notranslate nohighlight">\(\text{Zone}_{\text{high}, t} &gt; \text{Zone}_{\text{low}, t}\)</span></p></li>
-<li><p><strong>Meaningful rejection wicks:</strong> <span class="math notranslate nohighlight">\(w_{t-1} \ge 0.25\)</span> and <span class="math notranslate nohighlight">\(w_t \ge 0.25\)</span> (each lower wick is at least <span class="math notranslate nohighlight">\(25\%\)</span> of the candle’s <code class="docutils literal notranslate"><span class="pre">High–Low</span></code> range).</p></li>
+<li><p><strong>Meaningful rejection wicks:</strong> <span class="math notranslate nohighlight">\(w_{t-1} \ge 0.25\)</span> and <span class="math notranslate nohighlight">\(w_t \ge 0.25\)</span> (each lower wick is at least <span class="math notranslate nohighlight">\(25\%\)</span> of the candle’s <code class="docutils literal notranslate"><span class="pre">High-Low</span></code> range).</p></li>
 </ol>
 <p>A resting <strong>Limit Buy</strong> order is placed at the midpoint <span class="math notranslate nohighlight">\(P_{\text{entry}, t} = \frac{\text{Zone}_{\text{low}, t} + \text{Zone}_{\text{high}, t}}{2}\)</span> for up to <span class="math notranslate nohighlight">\(\tau = 3\)</span> days.</p>
 <div class="cell docutils container">
@@ -520,10 +521,10 @@ document.write(`
 </div>
 </section>
 <hr class="docutils" />
-<section id="section-2-multi-asset-simulation-core-metrics-standalone-event-study">
-<h2>Section 2 — Multi-Asset Simulation &amp; Core Metrics (Standalone Event Study)<a class="headerlink" href="#section-2-multi-asset-simulation-core-metrics-standalone-event-study" title="Link to this heading">#</a></h2>
-<p><strong>Methodology (<code class="docutils literal notranslate"><span class="pre">eval_trades</span></code> — Pure Event Study):</strong><br />
-Because our goal is to validate the statistical predictive power of the <strong>signal itself</strong> every time it appears—rather than backtesting a capital-constrained portfolio—each entry is evaluated <strong>independently (standalone)</strong>:</p>
+<section id="track-record">
+<h2>Track Record<a class="headerlink" href="#track-record" title="Link to this heading">#</a></h2>
+<p><strong>Methodology (pure event study via <code class="docutils literal notranslate"><span class="pre">eval_trades</span></code>):</strong><br />
+Our goal is to validate the statistical predictive power of the <strong>signal itself</strong> every time it appears, not the trajectory of a capital-constrained portfolio. Each entry is therefore evaluated <strong>independently (standalone)</strong>:</p>
 <ul class="simple">
 <li><p>When a valid setup triggers on day <span class="math notranslate nohighlight">\(t\)</span> and its limit order is filled on day <span class="math notranslate nohighlight">\(fb \in [t+1, t+3]\)</span>, we track that specific trade forward until day <span class="math notranslate nohighlight">\(k\)</span> when it touches either the Stop Loss (<span class="math notranslate nohighlight">\(-4\%\)</span>) or the Take Profit (<span class="math notranslate nohighlight">\(+6\%\)</span>).</p></li>
 <li><p>If another two-candle wick overlap forms while a previous trade is still open, the new signal is also evaluated independently on its own barrier path.</p></li>
@@ -567,11 +568,11 @@ Because our goal is to validate the statistical predictive power of the <strong>
 <span class="n">bars</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ASSETS</span><span class="p">,</span> <span class="n">wrs</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="n">COLORS</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ASSETS</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.88</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">BE_WR</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#dc2626&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Break-Even (</span><span class="si">{</span><span class="n">BE_WR</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">%)&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars</span><span class="p">,</span> <span class="n">wrs</span><span class="p">):</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">w</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">w</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">60</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Win Rate (%)&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;2A. Win Rate vs. Break-Even&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">60</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Win Rate (%)&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;2A. Win Rate vs. Break-Even (SL </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">SL</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s2">%, RR </span><span class="si">{</span><span class="n">RR</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ASSETS</span><span class="p">:</span>
     <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">TRADES</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="n">TRADES</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;R&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">TRADES</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;R&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">+.1f</span><span class="si">}</span><span class="s2">R)&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#666666&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;2B. Cumulative R-Multiples (2021–2026)&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#666666&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;2B. Cumulative R-Multiples (baseline: SL </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">SL</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="si">}</span><span class="s2">%, RR </span><span class="si">{</span><span class="n">RR</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Cumulative R&quot;</span><span class="p">);</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Asset&#39;</span><span class="p">)</span>
@@ -579,7 +580,7 @@ Because our goal is to validate the statistical predictive power of the <strong>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/9faf2314928b1ba4ad7623919a19298024fb92ac985a7bc6e6bab7907e28c22b.png" src="_images/9faf2314928b1ba4ad7623919a19298024fb92ac985a7bc6e6bab7907e28c22b.png" />
+<img alt="_images/b10692e162d72ce43c9870d68db3fd0cdc7491f5b4319532e514dad7834286d1.png" src="_images/b10692e162d72ce43c9870d68db3fd0cdc7491f5b4319532e514dad7834286d1.png" />
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -664,8 +665,8 @@ Because our goal is to validate the statistical predictive power of the <strong>
 </div>
 </section>
 <hr class="docutils" />
-<section id="section-3-sensitivity-across-risk-reward-ratios-rr-stop-widths">
-<h2>Section 3 — Sensitivity Across Risk:Reward Ratios (<span class="math notranslate nohighlight">\(RR\)</span>) &amp; Stop Widths<a class="headerlink" href="#section-3-sensitivity-across-risk-reward-ratios-rr-stop-widths" title="Link to this heading">#</a></h2>
+<section id="sensitivity">
+<h2>Sensitivity<a class="headerlink" href="#sensitivity" title="Link to this heading">#</a></h2>
 <p>To verify that performance is not an artifact of a single parameter choice, we evaluate the signal across <span class="math notranslate nohighlight">\(RR \in \{1.0,\ 1.5,\ 2.0,\ 2.5,\ 3.0\}\)</span> and <span class="math notranslate nohighlight">\(s \in \{3\%,\ 4\%,\ 5\%\}\)</span> against a <strong>Random Limit Benchmark</strong> (<span class="math notranslate nohighlight">\(H_{0,\text{limit}}\)</span>, random limit buy orders placed at the same median pullback depth below the close).</p>
 <p>Each cell reports the standardized <strong><span class="math notranslate nohighlight">\(z\)</span>-score</strong> (number of standard errors above random noise) and the corresponding one-sided <strong><span class="math notranslate nohighlight">\(p\)</span>-value</strong> (<span class="math notranslate nohighlight">\(p = 1 - \Phi(z)\)</span>, where <span class="math notranslate nohighlight">\(*\)</span> denotes <span class="math notranslate nohighlight">\(p &lt; 0.05\)</span>):</p>
 <div class="math notranslate nohighlight">
@@ -713,8 +714,8 @@ Because our goal is to validate the statistical predictive power of the <strong>
 </div>
 </section>
 <hr class="docutils" />
-<section id="section-4-validation-vs-random-entries-h-0-monthly-ols-drift-regression">
-<h2>Section 4 — Validation vs. Random Entries (<span class="math notranslate nohighlight">\(H_0\)</span>) &amp; Monthly OLS Drift Regression<a class="headerlink" href="#section-4-validation-vs-random-entries-h-0-monthly-ols-drift-regression" title="Link to this heading">#</a></h2>
+<section id="validation">
+<h2>Validation<a class="headerlink" href="#validation" title="Link to this heading">#</a></h2>
 <p>We conduct two statistical tests to separate genuine <strong>Signal Alpha</strong> from <strong>Random Pullback Noise</strong> and <strong>Underlying Market Drift</strong>:</p>
 <ol class="arabic">
 <li><p><strong>Monte Carlo Permutation Test (<span class="math notranslate nohighlight">\(H_{0,\text{limit}}\)</span>, Top Row):</strong><br />
@@ -723,7 +724,7 @@ We simulate <span class="math notranslate nohighlight">\(M = 2,000\)</span> rand
 \[p\text{-value} = \frac{1}{M}\sum_{m=1}^M \mathbb{I}\!\left(\bar{R}_{H_0}^{(m)} \ge E[R]_{\text{signal}}\right)\]</div>
 </li>
 <li><p><strong>Monthly Time-Series OLS Regression (Bottom Row):</strong><br />
-Because individual barrier trades have binary outcomes (<span class="math notranslate nohighlight">\(-4\%\)</span> or <span class="math notranslate nohighlight">\(+6\%\)</span>), we aggregate strategy returns into <strong>continuous monthly returns (<span class="math notranslate nohighlight">\(R_{\text{strat}, m}\)</span>)</strong> and regress them against the <strong>monthly return of the underlying asset (<span class="math notranslate nohighlight">\(R_{\text{asset}, m}\)</span>)</strong> across all calendar months (<span class="math notranslate nohighlight">\(2021\text{–}2026\)</span>):</p>
+Because individual barrier trades have binary outcomes (<span class="math notranslate nohighlight">\(-4\%\)</span> or <span class="math notranslate nohighlight">\(+6\%\)</span>), we aggregate strategy returns into <strong>continuous monthly returns (<span class="math notranslate nohighlight">\(R_{\text{strat}, m}\)</span>)</strong> and regress them against the <strong>monthly return of the underlying asset (<span class="math notranslate nohighlight">\(R_{\text{asset}, m}\)</span>)</strong> across all calendar months (2021 to 2026):</p>
 <div class="math notranslate nohighlight">
 \[R_{\text{strat}, m} = \alpha + \beta \cdot R_{\text{asset}, m} + \varepsilon_m\]</div>
 <p>Here, <span class="math notranslate nohighlight">\(\beta \cdot \bar{R}_{\text{asset}}\)</span> measures the return explained by passive market drift, while the intercept <strong><span class="math notranslate nohighlight">\(\alpha\)</span> (Monthly Alpha)</strong> isolates the strategy’s excess return at zero market drift (<span class="math notranslate nohighlight">\(R_{\text{asset}, m} = 0\)</span>).</p>
@@ -776,7 +777,7 @@ Because individual barrier trades have binary outcomes (<span class="math notran
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/ceae062bb445cf6cc0ac9cbfe646e40d97ed4b821a4546f2680cf551ec1d7c22.png" src="_images/ceae062bb445cf6cc0ac9cbfe646e40d97ed4b821a4546f2680cf551ec1d7c22.png" />
+<img alt="_images/1f90822514665b2541be49b46823f99e58b173f86f89cde912f555634a819181.png" src="_images/1f90822514665b2541be49b46823f99e58b173f86f89cde912f555634a819181.png" />
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -860,6 +861,17 @@ Because individual barrier trades have binary outcomes (<span class="math notran
 </div></div></div>
 </div>
 </section>
+<section id="main-findings">
+<h2>Main Findings<a class="headerlink" href="#main-findings" title="Link to this heading">#</a></h2>
+<p>Same sample across all three assets (January 2021 to November 2026, daily bars), baseline SL 4% and RR 1.5:</p>
+<ul class="simple">
+<li><p><strong>ETHUSDT is the only asset where the signal survives both controls.</strong> Win rate 49.1% against a 40% break-even, E[R] +0.23R per trade (PF 1.45). Against random limit entries at the same pullback depth it reaches z = +2.22 (p = 0.016), and in the monthly drift decomposition an alpha of +3.9%/month remains significant after removing market beta (t = +2.38, p = 0.017).</p></li>
+<li><p><strong>SOLUSDT shows a positive edge that is partly drift-driven.</strong> Win rate 46.1%, E[R] +0.15R per trade (PF 1.28), significant against the random limit benchmark (z = +1.94, p = 0.029). The monthly alpha of +1.9%/month does not reach the 5% significance level on its own (p = 0.22).</p></li>
+<li><p><strong>BTCUSDT is statistically indistinguishable from noise.</strong> Win rate 43.1%, only +3.1pp above break-even; E[R] +0.08R per trade versus +0.07R for random limit entries at the same depth (z = +0.18, p = 0.45). The monthly alpha is not significant either (p = 0.73), so its results are consistent with market drift alone.</p></li>
+<li><p><strong>Sensitivity grid:</strong> ETH stays below the 5% significance level in 3 of the 15 stop/reward combinations, SOL in 4 of 15, BTC in none; the significant combinations are concentrated at low stops (SL 3% and SL 4%) with reward ratios between RR 1.0 and RR 2.5.</p></li>
+<li><p><strong>Takeaway:</strong> the two-candle lower-wick overlap is not a universal signal. On ETH it survives both the noise control and the drift decomposition; on SOL it partially does; on BTC no verifiable edge exists in this sample.</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -917,10 +929,11 @@ Because individual barrier trades have binary outcomes (<span class="math notran
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-1-signal-geometry-wick-conditions">Section 1 — Signal Geometry &amp; Wick Conditions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-2-multi-asset-simulation-core-metrics-standalone-event-study">Section 2 — Multi-Asset Simulation &amp; Core Metrics (Standalone Event Study)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-3-sensitivity-across-risk-reward-ratios-rr-stop-widths">Section 3 — Sensitivity Across Risk:Reward Ratios (<span class="math notranslate nohighlight">\(RR\)</span>) &amp; Stop Widths</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-4-validation-vs-random-entries-h-0-monthly-ols-drift-regression">Section 4 — Validation vs. Random Entries (<span class="math notranslate nohighlight">\(H_0\)</span>) &amp; Monthly OLS Drift Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-setup">Signal Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#track-record">Track Record</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity">Sensitivity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-findings">Main Findings</a></li>
 </ul>
   </nav></div>
 
